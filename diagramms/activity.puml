@@ -1,0 +1,30 @@
+@startuml Activity
+|Player1|
+partition Initialization {
+    start
+    :**Player1** выбирает конфигурацию уровня:
+    количество бокалов, цветов, разбиений;
+    |#AntiqueWhite|Player2|
+    if (**Player2** принимает данную конфигурацию?) then (да)
+                :Оба игрока готовы к началу игры;
+            else (нет)
+                :**Player2** выбирает свой вариант конфигурации;
+        endif
+    |Player1|
+    if (**Player1** принимает данную конфигурацию?) then (да)
+                :Оба игрока готовы к началу игры;
+            else (нет)
+                :**Player1** выбирает свой вариант конфигурации;
+        endif
+}
+partition Game {
+    :**Player1** делает первый ход;
+    repeat
+    |Player2|
+    :**Player2** делает ход;
+    |Player1|
+    :**Player1** делает ход;
+    repeat while (Игра не окончена?) is (да) not (нет)
+    stop
+}
+@enduml
