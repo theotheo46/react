@@ -1,4 +1,5 @@
 import React from 'react'
+import './Button.pcss'
 
 type StyleTypes = 'primary' | 'secondary' | 'tertiary' | 'disabled' | 'error' // TODO можно перенести в общий файл с типами
 

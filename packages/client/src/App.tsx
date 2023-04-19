@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import './styles/App.pcss'
-import Button from './components/Button'
 
 function App() {
   useEffect(() => {
@@ -13,14 +12,7 @@ function App() {
 
     fetchServerData()
   }, [])
-  return (
-    <div className="App">
-      <h2>Вот тут будет жить ваше приложение :)</h2>
-      <Button styleType="primary" width="320px">
-        Кнопка
-      </Button>
-    </div>
-  )
+  return <div className="App">Вот тут будет жить ваше приложение :)</div>
 }
 
 export default App
