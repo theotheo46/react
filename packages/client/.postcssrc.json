@@ -1,0 +1,9 @@
+{
+  "plugins": {
+    "postcss-import": true,
+    "postcss-nested": true,
+    "postcss-simple-vars": true,
+    "autoprefixer": true,
+    "postcss-preset-env": true
+  }
+}
