@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const HomePage: React.FC = () => {
+const NotFoundPage: React.FC = () => {
   return (
     <>
       <h1>404 Error page</h1>
@@ -9,4 +9,4 @@ const HomePage: React.FC = () => {
   )
 }
 
-export default HomePage
+export default NotFoundPage
