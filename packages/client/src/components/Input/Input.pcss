@@ -1,0 +1,50 @@
+.input-wrapper {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: flex-start;
+    border-radius: 16px;
+    margin: 14px auto;
+    width: 100%;
+    max-width: 380px;
+    height: 52px;
+    text-align: center;
+    text-decoration: none;
+    background: transparent;
+    transition: background .3s ease-in-out;
+
+    input.input {
+        outline: none;
+        border: 2px solid #D4D4D8;
+        background: transparent;
+        padding: 16px;
+        border-radius: 16px;
+        width: 100%;
+        height: 100%;
+        transition: background 0.3s ease-in-out;
+        &:hover{
+            background: whitesmoke;
+        }
+        &:not(:placeholder-shown) {
+            + .input-label {
+                transform: scale(0.85) translateY(-38px);
+            }
+        }
+        &:focus{
+            background: #E7E5E4;  
+            + .input-label{
+                transform: scale(0.85) translateY(-38px);
+            }
+        }
+    }
+
+    .input-label{
+        pointer-events: none;
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        white-space: nowrap;
+        color: #A1A1AA;
+        transition: transform 0.3s ease-in-out;
+    }
+}
