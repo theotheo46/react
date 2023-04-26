@@ -27,6 +27,14 @@ const Navigation: React.FC = () => {
       path: '/leaderbord',
       title: 'Leaderbord',
     },
+    {
+      path: '/error400',
+      title: 'Error 400',
+    },
+    {
+      path: '/error500',
+      title: 'Error 500',
+    } 
   ]
 
   return (
