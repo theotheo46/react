@@ -6,7 +6,7 @@ interface ButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  classNames?: string
+  className?: string
   children?: React.ReactNode
   styleType?: StyleTypes
   height?: string
@@ -17,7 +17,7 @@ interface ButtonProps
 }
 
 const Button: React.FC<ButtonProps> = ({
-  classNames = '',
+  className = '',
   styleType = 'primary',
   onClick,
   children,
@@ -39,8 +39,8 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`button  ${classNames} ${currentStyle}`}
-      disabled
+      className={`button  ${className} ${currentStyle}`}
+      disabled={disabled}
       style={buttonStyle}
       onClick={onClick}
       {...rest}>
