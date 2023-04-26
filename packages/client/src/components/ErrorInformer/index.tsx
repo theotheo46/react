@@ -19,10 +19,10 @@ const ErrorInformer: React.FC<ErrorInformerProps> = ({
 
   return (
     <div
-      className={'errorinformer'}
+      className={'error-informer'}
       {...rest}>
-        <div className="errorText">{errorText}</div>
-        <div className="errorStatus">{errorStatus}</div>
+        <div className="error-text">{errorText}</div>
+        <div className="error-status">{errorStatus}</div>
     </div>
   )
 }
