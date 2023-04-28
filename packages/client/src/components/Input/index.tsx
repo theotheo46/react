@@ -1,7 +1,7 @@
 import React from 'react'
 import './Input.pcss'
 
-interface InputProps
+export interface InputProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement

@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: flex-start;
     border-radius: var(--border-radius);
-    margin: 14px auto;
+    margin: auto;
     width: 100%;
     max-width: 380px;
     height: var(--length-unit);
@@ -17,7 +17,7 @@
         outline: none;
         border: 2px solid var(--color-border);
         background: transparent;
-        padding: 16px;
+        padding: 8px;
         border-radius: var(--border-radius);
         width: 100%;
         height: 100%;
@@ -27,13 +27,13 @@
         }
         &:not(:placeholder-shown) {
             + .input-label {
-                transform: scale(0.85) translateY(-38px);
+                transform: scale(0.85) translateY(-32px);
             }
         }
         &:focus{
             background: var(--color-bg-darkgray);  
             + .input-label{
-                transform: scale(0.85) translateY(-38px);
+                transform: scale(0.85) translateY(-32px);
             }
         }
     }
@@ -41,8 +41,8 @@
     .input-label{
         pointer-events: none;
         position: absolute;
-        top: 16px;
-        left: 16px;
+        top: 8px;
+        left: 8px;
         white-space: nowrap;
         color: var(--color-text-gray);
         transition: transform 0.3s ease-in-out;
