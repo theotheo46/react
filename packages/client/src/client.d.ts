@@ -10,3 +10,4 @@ declare type StyleTypes =
   | 'tertiary'
   | 'disabled'
   | 'error'
+  | 'link'
