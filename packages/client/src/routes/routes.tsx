@@ -8,9 +8,10 @@ import SignInPage from "../pages/SignInPage"
 import SignUpPage from "../pages/SignUpPage"
 import LeaderbordPage from "../pages/LeaderbordPage"
 import ErrorPage from "../pages/ErrorPage"
-
+import MiniLendingPage from "../pages/MiniLendingPage/MiniLendingPage"
+ 
 const RoutesBase: React.FC = () => {
-  return (
+  return ( 
     <>
     <Routes>
         <Route path='/' element={<Layout />}>
@@ -22,11 +23,11 @@ const RoutesBase: React.FC = () => {
           <Route path='/leaderbord' element={<LeaderbordPage />} />
           <Route path='/error400' element={<ErrorPage errorText="Ошибка в обработке запроса на сервере" errorStatus="Some status"/>} />
           <Route path='/error500' element={<ErrorPage errorText="Ошибка на сервере" errorStatus="Some status"/>} />
+          <Route path='/minilending' element={<MiniLendingPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </>
   )
 }
-
 export default RoutesBase
