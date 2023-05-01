@@ -34,7 +34,11 @@ const Navigation: React.FC = () => {
     {
       path: '/error500',
       title: 'Error 500',
-    } 
+    },
+    {
+      path: '/level',
+      title: 'Level Page',
+    }
   ]
 
   return (
