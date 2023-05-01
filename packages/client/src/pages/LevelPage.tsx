@@ -1,93 +1,125 @@
 import Bottle from '../components/Bottle/index'
 import React, { useState } from 'react'
-import FillTypeBottle from '../components/Bottle/FillTypeBottle'
 import FillTypeColor from '../components/Bottle/FillTypeColor'
+import { FunctionArray } from '../utils/FunctionArray'
 
 
 interface LevelProps {
-  //arrayFillTypeBottle?: FillTypeBottle[]
-  countColor?: number
+  initCountColor?: number
 }
 
 const Color = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#89fade']
 
-const LevelPage: React.FC<LevelProps> = ({ countColor = 2 }) => {
+const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
 
-  const click = () => {
-    console.log('sldhsiuhisu')
-  }
+  let selectColorBottle: FillTypeColor
+  let selectKey: string
 
-  const [countColor2, setCountColor] = useState(() => {
-    return countColor
+  let checkFinnishBottle: any[] = []
+
+  let callbackUnSelectBottle: () => void
+  let callbackRemoveColorBottle: () => void
+
+  const [victoryDisplay, setDisplay] = useState(() => {
+    return 'none'
   })
 
-  function shuffleArray(array: FillTypeColor[]) {
-    const arrayCopy = array
-    let arrayCopy2: FillTypeColor[] = arrayCopy
-    let lastValue: FillTypeColor = -1
-    let countRepeated = 0
-    let countInBottle = 0
-    let restart = 1
-    while (restart) {
-      arrayCopy2 = arrayCopy
-      restart = 0
-      for (let i = arrayCopy2.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        const temp = arrayCopy2[i]
-        arrayCopy2[i] = arrayCopy2[j]
-        arrayCopy2[j] = temp
-        if (arrayCopy2[i].id === lastValue) {
-          countRepeated = countRepeated + 1
-        }
-        if (countRepeated >= 3) {
-          restart = 1
-          lastValue = -1
-          countInBottle = 0
-          countRepeated = 0
-          break
-        }
-        countInBottle = countInBottle + 1
-        if (countInBottle >= 4) {
-          countInBottle = 0
-          countRepeated = 0
-          lastValue = -1
-        } else {
-          lastValue = arrayCopy2[i].id
+  const saveCallbackFinishBottle = (callbackFillColor: () => boolean) => {
+    checkFinnishBottle.push(callbackFillColor)
+  }
+
+  // Фунуция проверки на заполненость всех бутылок
+  const checkAllBottle = () => {
+    let result = true
+    checkFinnishBottle.forEach(value => {
+      result = result && value()
+    })
+    if (result) {
+      setDisplay('block')
+    }
+  }
+
+  // Фунуция вызывающаяся после нажатия на бутыку
+  const click = (isSelect: boolean, selectColor: FillTypeColor,
+                 key: string,
+                 callbackUnSelect: () => void,
+                 callbackFillColor: (color: FillTypeColor) => void,
+                 callbackRemoveColor: () => void
+  ) => {
+    if (selectKey === key) {
+      // убрать выделение текущей бутылки
+      unSelectColor()
+      selectKey = '-1'
+    } else {
+      if (isSelect && selectColorBottle === undefined) {
+        // выбор бутылки для будущего переливания
+        selectKey = key
+        callbackUnSelectBottle = callbackUnSelect
+        callbackRemoveColorBottle = callbackRemoveColor
+        selectColorBottle = selectColor
+      } else {
+        // перелить запомненый цвет
+        if (selectColorBottle !== undefined) {
+          callbackFillColor(selectColorBottle)
+          callbackRemoveColorBottle()
+          unSelectColor()
+          checkAllBottle()
+          selectKey = '-1'
         }
       }
     }
-    array = arrayCopy2
   }
 
+  // скинуть выбраный цвет
+  const unSelectColor = () => {
+    if (callbackUnSelectBottle !== undefined) {
+      callbackUnSelectBottle()
+    }
+    selectColorBottle = undefined
+  }
+
+  const [countColor, setCountColor] = useState(() => {
+    return initCountColor
+  })
+
+  // создание бутылок в зависимость от количества цветов
   function createArrayBottle(): Bottle[] {
+    setDisplay('none')
+    checkFinnishBottle = []
     const orderColor: FillTypeColor[] = []
     const arrayBottle: Bottle[] = []
     let keyBottle = '0'
 
-    for (let i = 0; i < countColor2; i++) {
+    for (let i = 0; i < countColor; i++) {
       for (let j = 0; j < 4; j++) {
         orderColor.push(new FillTypeColor(i, Color[i]))
       }
     }
 
-    shuffleArray(orderColor)
-    for (let i = 0; i < countColor2; i++) {
+    FunctionArray.shuffleArray(orderColor) // перестановка будущих цвето
+
+    // заполнение бутылок цветом
+    for (let i = 0; i < countColor; i++) {
       const arrayFillTypeBottle = [
-        new FillTypeBottle(true, orderColor.pop()),
-        new FillTypeBottle(true, orderColor.pop()),
-        new FillTypeBottle(true, orderColor.pop()),
-        new FillTypeBottle(true, orderColor.pop())
+        orderColor.pop(), orderColor.pop(),
+        orderColor.pop(), orderColor.pop()
       ]
       keyBottle = String(i)
       arrayBottle.push(
-        <Bottle key={keyBottle} height={200} width={100} onClick={click} arrayFillTypeBottle={arrayFillTypeBottle}/>
+        <Bottle checkFinishBottle={saveCallbackFinishBottle}
+                key={keyBottle} keyBottle={keyBottle}
+                height={200} width={100} onClick={click}
+                arrayFillTypeBottle={arrayFillTypeBottle}/>
       )
     }
 
+    // пустые бутылки для переливания
     for (let i = 0; i < 2; i++) {
-      keyBottle = String(countColor2 + i)
+      keyBottle = String(countColor + i)
       arrayBottle.push(
-        <Bottle key={keyBottle} height={200} width={100} onClick={click}/>
+        <Bottle checkFinishBottle={saveCallbackFinishBottle}
+                key={keyBottle} keyBottle={keyBottle}
+                height={200} width={100} onClick={click}/>
       )
     }
 
@@ -121,6 +153,9 @@ const LevelPage: React.FC<LevelProps> = ({ countColor = 2 }) => {
         <button onClick={updateBottle} style={{ 'marginLeft': '20px' }}>Применить</button>
       </div>
       {arrayBottle}
+      <div style={{ marginTop: '20px', marginLeft: '20px', display: victoryDisplay }}>
+        <label>Победа!</label>
+      </div>
     </div>
   )
 }
