@@ -28,6 +28,10 @@ const Navigation: React.FC = () => {
       title: 'Leaderbord',
     },
     {
+      path: '/level',
+      title: 'Level Page',
+    },
+    {
       path: '/error400',
       title: 'Error 400',
     },
@@ -36,8 +40,8 @@ const Navigation: React.FC = () => {
       title: 'Error 500',
     },
     {
-      path: '/level',
-      title: 'Level Page',
+      path: '/minilending',
+      title: 'Mini lending',
     }
   ]
 
