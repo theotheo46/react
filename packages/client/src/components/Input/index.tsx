@@ -27,7 +27,7 @@ const Input: React.FC<InputProps> = ({
     padding,
     margin,
     height,
-    width
+    width,
   }
 
   return (
