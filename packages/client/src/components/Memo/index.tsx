@@ -9,8 +9,8 @@ interface MemoProps
   className?: string;
   header: string;
   text: string;
-  rws: string;
-  cls: string;
+  rws: number;
+  cls: number;
 }
 
 const Memo: React.FC<MemoProps> = ({
@@ -28,8 +28,8 @@ const Memo: React.FC<MemoProps> = ({
       <p className="header">{header}</p>
       <textarea className="text" 
         readOnly
-        rows={+rws}
-        cols={+cls}
+        rows={rws}
+        cols={cls}
       >
         {text}
       </textarea>
