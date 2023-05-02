@@ -1,33 +1,23 @@
 import Input from '../../Input'
-import { FormEvent, useContext, useEffect, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import './ProfileBody.pcss'
 import Button from '../../Button'
 import { createPortal } from 'react-dom'
 import Modal from '../../Modal'
 import ProfileChangePassword from '../ProfileChangePassword'
 import isEqual from '../../../helpers/isEqual'
-import {
-  RequestUpdateUserData,
-  User,
-  UserContext,
-} from '../../../context/UserContext'
+import { User, UserContext } from '../../../context/UserContext'
 
-interface ProfileBodyProps {
+interface Props {
   user: User
 }
 
-const ProfileBody: React.FC<ProfileBodyProps> = ({ user }) => {
+const ProfileBody = ({ user }: Props) => {
   const [userLocal, setUserLocal] = useState<User>(user)
   const [isChangePasswordModal, setIsChangePasswordModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
 
   const { updateUser } = useContext(UserContext)
-
-  useEffect(() => {
-    return () => {
-      setSuccessMessage('')
-    }
-  }, [])
 
   function inputHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { value, id } = e.target
@@ -47,7 +37,7 @@ const ProfileBody: React.FC<ProfileBodyProps> = ({ user }) => {
     e.preventDefault()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { avatar, ...data } = userLocal
-    updateUser(data as unknown as RequestUpdateUserData)
+    updateUser({ data })
     setSuccessMessage('Данные обновлены!')
   }
   return (

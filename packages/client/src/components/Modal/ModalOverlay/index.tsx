@@ -1,10 +1,10 @@
 import './ModalOverlay.pcss'
 
-interface ModalOverlay {
+interface Props {
   onClick: () => void
 }
 
-const ModalOverlay: React.FC<ModalOverlay> = ({ onClick }) => {
+const ModalOverlay = ({ onClick }: Props) => {
   return <div onClick={onClick} className="app-modal-overlay"></div>
 }
 

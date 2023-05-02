@@ -1,27 +1,13 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react'
 import Button from '../../Button'
-// import Input from '../../Input'
 import './ProfileChangeAvatar.pcss'
 import { UserContext } from '../../../context/UserContext'
 
-const ProfileChangeAvatar: React.FC = () => {
+const ProfileChangeAvatar = () => {
   const [file, setFile] = useState<File>()
   const [successMessage, setSuccessMessage] = useState('')
   const inputFile = useRef<HTMLInputElement | null>(null)
   const { updateAvatar } = useContext(UserContext)
-
-  useEffect(() => {
-    return () => {
-      setSuccessMessage('')
-    }
-  }, [])
 
   function changeFileHandler(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {

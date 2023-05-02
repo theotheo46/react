@@ -5,11 +5,11 @@ import { createPortal } from 'react-dom'
 import Modal from '../../Modal'
 import ProfileChangeAvatar from '../ProfileChangeAvatar'
 
-interface ProfileAvatarProps {
+interface Props {
   avatar: string
 }
 
-const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ avatar }) => {
+const ProfileAvatar = ({ avatar }: Props) => {
   const [isUpdateAvatarModal, setIsUpdateAvatarModal] = useState(false)
 
   function modalHandler() {

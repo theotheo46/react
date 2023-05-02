@@ -1,10 +1,10 @@
-import { FormEvent, useContext, useEffect, useState } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import Button from '../../Button'
 import Input from '../../Input'
 import './ProfileChangePassword.pcss'
 import { UserContext } from '../../../context/UserContext'
 
-const ProfileChangePassword: React.FC = () => {
+const ProfileChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [newPasswordTo, setNewPasswordTo] = useState('')
@@ -18,12 +18,6 @@ const ProfileChangePassword: React.FC = () => {
     !!newPassword &&
     !!newPasswordTo &&
     newPassword === newPasswordTo
-
-  useEffect(() => {
-    return () => {
-      setSuccessMessage('')
-    }
-  }, [])
 
   function formHandler(e: FormEvent) {
     e.preventDefault()

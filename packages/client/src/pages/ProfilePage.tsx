@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Profile from '../components/Profile'
 import { useEffect } from 'react'
 
-const ProfilePage: React.FC = () => {
+const ProfilePage = () => {
   const navigate = useNavigate()
 
   const pageTitle = 'Profile | Water Puzzle'

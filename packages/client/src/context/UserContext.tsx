@@ -63,7 +63,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }
 
   useEffect(() => {
-    if (firstRender) {
+    if (firstRender.current) {
       getUser()
     }
     if (!firstRender.current && !user) {
@@ -90,10 +90,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   async function loginUser(data = testUser) {
     try {
       setIsPending(true)
+      setError('')
       await baseApi.post('/auth/signin', data)
       await getUser()
     } catch (error) {
       const { message } = error as Error
+      setError(message)
       console.error(message)
     } finally {
       setIsPending(false)

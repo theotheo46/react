@@ -4,13 +4,13 @@ import './Modal.pcss'
 import Button from '../Button'
 import { FaTimes } from 'react-icons/fa'
 
-interface ModalProps {
+interface Props {
   title: string
   children: ReactNode
   onClose: () => void
 }
 
-const Modal: React.FC<ModalProps> = ({ title, children, onClose }) => {
+const Modal = ({ title, children, onClose }: Props) => {
   const iconTimesStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
   useEffect(() => {

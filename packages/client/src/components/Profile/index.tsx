@@ -4,7 +4,7 @@ import ProfileAvatar from './ProfileAvatar'
 import ProfileBody from './ProfileBody'
 import { UserContext } from '../../context/UserContext'
 
-const Profile: React.FC = () => {
+const Profile = () => {
   const { user } = useContext(UserContext)
 
   return (
