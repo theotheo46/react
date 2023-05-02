@@ -1,7 +1,7 @@
 import React from 'react'
 import './Input.pcss'
 
-interface InputProps
+export interface InputProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
@@ -27,7 +27,7 @@ const Input: React.FC<InputProps> = ({
     padding,
     margin,
     height,
-    width
+    width,
   }
 
   return (
