@@ -7,7 +7,7 @@ import ForumPage from "../pages/ForumPage"
 import SignInPage from "../pages/SignInPage"
 import SignUpPage from "../pages/SignUpPage"
 import LeaderbordPage from "../pages/LeaderbordPage"
-import ErrorPage from "../pages/ErrorPage"
+import ErrorPage from "../pages/ErrorPage/ErrorPage"
 import MiniLendingPage from "../pages/MiniLendingPage/MiniLendingPage"
  
 const RoutesBase: React.FC = () => {
@@ -21,8 +21,8 @@ const RoutesBase: React.FC = () => {
           <Route path='/signin' element={<SignInPage />} />
           <Route path='/singup' element={<SignUpPage />} />
           <Route path='/leaderbord' element={<LeaderbordPage />} />
-          <Route path='/error400' element={<ErrorPage errorText="Ошибка в обработке запроса на сервере" errorStatus="Some status"/>} />
-          <Route path='/error500' element={<ErrorPage errorText="Ошибка на сервере" errorStatus="Some status"/>} />
+          <Route path='/error400' element={<ErrorPage errorCode="404" errorText="К сожалению, запрашиваемая страница не найдена" errorStatus="Some status"/>} />
+          <Route path='/error500' element={<ErrorPage errorCode="500" errorText="Внутренняя ошибка сервера. Мы о ней знаем и скоро исправим!" errorStatus="Some status"/>} />
           <Route path='/minilending' element={<MiniLendingPage />} />
         </Route>
         <Route path='*' element={<NotFoundPage />} />
