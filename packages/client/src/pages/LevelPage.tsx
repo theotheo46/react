@@ -13,7 +13,6 @@ const colorForLevel = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#
 const LevelPage = ({ initCountColor = 2 }: Props) => {
 
   let selectColorBottle: InstanceType<typeof FillTypeColor>
-  let selectKeyForBottle: string
 
   let arrayCallbackBottleIsComplete: (() => boolean)[] = []
   let callbackUnSelectBottle: () => void
@@ -21,6 +20,10 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
 
   const [victoryLabelDisplay, setDisplay] = useState(() => {
     return 'none'
+  })
+
+  const [selectKeyForBottle, setSelectKeyForBottle] = useState(() => {
+    return '-1'
   })
 
   const [countColor, setCountColor] = useState(() => {
@@ -57,7 +60,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     }
 
     function selectColorFromBottle() {
-      selectKeyForBottle = keyHtmlElement
+      setSelectKeyForBottle(keyHtmlElement)
       callbackUnSelectBottle = callbackUnSelect
       callbackRemoveColorBottle = callbackRemoveColor
       selectColorBottle = selectColor
@@ -77,7 +80,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         callbackUnSelectBottle()
       }
       selectColorBottle = undefined
-      selectKeyForBottle = '-1'
+      setSelectKeyForBottle('-1')
     }
   }
 
