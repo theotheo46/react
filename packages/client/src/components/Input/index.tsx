@@ -11,7 +11,7 @@ export interface InputProps
   label: string
   regex?: RegExp
   errorText?: string
-  isValid?: boolean
+  hasError?: boolean
   refs?: UseFormRegisterReturn<string>
   className?: string
   padding?: string
@@ -23,7 +23,7 @@ const Input = ({
   errorText,
   label,
   className = '',
-  isValid,
+  hasError,
   refs,
   height,
   width,
@@ -51,7 +51,7 @@ const Input = ({
         {...rest}
       />
       <span className="input-label">{label}</span>
-      {isValid && <div className="error-label error">{errorText}</div>}
+      {hasError && <div className="error-label error">{errorText}</div>}
     </label>
   )
 }

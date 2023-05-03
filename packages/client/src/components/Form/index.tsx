@@ -44,7 +44,7 @@ const Form = ({ title, className, inputs, buttonLabel }: Props) => {
         <Input
           key={key}
           {...input}
-          isValid={!!errors[input.name]}
+          hasError={!!errors[input.name]}
           refs={register(input.name, {
             required: {
               value: input.required || false,

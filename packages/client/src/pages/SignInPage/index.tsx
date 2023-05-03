@@ -1,17 +1,16 @@
 import Form from '../../components/Form'
 import { InputProps } from '../../components/Input'
 import { VALIDATE_FIELDS } from '../../utils/validate-data'
-import './EntryPage.pcss'
 
-const inputs: InputProps[] = VALIDATE_FIELDS.registration
-const SignUpPage = () => {
+const inputs: InputProps[] = VALIDATE_FIELDS.login
+const SignInPage = () => {
   return (
     <main className="entry-page page-wrap">
       <Form
-        title="Регистрация"
-        className="sign-up-page"
+        title="Войти в профиль"
+        className="sign-in-page"
         inputs={inputs}
-        buttonLabel="Зарегистрироваться"
+        buttonLabel="Войти"
         onSubmit={() => {
           console.log('submit!')
         }}
@@ -21,4 +20,4 @@ const SignUpPage = () => {
   )
 }
 
-export default SignUpPage
+export default SignInPage
