@@ -43,7 +43,7 @@ const EMAIL = {
 
 const LOGIN = {
   id: 'login',
-  label: 'Login',
+  label: 'Логин',
   type: 'text',
   required: true,
   name: 'login',
@@ -53,7 +53,7 @@ const LOGIN = {
 
 const DISPLAY_NAME = {
   id: 'display_name',
-  label: 'Chat Name',
+  label: 'Публичное имя',
   type: 'text',
   name: 'display_name',
   regex: REGULAR_EXPRESSON.LOGIN,
@@ -64,7 +64,7 @@ const FIRST_NAME = {
   id: 'first_name',
   type: 'text',
   required: true,
-  label: 'First Name',
+  label: 'Имя',
   name: 'first_name',
   regex: REGULAR_EXPRESSON.NAME,
   errorText: REGEX_ERRORS.NAME,
@@ -74,7 +74,7 @@ const SECOND_NAME = {
   id: 'second_name',
   type: 'text',
   required: true,
-  label: 'Second Name',
+  label: 'Фамилия',
   name: 'second_name',
   regex: REGULAR_EXPRESSON.NAME,
   errorText: REGEX_ERRORS.NAME,
@@ -84,7 +84,7 @@ const PHONE = {
   id: 'phone',
   type: 'tel',
   required: true,
-  label: 'Phone',
+  label: 'Телефон',
   name: 'phone',
   regex: REGULAR_EXPRESSON.PHONE,
   errorText: REGEX_ERRORS.PHONE,
@@ -93,7 +93,7 @@ const PHONE = {
 const PASSWORD = {
   id: 'password',
   type: 'password',
-  label: 'Password',
+  label: 'Пароль',
   name: 'password',
   regex: REGULAR_EXPRESSON.PASSWORD,
   errorText: REGEX_ERRORS.PASSWORD,
@@ -102,7 +102,7 @@ const PASSWORD = {
 const OLD_PASSWORD = {
   id: 'oldPassword',
   type: 'password',
-  label: 'Old password',
+  label: 'Старый пароль',
   name: 'oldPassword',
   regex: REGULAR_EXPRESSON.PASSWORD,
   errorText: REGEX_ERRORS.PASSWORD,
@@ -111,7 +111,7 @@ const OLD_PASSWORD = {
 const NEW_PASSWORD = {
   id: 'newPassword',
   type: 'password',
-  label: 'New password',
+  label: 'Новый пароль',
   name: 'newPassword',
   regex: REGULAR_EXPRESSON.PASSWORD,
   errorText: REGEX_ERRORS.PASSWORD,
@@ -120,7 +120,7 @@ const NEW_PASSWORD = {
 const REPEAT_PASSWORD = {
   id: 'confirm_new_password',
   type: 'password',
-  label: 'Repeate new password',
+  label: 'Повторить новый пароль',
   name: 'confirm_new_password',
   regex: REGULAR_EXPRESSON.PASSWORD,
   errorText: REGEX_ERRORS.PASSWORD,

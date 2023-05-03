@@ -49,7 +49,7 @@ const Form: React.FC<FormProps> = ({
         <Input
           key={key}
           {...input}
-          isValid={errors[input.name] ? true : false}
+          isValid={!!errors[input.name]}
           refs={register(input.name, {
             required: {
               value: input.required || false,
