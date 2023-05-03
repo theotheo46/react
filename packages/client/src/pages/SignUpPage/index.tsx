@@ -1,16 +1,11 @@
 import Form from '../../components/Form'
 import { InputProps } from '../../components/Input'
+import { VALIDATE_FIELDS } from '../../utils/validate-data'
 import './SignUpPage.pcss'
 
 const SignUpPage: React.FC = () => {
-  const inputs: InputProps[] = [
-    { name: 'first-name', label: 'Имя' },
-    { name: 'last-name', label: 'Фамилия' },
-    { name: 'email', label: 'Email', type: 'email' },
-    { name: 'phone', label: 'Телефон', type: 'tel' },
-    { name: 'login', label: 'Логин' },
-    { name: 'password', label: 'Пароль', type: 'password' },
-  ]
+  const inputs: InputProps[] = VALIDATE_FIELDS.registration
+
   return (
     <div className="entry-page">
       <Form
