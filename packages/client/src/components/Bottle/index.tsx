@@ -34,8 +34,10 @@ const Bottle = (
     bottleColors = []
   }: Props) => {
 
-  let context: CanvasRenderingContext2D | null
-  let offsetYForSelectBottle = 0
+  let context: CanvasRenderingContext2D | null // todo use setState
+  let offsetYForSelectBottle = 0 // todo use setState
+  let isComplete = false // todo use setState
+  let isEmpty = false // todo use setState
 
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
@@ -92,7 +94,8 @@ const Bottle = (
     if (!canvas || !canvas.current) return
     context = canvas.current.getContext('2d')
     drawEntireBottle(context)
-    onSaveFinishCallback(isFullOrEmpty)
+    onSaveFinishCallback(bottleIsComplete)
+    updateStatesBottle()
   })
 
   const unSelectBottle = () => {
@@ -104,6 +107,7 @@ const Bottle = (
   const addNewColorInBottle = (color: InstanceType<typeof FillTypeColor>) => {
     if (bottleColors.length < 4) {
       bottleColors.push(color)
+      updateStatesBottle()
       unSelectBottle()
     }
   }
@@ -112,26 +116,24 @@ const Bottle = (
     if (bottleColors.length > 0) {
       bottleColors.pop()
       drawEntireBottle(context)
+      updateStatesBottle()
     }
   }
 
-  const isFullOrEmpty = (): boolean => {
-    if (bottleColors.length === 0) {
-      return true
-    }
+  const bottleIsComplete = (): boolean => {
+    return isComplete || isEmpty
+  }
+
+  const updateStatesBottle = () => {
+    isEmpty = (bottleColors.length === 0)
     if (bottleColors.length === 4) {
       const lastIdColor = bottleColors[0].id
-      bottleColors.forEach(color => {
-        if (lastIdColor !== color.id) {
-          return false
-        }
-      })
-      return true
+      isComplete = !bottleColors.some(color => lastIdColor !== color.id)
     }
-    return false
   }
 
   const clickEventOnBottle = () => {
+    if (isComplete) return
     const selectColor: InstanceType<typeof FillTypeColor> = bottleColors.slice(-1)[0]
     if (selectColor !== undefined) {
       isSelect = !isSelect
