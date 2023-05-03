@@ -96,7 +96,7 @@ const Bottle = (
     drawEntireBottle(context)
     onSaveFinishCallback(bottleIsComplete)
     updateStatesBottle()
-  })
+  }, [])
 
   const unSelectBottle = () => {
     isSelect = false
