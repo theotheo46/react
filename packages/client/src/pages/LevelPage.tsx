@@ -13,79 +13,77 @@ const colorForLevel = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#
 const LevelPage = ({ initCountColor = 2 }: Props) => {
 
   let selectColorBottle: InstanceType<typeof FillTypeColor>
-  let selectKey: string
+  let selectKeyForBottle: string
 
-  let checkFinnishBottle: any[] = []
-
+  let arrayCallbackBottleIsComplete: (() => boolean)[] = []
   let callbackUnSelectBottle: () => void
   let callbackRemoveColorBottle: () => void
 
-  const [victoryDisplay, setDisplay] = useState(() => {
+  const [victoryLabelDisplay, setDisplay] = useState(() => {
     return 'none'
   })
-
-  const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
-    checkFinnishBottle.push(callbackFinishBottle)
-  }
-
-  // Фунуция проверки на заполненость всех бутылок
-  const checkAllBottle = () => {
-    let result = true
-    checkFinnishBottle.forEach(value => {
-      result = result && value()
-    })
-    if (result) {
-      setDisplay('block')
-    }
-  }
-
-  // Фунуция вызывающаяся после нажатия на бутыку
-  const onClickHandler = (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
-                 keyHtmlElement: string,
-                 callbackUnSelect: () => void,
-                 callbackFillColor: (color: InstanceType<typeof FillTypeColor>) => void,
-                 callbackRemoveColor: () => void
-  ) => {
-    if (selectKey === keyHtmlElement) {
-      // убрать выделение текущей бутылки
-      unSelectColor()
-      selectKey = '-1'
-    } else {
-      if (isSelect && selectColorBottle === undefined) {
-        // выбор бутылки для будущего переливания
-        selectKey = keyHtmlElement
-        callbackUnSelectBottle = callbackUnSelect
-        callbackRemoveColorBottle = callbackRemoveColor
-        selectColorBottle = selectColor
-      } else {
-        // перелить запомненый цвет
-        if (selectColorBottle !== undefined) {
-          callbackFillColor(selectColorBottle)
-          callbackRemoveColorBottle()
-          unSelectColor()
-          checkAllBottle()
-          selectKey = '-1'
-        }
-      }
-    }
-  }
-
-  // скинуть выбраный цвет
-  const unSelectColor = () => {
-    if (callbackUnSelectBottle !== undefined) {
-      callbackUnSelectBottle()
-    }
-    selectColorBottle = undefined
-  }
 
   const [countColor, setCountColor] = useState(() => {
     return initCountColor
   })
 
-  // создание бутылок в зависимость от количества цветов
+  const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
+    arrayCallbackBottleIsComplete.push(callbackFinishBottle)
+  }
+
+  const updateVictoryLabel = () => {
+    const allBottleIsComplete = arrayCallbackBottleIsComplete.every(bottleIsComplete => bottleIsComplete())
+    if (allBottleIsComplete) {
+      setDisplay('block')
+    }
+  }
+
+  const onClickHandler = (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
+                          keyHtmlElement: string,
+                          callbackUnSelect: () => void,
+                          callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
+                          callbackRemoveColor: () => void
+  ) => {
+    const needAddSelectedColorInBottle = selectColorBottle !== undefined
+    const needSelectColorFromBottle = isSelect && !needAddSelectedColorInBottle
+    if (selectKeyForBottle === keyHtmlElement) {
+      clearSelectedColor()
+    } else {
+      if (needSelectColorFromBottle) {
+        selectColorFromBottle()
+      } else {
+        addSelectedColorInBottle()
+      }
+    }
+
+    function selectColorFromBottle() {
+      selectKeyForBottle = keyHtmlElement
+      callbackUnSelectBottle = callbackUnSelect
+      callbackRemoveColorBottle = callbackRemoveColor
+      selectColorBottle = selectColor
+    }
+
+    function addSelectedColorInBottle() {
+      if (needAddSelectedColorInBottle) {
+        callbackAddNewColor(selectColorBottle)
+        callbackRemoveColorBottle()
+        clearSelectedColor()
+        updateVictoryLabel()
+      }
+    }
+
+    function clearSelectedColor() {
+      if (callbackUnSelectBottle !== undefined) {
+        callbackUnSelectBottle()
+      }
+      selectColorBottle = undefined
+      selectKeyForBottle = '-1'
+    }
+  }
+
   function createArrayBottle(): Bottle[] {
     setDisplay('none')
-    checkFinnishBottle = []
+    arrayCallbackBottleIsComplete = []
     const orderColor: InstanceType<typeof FillTypeColor>[] = []
     const arrayBottle: Bottle[] = []
     let keyBottle = '0'
@@ -126,34 +124,33 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     return arrayBottle
   }
 
-  function updateBottle() {
-    setArrayBottle(createArrayBottle())
-  }
-
-  function onChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    setCountColor(Number(event.target.value))
-  }
-
   const [arrayBottle, setArrayBottle] = useState(() => {
     return createArrayBottle()
   })
 
+  function reCreateAllBottles() {
+    setArrayBottle(createArrayBottle())
+  }
+
+  function onChangeCountColorInLevel(event: React.ChangeEvent<HTMLSelectElement>) {
+    setCountColor(Number(event.target.value))
+  }
 
   return (
     <div>
       <div style={{ margin: '20px' }}>
         <label>Количество цветов: </label>
-        <select onChange={onChange}>
+        <select onChange={onChangeCountColorInLevel}>
           <option>2</option>
           <option>3</option>
           <option>4</option>
           <option>5</option>
           <option>6</option>
         </select>
-        <button onClick={updateBottle} style={{ 'marginLeft': '20px' }}>Применить</button>
+        <button onClick={reCreateAllBottles} style={{ 'marginLeft': '20px' }}>Применить</button>
       </div>
       {arrayBottle}
-      <div style={{ marginTop: '20px', marginLeft: '20px', display: victoryDisplay }}>
+      <div style={{ marginTop: '20px', marginLeft: '20px', display: victoryLabelDisplay }}>
         <label>Победа!</label>
       </div>
     </div>

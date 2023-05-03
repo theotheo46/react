@@ -13,7 +13,7 @@ interface Props
   onClickHandler: (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
                    keyHtmlElement: string,
                    callbackUnSelect: () => void,
-                   callbackFillColor: (color: InstanceType<typeof FillTypeColor>) => void,
+                   callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
                    callbackRemoveColor: () => void) => void
   onSaveFinishCallback: (callbackFinishBottle: () => boolean) => void
   keyHtmlElement: string
