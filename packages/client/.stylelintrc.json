@@ -8,6 +8,7 @@
     "alpha-value-notation": "number",
     "color-function-notation": null,
     "shorthand-property-no-redundant-values": null,
-    "no-empty-source": null
+    "no-empty-source": null,
+    "selector-class-pattern": null
   }
 }
