@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import styles from './Navigation.module.pcss'
 
-const Navigation: React.FC = () => {
+const Navigation = () => {
   const navs = [
     {
       path: '/',
@@ -38,17 +38,15 @@ const Navigation: React.FC = () => {
     {
       path: '/minilending',
       title: 'Mini lending',
-    }
+    },
   ]
 
   return (
     <nav className={styles.nav}>
       <ul>
-        {navs.map((item) => (
+        {navs.map(item => (
           <li key={item.title}>
-            <NavLink to={item.path}>
-              {item.title}
-            </NavLink>
+            <NavLink to={item.path}>{item.title}</NavLink>
           </li>
         ))}
       </ul>

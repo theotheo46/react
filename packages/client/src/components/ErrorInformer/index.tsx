@@ -1,7 +1,7 @@
 import React from 'react'
 import './ErrorInformer.pcss'
 
-interface ErrorInformerProps
+interface Props
   extends React.DetailedHTMLProps<
     React.HTMLProps<HTMLDivElement>,
     HTMLDivElement
@@ -10,19 +10,11 @@ interface ErrorInformerProps
   errorStatus: string
 }
 
-const ErrorInformer: React.FC<ErrorInformerProps> = ({
-  errorText,
-  errorStatus,
-  ...rest
-}) => {
-
-
+const ErrorInformer = ({ errorText, errorStatus, ...rest }: Props) => {
   return (
-    <div
-      className={'error-informer'}
-      {...rest}>
-        <div className="error-text">{errorText}</div>
-        <div className="error-status">{errorStatus}</div>
+    <div className={'error-informer'} {...rest}>
+      <div className="error-text">{errorText}</div>
+      <div className="error-status">{errorStatus}</div>
     </div>
   )
 }

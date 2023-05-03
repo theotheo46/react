@@ -1,21 +1,15 @@
-import ErrorInformer from "../components/ErrorInformer"
+import ErrorInformer from '../components/ErrorInformer'
 
-interface ErrorProps
-  {
+interface Props {
   errorText: string
   errorStatus: string
 }
 
-const ErrorPage: React.FC<ErrorProps> = ({
-  errorText,
-  errorStatus
-}
-
-) => {
+const ErrorPage = ({ errorText, errorStatus }: Props) => {
   return (
     <>
       <h1>Error page</h1>
-      <ErrorInformer errorText={errorText} errorStatus={errorStatus}/>
+      <ErrorInformer errorText={errorText} errorStatus={errorStatus} />
     </>
   )
 }

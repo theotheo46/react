@@ -1,4 +1,4 @@
-const ForumPage: React.FC = () => {
+const ForumPage = () => {
   return (
     <>
       <h1>Forum page</h1>

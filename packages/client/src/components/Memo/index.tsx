@@ -1,36 +1,23 @@
 import React from 'react'
 import './Memo.pcss'
 
-interface MemoProps
+interface Props
   extends React.DetailedHTMLProps<
     React.HTMLProps<HTMLDivElement>,
     HTMLDivElement
   > {
-  className?: string;
-  header: string;
-  text: string;
-  rws: number;
-  cls: number;
+  className?: string
+  header: string
+  text: string
+  rws: number
+  cls: number
 }
 
-const Memo: React.FC<MemoProps> = ({
-  className,
-  header,
-  text,
-  rws,
-  cls,
-  ...rest
-}) => {
+const Memo = ({ className, header, text, rws, cls, ...rest }: Props) => {
   return (
-    <div
-      className={className}
-      {...rest}>
+    <div className={className} {...rest}>
       <p className="header">{header}</p>
-      <textarea className="text" 
-        readOnly
-        rows={rws}
-        cols={cls}
-      >
+      <textarea className="text" readOnly rows={rws} cols={cls}>
         {text}
       </textarea>
     </div>

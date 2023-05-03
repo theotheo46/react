@@ -3,7 +3,7 @@ import { InputProps } from '../../components/Input'
 import { VALIDATE_FIELDS } from '../../utils/validate-data'
 import './SignUpPage.pcss'
 
-const SignUpPage: React.FC = () => {
+const SignUpPage = () => {
   const inputs: InputProps[] = VALIDATE_FIELDS.registration
 
   return (

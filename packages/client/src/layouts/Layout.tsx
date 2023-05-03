@@ -1,13 +1,13 @@
-import { Outlet } from 'react-router-dom';
-import Navigation from '../components/Navigation/Navigation';
+import { Outlet } from 'react-router-dom'
+import Navigation from '../components/Navigation/Navigation'
 
-const Layout: React.FC = () => {
+const Layout = () => {
   return (
     <>
       <Navigation />
       <Outlet />
     </>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

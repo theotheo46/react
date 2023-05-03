@@ -18,7 +18,7 @@ export interface InputProps
   margin?: string
 }
 
-const Input: React.FC<InputProps> = ({
+const Input = ({
   name,
   errorText,
   label,
@@ -30,7 +30,7 @@ const Input: React.FC<InputProps> = ({
   padding,
   margin,
   ...rest
-}) => {
+}: InputProps) => {
   const inputStyle = {
     padding,
     margin,

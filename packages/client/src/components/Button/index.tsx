@@ -1,7 +1,7 @@
 import React from 'react'
 import './Button.pcss'
 
-interface ButtonProps
+interface Props
   extends React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
@@ -16,7 +16,7 @@ interface ButtonProps
   onClick?: (event: React.MouseEvent) => void
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   className = '',
   styleType = 'primary',
   onClick,
@@ -27,14 +27,14 @@ const Button: React.FC<ButtonProps> = ({
   padding,
   margin,
   ...rest
-}) => {
+}: Props) => {
   const currentStyle = disabled ? 'disabled' : styleType
 
   const buttonStyle = {
     padding,
     margin,
     height,
-    width
+    width,
   }
 
   return (

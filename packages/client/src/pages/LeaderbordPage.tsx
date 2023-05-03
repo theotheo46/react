@@ -1,4 +1,4 @@
-const LeaderbordPage: React.FC = () => {
+const LeaderbordPage = () => {
   return (
     <>
       <h1>Leaderbord page</h1>
