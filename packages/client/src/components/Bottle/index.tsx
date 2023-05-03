@@ -1,187 +1,127 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import FillTypeColor from './FillTypeColor'
+import { AlgorithmDrawPartOfBottle } from './AlgorithmDrawPartOfBottle'
 
 
-interface BottleProps
+interface Props
   extends React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>,
     HTMLCanvasElement> {
   height?: number
   width?: number
-  canvas?: any
-  pointStartX?: number
-  pointStartY?: number
-  onClick?: void
-  checkFinishBottle: void
-  keyBottle: string
+  offsetX?: number
+  offsetY?: number
+  onClickHandler: (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
+                   keyHtmlElement: string,
+                   callbackUnSelect: () => void,
+                   callbackFillColor: (color: InstanceType<typeof FillTypeColor>) => void,
+                   callbackRemoveColor: () => void) => void
+  onSaveFinishCallback: (callbackFinishBottle: () => boolean) => void
+  keyHtmlElement: string
   isSelect: boolean
-  arrayFillTypeBottle?: FillTypeColor[]
+  bottleColors?: InstanceType<typeof FillTypeColor>[]
 }
 
-interface FillLayerProps {
-  context: CanvasRenderingContext2D
-  pointStartX: number
-  pointStartY: number
-  pointSelectY: number
-  height: number
-  width: number
-  color: string
-}
-
-// класс для сохранения алгоритмов отрисовки заполненой части бутылок
-const FunFillLayer = {
-
-  getFunctionFill: (count: number, layerProps: FillLayerProps) => {
-    if (count <= 0) {
-      FunFillLayer.top(layerProps)
-    } else if (count === 1) {
-      FunFillLayer.preTop(layerProps)
-    } else if (count === 2) {
-      FunFillLayer.preBottom(layerProps)
-    } else {
-      FunFillLayer.bottom(layerProps)
-    }
-  },
-
-  top: (layerProps: FillLayerProps) => {
-    FunFillLayer.fillRect(layerProps)
-  },
-  preTop: (layerProps: FillLayerProps) => {
-    FunFillLayer.fillRect(layerProps)
-  },
-  preBottom: (layerProps: FillLayerProps) => {
-    FunFillLayer.fillRect(layerProps)
-  },
-  fillRect: (layerProps: FillLayerProps) => {
-    // закрашенная прямоугольная область
-    layerProps.context.beginPath()
-
-    layerProps.context.fillStyle = layerProps.color
-    layerProps.context.fillRect(layerProps.pointStartX, layerProps.pointStartY + layerProps.pointSelectY,
-      layerProps.width, layerProps.height)
-
-    layerProps.context.closePath()
-  },
-  bottom: (layerProps: FillLayerProps) => {
-    // закрашенная полукруглая область
-    layerProps.context.fillStyle = layerProps.color
-
-    layerProps.context.beginPath()
-    layerProps.context.moveTo(layerProps.pointStartX, layerProps.pointStartY + layerProps.pointSelectY)
-    layerProps.context.lineTo(layerProps.pointStartX, layerProps.pointStartY + layerProps.height + layerProps.pointSelectY)
-    layerProps.context.arcTo(layerProps.pointStartX + layerProps.width / 2, layerProps.pointStartY + layerProps.height + layerProps.width / 2 + layerProps.pointSelectY,
-      layerProps.pointStartX + layerProps.width, layerProps.pointStartY + layerProps.height + layerProps.pointSelectY,
-      layerProps.width / 2 + 10)
-
-    layerProps.context.lineTo(layerProps.pointStartX + layerProps.width, layerProps.pointStartY + layerProps.height + layerProps.pointSelectY)
-    layerProps.context.lineTo(layerProps.pointStartX + layerProps.width, layerProps.pointStartY + layerProps.pointSelectY)
-    layerProps.context.lineTo(layerProps.pointStartX, layerProps.pointStartY + layerProps.pointSelectY)
-    layerProps.context.closePath()
-
-    layerProps.context.fill()
-  }
-}
-
-const Bottle: React.FC<BottleProps> = (
+const Bottle = (
   {
     height = 50,
     width = 50,
-    pointStartX = 10,
-    pointStartY = 20,
-    onClick,
-    checkFinishBottle,
-    keyBottle,
+    offsetX = 10,
+    offsetY = 20,
+    onClickHandler,
+    onSaveFinishCallback,
+    keyHtmlElement,
     isSelect = false,
-    arrayFillTypeBottle = []
-  }) => {
+    bottleColors = []
+  }: Props) => {
 
-  let context: CanvasRenderingContext2D
-  let pointSelectY = 0
+  let context: CanvasRenderingContext2D | null
+  let offsetYForSelectBottle = 0
 
-  // рисование всей бутылки
-  const drawBottle = (context: CanvasRenderingContext2D) => {
-    const widthCanvas = width - pointStartX * 2
-    const heightCanvas = height - pointStartY - widthCanvas / 2
+  const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
+    if (!context) return
+    const widthCanvas = width - offsetX * 2
+    const heightCanvas = height - offsetY - widthCanvas / 2
     context.clearRect(0, 0, width, height)
-    drawFillBottle(context, widthCanvas, heightCanvas)
+    drawShadedPartOfBottle(context, widthCanvas, heightCanvas)
     drawStrokeBottle(context, widthCanvas, heightCanvas)
   }
 
-  // отрисовка только заполненой цветом области
-  const drawFillBottle = (context: CanvasRenderingContext2D, widthCanvas: number, heightCanvas: number) => {
-    let count = (4 - arrayFillTypeBottle.length)
+  const drawShadedPartOfBottle = (context: CanvasRenderingContext2D, widthCanvas: number, heightCanvas: number) => {
+    let count = (4 - bottleColors.length)
     const heightLayer = heightCanvas / 4
-    let pointStartYLayer: number = pointStartY + count * heightLayer
+    let offsetYForShadedPartBottle: number = offsetY + count * heightLayer
+    drawAllPartOfBottle()
 
-    for (let i = arrayFillTypeBottle.length - 1; i >= 0; i--) {
-      const layerProps = {
-        context: context,
-        pointStartX: pointStartX,
-        pointStartY: pointStartYLayer,
-        pointSelectY: pointSelectY,
-        width: widthCanvas,
-        height: heightLayer + 1,
-        color: arrayFillTypeBottle[i].color
+
+    function drawAllPartOfBottle() {
+      if (!context) return
+      for (let i = bottleColors.length - 1; i >= 0; i--) {
+        const layerProps = {
+          context: context,
+          offsetX: offsetX,
+          offsetY: offsetYForShadedPartBottle,
+          offsetYForSelectBottle: offsetYForSelectBottle,
+          width: widthCanvas,
+          height: heightLayer + 1,
+          colorShadedPart: bottleColors[i].color
+        }
+        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(count, layerProps)
+        count++
+        offsetYForShadedPartBottle = offsetYForShadedPartBottle + heightLayer
       }
-      FunFillLayer.getFunctionFill(count, layerProps)
-      count++
-      pointStartYLayer = pointStartYLayer + heightLayer
     }
   }
 
-  // отрисовка контура бутылки
   const drawStrokeBottle = (context: CanvasRenderingContext2D, widthCanvas: number, heightCanvas: number) => {
     context.beginPath()
-    context.moveTo(pointStartX, pointStartY + pointSelectY)
-    context.lineTo(pointStartX, pointStartY + heightCanvas + pointSelectY)
-    context.arcTo(pointStartX + widthCanvas / 2, pointStartY + heightCanvas + widthCanvas / 2 + pointSelectY,
-      pointStartX + widthCanvas, pointStartY + heightCanvas + pointSelectY,
+    context.moveTo(offsetX, offsetY + offsetYForSelectBottle)
+    context.lineTo(offsetX, offsetY + heightCanvas + offsetYForSelectBottle)
+    context.arcTo(offsetX + widthCanvas / 2, offsetY + heightCanvas + widthCanvas / 2 + offsetYForSelectBottle,
+      offsetX + widthCanvas, offsetY + heightCanvas + offsetYForSelectBottle,
       widthCanvas / 2 + 10)
 
-    context.lineTo(pointStartX + widthCanvas, pointStartY + heightCanvas + pointSelectY)
-    context.lineTo(pointStartX + widthCanvas, pointStartY + pointSelectY)
-    context.lineTo(pointStartX, pointStartY + pointSelectY)
+    context.lineTo(offsetX + widthCanvas, offsetY + heightCanvas + offsetYForSelectBottle)
+    context.lineTo(offsetX + widthCanvas, offsetY + offsetYForSelectBottle)
+    context.lineTo(offsetX, offsetY + offsetYForSelectBottle)
     context.stroke()
     context.closePath()
   }
 
-  const canvas = React.useRef()
-  React.useEffect(() => {
+  const canvas = useRef<HTMLCanvasElement | null>()
+  useEffect(() => {
+    if (!canvas || !canvas.current) return
     context = canvas.current.getContext('2d')
-    drawBottle(context)
-    checkFinishBottle(isFullOrEmpty)
+    drawEntireBottle(context)
+    onSaveFinishCallback(isFullOrEmpty)
   })
 
-// сброс выделения бутылки
-  const unSelect = () => {
+  const unSelectBottle = () => {
     isSelect = false
-    pointSelectY = 0
-    drawBottle(context)
+    offsetYForSelectBottle = 0
+    drawEntireBottle(context)
   }
 
-  // заполенние бутылки новым цветом
-  const fillColor = (color: FillTypeColor) => {
-    if (arrayFillTypeBottle.length < 4) {
-      arrayFillTypeBottle.push(color)
-      unSelect()
+  const addNewColorInBottle = (color: InstanceType<typeof FillTypeColor>) => {
+    if (bottleColors.length < 4) {
+      bottleColors.push(color)
+      unSelectBottle()
     }
   }
 
-  // выливание из бутылки одного цвета
-  const removeTopColor = () => {
-    if (arrayFillTypeBottle.length > 0) {
-      arrayFillTypeBottle.pop()
-      drawBottle(context)
+  const removeFirstTopColor = () => {
+    if (bottleColors.length > 0) {
+      bottleColors.pop()
+      drawEntireBottle(context)
     }
   }
 
-  // условие для готовности бутылки
   const isFullOrEmpty = (): boolean => {
-    if (arrayFillTypeBottle.length === 0) {
+    if (bottleColors.length === 0) {
       return true
     }
-    if (arrayFillTypeBottle.length === 4) {
-      const lastIdColor = arrayFillTypeBottle[0].id
-      arrayFillTypeBottle.forEach(color => {
+    if (bottleColors.length === 4) {
+      const lastIdColor = bottleColors[0].id
+      bottleColors.forEach(color => {
         if (lastIdColor !== color.id) {
           return false
         }
@@ -191,20 +131,18 @@ const Bottle: React.FC<BottleProps> = (
     return false
   }
 
-  const click = () => {
-    const selectColor: FillTypeColor = arrayFillTypeBottle.slice(-1)[0]
-
+  const clickEventOnBottle = () => {
+    const selectColor: InstanceType<typeof FillTypeColor> = bottleColors.slice(-1)[0]
     if (selectColor !== undefined) {
       isSelect = !isSelect
-      pointSelectY = (isSelect) ? -20 : 0
-      drawBottle(context)
+      offsetYForSelectBottle = (isSelect) ? -20 : 0
+      drawEntireBottle(context)
     }
-    onClick(isSelect, selectColor, keyBottle, unSelect, fillColor, removeTopColor)
-
+    onClickHandler(isSelect, selectColor, keyHtmlElement, unSelectBottle, addNewColorInBottle, removeFirstTopColor)
   }
 
   return (
-    <canvas key={keyBottle} onClick={click} ref={canvas} height={height} width={width}/>
+    <canvas key={keyHtmlElement} onClick={clickEventOnBottle} ref={canvas} height={height} width={width}/>
   )
 }
 

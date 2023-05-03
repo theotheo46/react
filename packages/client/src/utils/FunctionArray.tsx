@@ -1,7 +1,7 @@
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 
 export class FunctionArray {
-  public static shuffleArray(array: FillTypeColor[]) {
+  public static shuffleArray(array: InstanceType<typeof FillTypeColor>[]) {
     const arrayCopy = array
     let resultArray: InstanceType<typeof FillTypeColor>[] = arrayCopy
     let lastValue: InstanceType<typeof FillTypeColor> = -1

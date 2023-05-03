@@ -4,15 +4,15 @@ import FillTypeColor from '../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../utils/FunctionArray'
 
 
-interface LevelProps {
+interface Props {
   initCountColor?: number
 }
 
-const Color = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#89fade']
+const colorForLevel = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#89fade']
 
-const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
+const LevelPage = ({ initCountColor = 2 }: Props) => {
 
-  let selectColorBottle: FillTypeColor
+  let selectColorBottle: InstanceType<typeof FillTypeColor>
   let selectKey: string
 
   let checkFinnishBottle: any[] = []
@@ -24,8 +24,8 @@ const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
     return 'none'
   })
 
-  const saveCallbackFinishBottle = (callbackFillColor: () => boolean) => {
-    checkFinnishBottle.push(callbackFillColor)
+  const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
+    checkFinnishBottle.push(callbackFinishBottle)
   }
 
   // Фунуция проверки на заполненость всех бутылок
@@ -40,20 +40,20 @@ const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
   }
 
   // Фунуция вызывающаяся после нажатия на бутыку
-  const click = (isSelect: boolean, selectColor: FillTypeColor,
-                 key: string,
+  const onClickHandler = (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
+                 keyHtmlElement: string,
                  callbackUnSelect: () => void,
-                 callbackFillColor: (color: FillTypeColor) => void,
+                 callbackFillColor: (color: InstanceType<typeof FillTypeColor>) => void,
                  callbackRemoveColor: () => void
   ) => {
-    if (selectKey === key) {
+    if (selectKey === keyHtmlElement) {
       // убрать выделение текущей бутылки
       unSelectColor()
       selectKey = '-1'
     } else {
       if (isSelect && selectColorBottle === undefined) {
         // выбор бутылки для будущего переливания
-        selectKey = key
+        selectKey = keyHtmlElement
         callbackUnSelectBottle = callbackUnSelect
         callbackRemoveColorBottle = callbackRemoveColor
         selectColorBottle = selectColor
@@ -86,13 +86,13 @@ const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
   function createArrayBottle(): Bottle[] {
     setDisplay('none')
     checkFinnishBottle = []
-    const orderColor: FillTypeColor[] = []
+    const orderColor: InstanceType<typeof FillTypeColor>[] = []
     const arrayBottle: Bottle[] = []
     let keyBottle = '0'
 
     for (let i = 0; i < countColor; i++) {
       for (let j = 0; j < 4; j++) {
-        orderColor.push(new FillTypeColor(i, Color[i]))
+        orderColor.push(new FillTypeColor(i, colorForLevel[i]))
       }
     }
 
@@ -106,10 +106,10 @@ const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
       ]
       keyBottle = String(i)
       arrayBottle.push(
-        <Bottle checkFinishBottle={saveCallbackFinishBottle}
-                key={keyBottle} keyBottle={keyBottle}
-                height={200} width={100} onClick={click}
-                arrayFillTypeBottle={arrayFillTypeBottle}/>
+        <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
+                key={keyBottle} keyHtmlElement={keyBottle}
+                height={200} width={100} onClickHandler={onClickHandler}
+                bottleColors={arrayFillTypeBottle}/>
       )
     }
 
@@ -117,9 +117,9 @@ const LevelPage: React.FC<LevelProps> = ({ initCountColor = 2 }) => {
     for (let i = 0; i < 2; i++) {
       keyBottle = String(countColor + i)
       arrayBottle.push(
-        <Bottle checkFinishBottle={saveCallbackFinishBottle}
-                key={keyBottle} keyBottle={keyBottle}
-                height={200} width={100} onClick={click}/>
+        <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
+                key={keyBottle} keyHtmlElement={keyBottle}
+                height={200} width={100} onClickHandler={onClickHandler}/>
       )
     }
 
