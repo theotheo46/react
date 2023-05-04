@@ -2,6 +2,7 @@ import Bottle from '../components/Bottle/index'
 import React, { useState } from 'react'
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../utils/FunctionArray'
+import { bool } from 'prop-types'
 
 
 interface Props {
@@ -22,9 +23,11 @@ const colorForLevel = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#
 
 const LevelPage = ({ initCountColor = 2 }: Props) => {
 
-  let arrayCallbackBottleIsComplete: (() => boolean)[] = []
-  let callbackUnSelectBottle: () => void
-  let callbackRemoveColorBottle: () => void
+  const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] = useState<(() => boolean)[]>([])
+
+  const [callbackRemoveColorBottle, setCallbackRemoveColorBottle] = useState<() => () => void>()
+
+  const [callbackUnSelectBottle, setCallbackUnSelectBottle] = useState<() => () => void>()
 
   const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
 
@@ -67,8 +70,8 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
 
     function selectColorFromBottle() {
       setSelectKeyForBottle(keyHtmlElement)
-      callbackUnSelectBottle = callbackUnSelect
-      callbackRemoveColorBottle = callbackRemoveColor
+      setCallbackUnSelectBottle(() => callbackUnSelect)
+      setCallbackRemoveColorBottle(() => callbackRemoveColor)
       setSelectColorBottle(selectColor)
     }
 
@@ -93,7 +96,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   function createArrayBottle(): InfoForRenderBottle[] {
     const infoForRenderBottle: InfoForRenderBottle[] = []
     setDisplay('none')
-    arrayCallbackBottleIsComplete = []
+    setArrayCallbackBottleIsComplete([])
     const orderColor: InstanceType<typeof FillTypeColor>[] = []
     let keyBottle = '0'
 
@@ -122,9 +125,10 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   }
 
   function reCreateAllBottles() {
-    console.log(createArrayBottle())
+    // console.log(createArrayBottle())
+    // setArraySettingsBottle([])
     setArraySettingsBottle(createArrayBottle())
-    console.log(arraySettingsBottle)
+    // console.log(arraySettingsBottle)
   }
 
   function onChangeCountColorInLevel(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -144,10 +148,10 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         </select>
         <button onClick={reCreateAllBottles} style={{ 'marginLeft': '20px' }}>Применить</button>
       </div>
-      {arraySettingsBottle.map((bottle) => <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
-                                    key={bottle.keyHtmlElement} keyHtmlElement={bottle.keyHtmlElement}
-                                    bottleColors={bottle.bottleColors}
-                                    height={200} width={100} onClickHandler={onClickHandler}/>)}
+      {arraySettingsBottle.map((bottle, idx) => <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
+                                                        key={idx} keyHtmlElement={idx}
+                                                        bottleColors={bottle.bottleColors}
+                                                        height={200} width={100} onClickHandler={onClickHandler}/>)}
       <div style={{ marginTop: '20px', marginLeft: '20px', display: victoryLabelDisplay }}>
         <label>Победа!</label>
       </div>
