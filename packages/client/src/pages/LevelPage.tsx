@@ -28,7 +28,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
 
   const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
 
-  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(undefined)
+  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(undefined) 
 
   const [victoryLabelDisplay, setDisplay] = useState('none')
 
