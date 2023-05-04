@@ -4,6 +4,10 @@ if [ "$LEFTHOOK" = "0" ]; then
   exit 0
 fi
 
+if [ -t 1 ] ; then
+  exec < /dev/tty ; # <- enables interactive shell
+fi
+
 call_lefthook()
 {
   dir="$(git rev-parse --show-toplevel)"
@@ -13,24 +17,21 @@ call_lefthook()
   if lefthook -h >/dev/null 2>&1
   then
     eval lefthook $@
-  elif test -f "$dir/node_modules/lefthook/bin/index.js"
-  then
-    eval "\"$dir/node_modules/lefthook/bin/index.js\" $@"
   elif test -f "$dir/node_modules/@evilmartians/lefthook/bin/lefthook_${osArch}_${cpuArch}/lefthook"
   then
-    eval "\"$dir/node_modules/@evilmartians/lefthook/bin/lefthook_${osArch}_${cpuArch}/lefthook\" $@"
+    eval "$dir/node_modules/@evilmartians/lefthook/bin/lefthook_${osArch}_${cpuArch}/lefthook $@"
   elif test -f "$dir/node_modules/@evilmartians/lefthook-installer/bin/lefthook_${osArch}_${cpuArch}/lefthook"
   then
-    eval "\"$dir/node_modules/@evilmartians/lefthook-installer/bin/lefthook_${osArch}_${cpuArch}/lefthook\" $@"
+    eval "$dir/node_modules/@evilmartians/lefthook-installer/bin/lefthook_${osArch}_${cpuArch}/lefthook $@"
+  elif test -f "$dir/node_modules/lefthook/bin/index.js"
+  then
+    eval "$dir/node_modules/lefthook/bin/index.js $@"
   elif bundle exec lefthook -h >/dev/null 2>&1
   then
     bundle exec lefthook $@
   elif yarn lefthook -h >/dev/null 2>&1
   then
     yarn lefthook $@
-  elif pnpm lefthook -h >/dev/null 2>&1
-  then
-    pnpm lefthook $@
   elif npx @evilmartians/lefthook -h >/dev/null 2>&1
   then
     npx @evilmartians/lefthook $@
@@ -38,5 +39,7 @@ call_lefthook()
     echo "Can't find lefthook in PATH"
   fi
 }
+
+
 
 call_lefthook "run prepare-commit-msg $@"
