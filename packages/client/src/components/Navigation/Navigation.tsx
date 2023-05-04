@@ -28,7 +28,6 @@ const Navigation = () => {
       title: 'Leaderbord',
     },
     {
-    {
       path: '/level',
       title: 'Level Page',
     },
