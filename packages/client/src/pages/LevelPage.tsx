@@ -2,7 +2,6 @@ import Bottle from '../components/Bottle/index'
 import React, { useState } from 'react'
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../utils/FunctionArray'
-import { bool } from 'prop-types'
 
 
 interface Props {
@@ -66,6 +65,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
       } else {
         addSelectedColorInBottle()
       }
+      // console.log(arraySettingsBottle)
     }
 
     function selectColorFromBottle() {
@@ -78,7 +78,9 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     function addSelectedColorInBottle() {
       if (needAddSelectedColorInBottle) {
         callbackAddNewColor(selectColorBottle)
-        callbackRemoveColorBottle()
+        if (callbackRemoveColorBottle !== undefined) {
+          callbackRemoveColorBottle()
+        }
         clearSelectedColor()
         updateVictoryLabel()
       }
