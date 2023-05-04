@@ -93,7 +93,7 @@ const Bottle = (
     setContex(canvas.current.getContext('2d'))
     drawEntireBottle(context)
     onSaveFinishCallback(bottleIsComplete)
-  }, [context])
+  }, [context, bottleColors])
 
   const unSelectBottle = () => {
     isSelect = false

@@ -65,7 +65,6 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
       } else {
         addSelectedColorInBottle()
       }
-      // console.log(arraySettingsBottle)
     }
 
     function selectColorFromBottle() {
@@ -127,10 +126,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   }
 
   function reCreateAllBottles() {
-    // console.log(createArrayBottle())
-    // setArraySettingsBottle([])
     setArraySettingsBottle(createArrayBottle())
-    // console.log(arraySettingsBottle)
   }
 
   function onChangeCountColorInLevel(event: React.ChangeEvent<HTMLSelectElement>) {
