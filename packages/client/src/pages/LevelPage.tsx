@@ -1,5 +1,5 @@
 import Bottle from '../components/Bottle/index'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../utils/FunctionArray'
 
@@ -26,21 +26,15 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   let callbackUnSelectBottle: () => void
   let callbackRemoveColorBottle: () => void
 
-  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(() => {
-    return undefined
-  })
+  const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
 
-  const [victoryLabelDisplay, setDisplay] = useState(() => {
-    return 'none'
-  })
+  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(undefined)
 
-  const [selectKeyForBottle, setSelectKeyForBottle] = useState(() => {
-    return '-1'
-  })
+  const [victoryLabelDisplay, setDisplay] = useState('none')
 
-  const [countColor, setCountColor] = useState(() => {
-    return initCountColor
-  })
+  const [selectKeyForBottle, setSelectKeyForBottle] = useState('-1')
+
+  const [countColor, setCountColor] = useState(initCountColor)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
@@ -127,14 +121,10 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     return infoForRenderBottle
   }
 
-  const [info, setInfo] = useState<InfoForRenderBottle[]>(() => {
-    return createArrayBottle()
-  })
-
   function reCreateAllBottles() {
     console.log(createArrayBottle())
-    setInfo(createArrayBottle())
-    console.log(info)
+    setArraySettingsBottle(createArrayBottle())
+    console.log(arraySettingsBottle)
   }
 
   function onChangeCountColorInLevel(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -154,7 +144,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         </select>
         <button onClick={reCreateAllBottles} style={{ 'marginLeft': '20px' }}>Применить</button>
       </div>
-      {info.map((bottle) => <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
+      {arraySettingsBottle.map((bottle) => <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
                                     key={bottle.keyHtmlElement} keyHtmlElement={bottle.keyHtmlElement}
                                     bottleColors={bottle.bottleColors}
                                     height={200} width={100} onClickHandler={onClickHandler}/>)}
