@@ -1,0 +1,28 @@
+.loader-game {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  gap: 1rem;
+  z-index: 30;
+  &__spinner {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border: 6px solid rgba(0, 0, 0, 0.1);
+    border-radius: 9999px;
+    border-top-color: var(--color-orange);
+    animation: spinner 1s infinite;
+  }
+  &__text {
+    opacity: 0.45;
+  }
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
