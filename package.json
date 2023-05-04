@@ -13,14 +13,6 @@
     "preview": "lerna run preview",
     "prepare": "husky install"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged" 
-    }
-  },
-  "lint-staged": {
-    "*.ts": "eslint" 
-  },
   "license": "MIT",
   "workspaces": [
     "packages/*"
