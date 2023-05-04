@@ -127,11 +127,11 @@ const Bottle = (
   const clickEventOnBottle = () => {
     const selectColor: InstanceType<typeof FillTypeColor> = bottleColors.slice(-1)[0]
     if (selectColor !== undefined) {
-      setSelect(!isSelect)
-      offsetYForSelectBottle = (isSelect) ? -20 : 0
+      setSelect(prevState => !prevState)
+      offsetYForSelectBottle = (!isSelect) ? -20 : 0
       drawEntireBottle(context)
     }
-    onClickHandler(isSelect, selectColor, keyHtmlElement, unSelectBottle, addNewColorInBottle, removeFirstTopColor)
+    onClickHandler(!isSelect, selectColor, keyHtmlElement, unSelectBottle, addNewColorInBottle, removeFirstTopColor)
   }
 
   return (
