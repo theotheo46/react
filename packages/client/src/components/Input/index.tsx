@@ -1,13 +1,18 @@
 import React from 'react'
 import './Input.pcss'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
-interface InputProps
+export interface InputProps
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
   name: string
   label: string
+  regex?: RegExp
+  errorText?: string
+  isValid?: boolean
+  refs?: UseFormRegisterReturn<string>
   className?: string
   padding?: string
   margin?: string
@@ -15,8 +20,11 @@ interface InputProps
 
 const Input: React.FC<InputProps> = ({
   name,
+  errorText,
   label,
   className = '',
+  isValid,
+  refs,
   height,
   width,
   padding,
@@ -27,7 +35,7 @@ const Input: React.FC<InputProps> = ({
     padding,
     margin,
     height,
-    width
+    width,
   }
 
   return (
@@ -35,8 +43,15 @@ const Input: React.FC<InputProps> = ({
       htmlFor={name}
       className={'input-wrapper ' + className}
       style={inputStyle}>
-      <input id={name} className="input" placeholder="&nbsp;" {...rest} />
+      <input
+        id={name}
+        className="input"
+        placeholder="&nbsp;"
+        {...refs}
+        {...rest}
+      />
       <span className="input-label">{label}</span>
+      {isValid && <div className="error-label error">{errorText}</div>}
     </label>
   )
 }

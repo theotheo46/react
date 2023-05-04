@@ -1,0 +1,69 @@
+.page-wrap {
+  min-height: 100vh;
+  width: 100%;
+  padding: 3rem;
+
+  .page-title {
+    text-align: center;
+    margin: 2.25rem 0;
+  }
+
+  &_blue {
+    background-color: var(--color-bg-blue);
+  }
+
+  &_lightblue {
+    background-color: var(--color-bg-lightblue);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+  }
+
+  h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    z-index: 10;
+  }
+
+  .card {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-card);
+    &_full {
+      padding: 3rem;
+    }
+  }
+
+  &__wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}

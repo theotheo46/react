@@ -1,17 +1,21 @@
 .button {
-    border: 2px solid;
-    border-radius: var(--border-radius);
-    height: var(--length-unit);
-    padding: 14px 16px;
-    text-align: center;
-    text-decoration: none;
-    transition: scale .3s ease-in-out;
+  border: 2px solid;
+  border-radius: var(--border-radius);
+  height: var(--length-unit);
+  padding: 14px 16px;
+  text-align: center;
+  text-decoration: none;
+  transition: scale 0.3s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
 }
 
-.button:hover{
-    scale: 1.05;
+.button:hover {
+  scale: 1.05;
 }
 
-.button:active{
-    scale: 0.95;
+.button:active {
+  scale: 0.95;
 }
