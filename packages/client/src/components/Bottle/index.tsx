@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import FillTypeColor from './FillTypeColor'
-import { AlgorithmDrawPartOfBottle } from './AlgorithmDrawPartOfBottle'
+import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
 
 
 interface Props
@@ -53,7 +53,6 @@ const Bottle = (
     const heightLayer = heightCanvas / 4
     let offsetYForShadedPartBottle: number = offsetY + count * heightLayer
     drawAllPartOfBottle()
-
 
     function drawAllPartOfBottle() {
       if (!context) return
