@@ -9,11 +9,9 @@ interface Props {
 }
 
 class InfoForRenderBottle {
-  keyHtmlElement: string
   bottleColors: InstanceType<typeof FillTypeColor>[]
 
-  constructor(keyHtmlElement: string, bottleColors: InstanceType<typeof FillTypeColor>[]) {
-    this.keyHtmlElement = keyHtmlElement
+  constructor(bottleColors: InstanceType<typeof FillTypeColor>[]) {
     this.bottleColors = bottleColors
   }
 }
@@ -114,12 +112,12 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         orderColor.pop(), orderColor.pop(),
         orderColor.pop(), orderColor.pop()
       ]
-      infoForRenderBottle.push(new InfoForRenderBottle(String(i), bottleColors))
+      infoForRenderBottle.push(new InfoForRenderBottle(bottleColors))
     }
 
     for (let i = 0; i < 2; i++) {
       keyBottle = String(countColor + i)
-      infoForRenderBottle.push(new InfoForRenderBottle(keyBottle, []))
+      infoForRenderBottle.push(new InfoForRenderBottle([]))
     }
 
     return infoForRenderBottle

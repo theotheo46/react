@@ -18,7 +18,6 @@ interface Props
                    callbackRemoveColor: () => void) => void
   onSaveFinishCallback: (callbackFinishBottle: () => boolean) => void
   keyHtmlElement: string
-  isSelect: boolean
   bottleColors?: InstanceType<typeof FillTypeColor>[]
 }
 
@@ -32,11 +31,11 @@ const Bottle = (
     onClickHandler,
     onSaveFinishCallback,
     keyHtmlElement,
-    isSelect = false,
     bottleColors = []
   }: Props) => {
 
-  const [context, setContex] = useState<CanvasRenderingContext2D | null>(null)
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
+  const [isSelect, setSelect] = useState(false)
 
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
@@ -87,16 +86,16 @@ const Bottle = (
     context.closePath()
   }
 
-  const canvas = useRef<HTMLCanvasElement | null>()
+  const canvas = useRef<HTMLCanvasElement | null>(null)
   useEffect(() => {
     if (!canvas || !canvas.current) return
-    setContex(canvas.current.getContext('2d'))
+    setContext(canvas.current.getContext('2d'))
     drawEntireBottle(context)
     onSaveFinishCallback(bottleIsComplete)
-  }, [context, bottleColors])
+  }, [bottleColors])
 
   const unSelectBottle = () => {
-    isSelect = false
+    setSelect(false)
     offsetYForSelectBottle = 0
     drawEntireBottle(context)
   }
@@ -128,7 +127,7 @@ const Bottle = (
   const clickEventOnBottle = () => {
     const selectColor: InstanceType<typeof FillTypeColor> = bottleColors.slice(-1)[0]
     if (selectColor !== undefined) {
-      isSelect = !isSelect
+      setSelect(!isSelect)
       offsetYForSelectBottle = (isSelect) ? -20 : 0
       drawEntireBottle(context)
     }
