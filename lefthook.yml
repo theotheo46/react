@@ -3,4 +3,4 @@ pre-commit:
   commands:
     tsc:
       glob: '*.{ts,tsx}'
-      run: yarn lint
+      run: yarn eslint
