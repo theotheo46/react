@@ -3,7 +3,4 @@ pre-commit:
   commands:
     tsc:
       glob: '*.{ts,tsx}'
-      run: yarn tsc {staged_files}
-    format:
-      glob: '*.{ts,tsx}'
-      run: yarn format
+      run: yarn lint
