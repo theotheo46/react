@@ -4,7 +4,7 @@ export class FunctionArray {
   public static shuffleArray(array: InstanceType<typeof FillTypeColor>[]) {
     const arrayCopy = array
     let resultArray: InstanceType<typeof FillTypeColor>[] = arrayCopy
-    let lastValue: InstanceType<typeof FillTypeColor> = -1
+    let lastValue = -1
     let countRepeated = 0
     let countInBottle = 0
     let restart = 1
@@ -15,7 +15,6 @@ export class FunctionArray {
     }
     array = resultArray
 
-
     function fillArrayWithColors() {
       for (let i = resultArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1))
@@ -24,6 +23,8 @@ export class FunctionArray {
         resultArray[j] = temp
         if (resultArray[i].id === lastValue) {
           countRepeated = countRepeated + 1
+        } else {
+          countRepeated = 0
         }
         if (countRepeated >= 3) {
           setRestartValues()
