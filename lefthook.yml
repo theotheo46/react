@@ -1,6 +1,9 @@
 pre-commit:
   parallel: true
   commands:
-    lint:
+    tsc:
       glob: '*.{ts,tsx}'
-      run: yarn tsc {staged_files} && yarn format
+      run: yarn tsc {staged_files}
+    format:
+      glob: '*.{ts,tsx}'
+      run: yarn format {staged_files}
