@@ -3,4 +3,4 @@ pre-commit:
   commands:
     lint:
       glob: '*.{ts,tsx}'
-      run: yarn lint {all_files} 
+      run: yarn tsc {all_files} 
