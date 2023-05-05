@@ -3,4 +3,4 @@ pre-commit:
   commands:
     lint:
       glob: '*.{ts,tsx,js}'
-      run: yarn eslint {all_files} 
+      run: yarn lint {all_files} 
