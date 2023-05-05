@@ -11,6 +11,7 @@ import ErrorPage from '../pages/ErrorPage'
 import MiniLendingPage from '../pages/MiniLendingPage/MiniLendingPage'
 import StartPage from '../pages/StartPage'
 import LevelPage from '../pages/LevelPage'
+import FinishPage from '../pages/FinishPage'
 
 const RoutesBase = () => {
   return (
@@ -24,6 +25,7 @@ const RoutesBase = () => {
         <Route path="/leaderbord" element={<LeaderbordPage />} />        
         <Route path='/level' element={<LevelPage />} />
         <Route path="/start" element={<StartPage />} />
+        <Route path="/finish" element={<FinishPage />} />
         <Route
           path="/error400"
           element={
