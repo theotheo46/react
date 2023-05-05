@@ -2,5 +2,5 @@ pre-commit:
   parallel: true
   commands:
     lint:
-      glob: '*.{ts,tsx}'
+      glob: '*.{ts,tsx,js}'
       run: yarn eslint {all_files}
