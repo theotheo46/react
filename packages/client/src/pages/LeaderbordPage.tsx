@@ -8,7 +8,7 @@ const LeaderbordPage = () => {
   const navigate = useNavigate()
 
   const pageTitle = 'Leaderboard | Water Puzzle'
-  const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' } 
+  const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
   useEffect(() => {
     document.title = pageTitle
