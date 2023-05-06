@@ -14,7 +14,7 @@ import LevelPage from '../pages/LevelPage'
 import ForumSectionPage from '../pages/Forum/ForumSectionPage'
 import ForumTopicPage from '../pages/Forum/ForumTopicPage'
 
-const Route sBase = () => {
+const RoutesBase = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
