@@ -16,6 +16,14 @@ const Navigation = () => {
       title: 'Forum',
     },
     {
+      path: '/forumsection',
+      title: 'Forum section',
+    },
+    {
+      path: '/forumtopic',
+      title: 'Forum topic',
+    },
+    {
       path: '/signin',
       title: 'Sign in',
     },
