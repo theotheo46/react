@@ -42,6 +42,7 @@ const SignInPage = () => {
             setError('')
           }}>
           <ErrorInformer
+            errorCode=""
             errorText={error}
             errorStatus="Ошибка при попытке входа в аккаунт"
           />

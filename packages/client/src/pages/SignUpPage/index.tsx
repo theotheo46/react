@@ -43,6 +43,7 @@ const SignUpPage = () => {
             setError('')
           }}>
           <ErrorInformer
+            errorCode=""
             errorText={error}
             errorStatus="Ошибка при попытке создания аккаунта"
           />

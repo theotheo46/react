@@ -10,25 +10,37 @@
   min-height: 100%;
   z-index: -1;
   background-color: var(--color-bg-lightblue);
-    
-    .header1 {
-      font-size: var(--font-header1-size);
+
+  .first-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 100vh;
+    .header {
+      font-size: var(--font-header2-size);
       padding: 10px;
     }
 
     .game-screen-image {
       width: 700px;
       height: auto;
-      padding: 10px;
     }
-
+  }
+  .second-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 100px;
     .memo-container {
-          height: 270px;
-          width: 750px;
+          width: 950px;
           display: flex;
           flex-flow: row nowrap;
           justify-content: space-between;
           align-items: left;
           padding: 10px;
       }
+    }
 }
