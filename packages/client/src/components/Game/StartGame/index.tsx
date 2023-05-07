@@ -2,26 +2,11 @@ import StartGameHeader from './StartGameHeader'
 import StartGameImage from './StartGameImage'
 import StartGameNav from './StartGameNav'
 import './StartGame.pcss'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import LoaderGame from '../LoaderGame'
+import { useStartLevel } from '../../../hooks/useStartLevel'
 
 const StartGame = () => {
-  const [gameIsLoading, setGameIsLoading] = useState(false)
-  const navigate = useNavigate()
-
-  function startGameHandler() {
-    setGameIsLoading(true)
-    delayBeforeGoToLevel()
-  }
-
-  function delayBeforeGoToLevel() {
-    const timer = setTimeout(() => {
-      setGameIsLoading(false)
-      clearTimeout(timer)
-      navigate('/') // TODO: Сделать переход на страницу с уровнем
-    }, 2000)
-  }
+  const { gameIsLoading, startGameHandler } = useStartLevel()
 
   return (
     <div className="start-game">
