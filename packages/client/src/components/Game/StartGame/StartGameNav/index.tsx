@@ -3,6 +3,8 @@ import Button from '../../../Button'
 import './StartGameNav.pcss'
 import iconModeBattle from '../../../../assets/icons/icon-mode-1.svg'
 import iconModePuzzle from '../../../../assets/icons/icon-mode-2.svg'
+import { UserContext } from '../../../../context/UserContext'
+import { useContext } from 'react'
 
 interface Props {
   onStart: () => void
@@ -10,7 +12,11 @@ interface Props {
 
 const StartGameNav = ({ onStart }: Props) => {
   const navigate = useNavigate()
-
+  const { logout } = useContext(UserContext)
+  const handleQuit = async () => {
+    logout()
+    navigate('/signin')
+  }
   return (
     <div className="game-start-nav">
       <div className="game-start-nav__switch-mode">
@@ -50,7 +56,7 @@ const StartGameNav = ({ onStart }: Props) => {
           styleType="primary">
           Лидеры
         </Button>
-        <Button width="100%" onClick={() => navigate('/')} styleType="primary">
+        <Button width="100%" onClick={() => handleQuit()} styleType="primary">
           Выйти
         </Button>
       </div>

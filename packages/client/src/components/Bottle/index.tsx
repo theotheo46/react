@@ -3,8 +3,10 @@ import FillTypeColor from './FillTypeColor'
 import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
 
 interface Props
-  extends React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>,
-    HTMLCanvasElement> {
+  extends React.DetailedHTMLProps<
+    React.CanvasHTMLAttributes<HTMLCanvasElement>,
+    HTMLCanvasElement
+  > {
   height?: number
   width?: number
   offsetX?: number
@@ -24,16 +26,16 @@ interface Props
 }
 
 const Bottle = ({
-                  height = 50,
-                  width = 50,
-                  offsetX = 10,
-                  offsetY = 20,
-                  offsetYForSelectBottle = 0,
-                  onClickHandler,
-                  onSaveFinishCallback,
-                  keyHtmlElement,
-                  bottleColors = []
-                }: Props) => {
+  height = 50,
+  width = 50,
+  offsetX = 10,
+  offsetY = 20,
+  offsetYForSelectBottle = 0,
+  onClickHandler,
+  onSaveFinishCallback,
+  keyHtmlElement,
+  bottleColors = [],
+}: Props) => {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isSelect, setSelect] = useState(false)
 
@@ -66,7 +68,7 @@ const Bottle = ({
           offsetYForSelectBottle: offsetYForSelectBottle,
           width: widthCanvas,
           height: heightLayer + 1,
-          colorShadedPart: bottleColors[i].color
+          colorShadedPart: bottleColors[i].color,
         }
         AlgorithmDrawPartOfBottle.getDesiredAlgorithm(count, layerProps)
         count++

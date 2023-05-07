@@ -11,26 +11,26 @@ export interface InputProps
   label: string
   regex?: RegExp
   errorText?: string
-  isValid?: boolean
+  hasError?: boolean
   refs?: UseFormRegisterReturn<string>
   className?: string
   padding?: string
   margin?: string
 }
 
-const Input: React.FC<InputProps> = ({
+const Input = ({
   name,
   errorText,
   label,
   className = '',
-  isValid,
+  hasError,
   refs,
   height,
   width,
   padding,
   margin,
   ...rest
-}) => {
+}: InputProps) => {
   const inputStyle = {
     padding,
     margin,
@@ -51,7 +51,7 @@ const Input: React.FC<InputProps> = ({
         {...rest}
       />
       <span className="input-label">{label}</span>
-      {isValid && <div className="error-label error">{errorText}</div>}
+      {hasError && <div className="error-label error">{errorText}</div>}
     </label>
   )
 }
