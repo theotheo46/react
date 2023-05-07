@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import FillTypeColor from './FillTypeColor'
 import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
 
-
 interface Props
   extends React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>,
     HTMLCanvasElement> {
@@ -11,29 +10,30 @@ interface Props
   offsetX?: number
   offsetY?: number
   offsetYForSelectBottle?: number
-  onClickHandler: (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
-                   keyHtmlElement: string,
-                   callbackUnSelect: () => void,
-                   callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
-                   callbackRemoveColor: () => void) => void
+  onClickHandler: (
+    isSelect: boolean,
+    selectColor: InstanceType<typeof FillTypeColor>,
+    keyHtmlElement: string,
+    callbackUnSelect: () => void,
+    callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
+    callbackRemoveColor: () => void
+  ) => void
   onSaveFinishCallback: (callbackFinishBottle: () => boolean) => void
   keyHtmlElement: string
   bottleColors?: InstanceType<typeof FillTypeColor>[]
 }
 
-const Bottle = (
-  {
-    height = 50,
-    width = 50,
-    offsetX = 10,
-    offsetY = 20,
-    offsetYForSelectBottle = 0,
-    onClickHandler,
-    onSaveFinishCallback,
-    keyHtmlElement,
-    bottleColors = []
-  }: Props) => {
-
+const Bottle = ({
+                  height = 50,
+                  width = 50,
+                  offsetX = 10,
+                  offsetY = 20,
+                  offsetYForSelectBottle = 0,
+                  onClickHandler,
+                  onSaveFinishCallback,
+                  keyHtmlElement,
+                  bottleColors = []
+                }: Props) => {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isSelect, setSelect] = useState(false)
 
@@ -46,8 +46,12 @@ const Bottle = (
     drawStrokeBottle(context, widthCanvas, heightCanvas)
   }
 
-  const drawShadedPartOfBottle = (context: CanvasRenderingContext2D, widthCanvas: number, heightCanvas: number) => {
-    let count = (4 - bottleColors.length)
+  const drawShadedPartOfBottle = (
+    context: CanvasRenderingContext2D,
+    widthCanvas: number,
+    heightCanvas: number
+  ) => {
+    let count = 4 - bottleColors.length
     const heightLayer = heightCanvas / 4
     let offsetYForShadedPartBottle: number = offsetY + count * heightLayer
     drawAllPartOfBottle()
@@ -71,15 +75,26 @@ const Bottle = (
     }
   }
 
-  const drawStrokeBottle = (context: CanvasRenderingContext2D, widthCanvas: number, heightCanvas: number) => {
+  const drawStrokeBottle = (
+    context: CanvasRenderingContext2D,
+    widthCanvas: number,
+    heightCanvas: number
+  ) => {
     context.beginPath()
     context.moveTo(offsetX, offsetY + offsetYForSelectBottle)
     context.lineTo(offsetX, offsetY + heightCanvas + offsetYForSelectBottle)
-    context.arcTo(offsetX + widthCanvas / 2, offsetY + heightCanvas + widthCanvas / 2 + offsetYForSelectBottle,
-      offsetX + widthCanvas, offsetY + heightCanvas + offsetYForSelectBottle,
-      widthCanvas / 2 + 10)
+    context.arcTo(
+      offsetX + widthCanvas / 2,
+      offsetY + heightCanvas + widthCanvas / 2 + offsetYForSelectBottle,
+      offsetX + widthCanvas,
+      offsetY + heightCanvas + offsetYForSelectBottle,
+      widthCanvas / 2 + 10
+    )
 
-    context.lineTo(offsetX + widthCanvas, offsetY + heightCanvas + offsetYForSelectBottle)
+    context.lineTo(
+      offsetX + widthCanvas,
+      offsetY + heightCanvas + offsetYForSelectBottle
+    )
     context.lineTo(offsetX + widthCanvas, offsetY + offsetYForSelectBottle)
     context.lineTo(offsetX, offsetY + offsetYForSelectBottle)
     context.stroke()
@@ -89,8 +104,9 @@ const Bottle = (
   const canvas = useRef<HTMLCanvasElement | null>(null)
   useEffect(() => {
     if (!canvas || !canvas.current) return
-    setContext(canvas.current.getContext('2d'))
-    drawEntireBottle(context)
+    const newContext = canvas.current.getContext('2d')
+    setContext(newContext)
+    drawEntireBottle(newContext)
     onSaveFinishCallback(bottleIsComplete)
   }, [bottleColors])
 
@@ -115,7 +131,7 @@ const Bottle = (
   }
 
   const bottleIsComplete = (): boolean => {
-    const isEmpty = (bottleColors.length === 0)
+    const isEmpty = bottleColors.length === 0
     let isComplete = false
     if (bottleColors.length === 4) {
       const lastIdColor = bottleColors[0].id
@@ -125,17 +141,31 @@ const Bottle = (
   }
 
   const clickEventOnBottle = () => {
-    const selectColor: InstanceType<typeof FillTypeColor> = bottleColors.slice(-1)[0]
+    const selectColor: InstanceType<typeof FillTypeColor> =
+      bottleColors.slice(-1)[0]
     if (selectColor !== undefined) {
       setSelect(prevState => !prevState)
-      offsetYForSelectBottle = (!isSelect) ? -20 : 0
+      offsetYForSelectBottle = !isSelect ? -20 : 0
       drawEntireBottle(context)
     }
-    onClickHandler(!isSelect, selectColor, keyHtmlElement, unSelectBottle, addNewColorInBottle, removeFirstTopColor)
+    onClickHandler(
+      !isSelect,
+      selectColor,
+      keyHtmlElement,
+      unSelectBottle,
+      addNewColorInBottle,
+      removeFirstTopColor
+    )
   }
 
   return (
-    <canvas key={keyHtmlElement} onClick={clickEventOnBottle} ref={canvas} height={height} width={width}/>
+    <canvas
+      key={keyHtmlElement}
+      onClick={clickEventOnBottle}
+      ref={canvas}
+      height={height}
+      width={width}
+    />
   )
 }
 

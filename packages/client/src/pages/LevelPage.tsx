@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../utils/FunctionArray'
 
-
 interface Props {
   initCountColor?: number
 }
@@ -16,19 +15,28 @@ class InfoForRenderBottle {
   }
 }
 
-const colorForLevel = ['#36d35d', '#fafa89', '#A78BFA', '#fa8989', '#fac289', '#89fade']
+const colorForLevel = [
+  '#36d35d',
+  '#fafa89',
+  '#A78BFA',
+  '#fa8989',
+  '#fac289',
+  '#89fade'
+]
 
 const LevelPage = ({ initCountColor = 2 }: Props) => {
+  const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] =
+    useState<(() => boolean)[]>([])
 
-  const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] = useState<(() => boolean)[]>([])
+  const [callbackRemoveColorBottle, setCallbackRemoveColorBottle] =
+    useState<() => () => void>()
 
-  const [callbackRemoveColorBottle, setCallbackRemoveColorBottle] = useState<() => () => void>()
-
-  const [callbackUnSelectBottle, setCallbackUnSelectBottle] = useState<() => () => void>()
+  const [callbackUnSelectBottle, setCallbackUnSelectBottle] =
+    useState<() => () => void>()
 
   const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
 
-  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(undefined)
+  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(FillTypeColor.TypeEmptyColor)
 
   const [victoryLabelDisplay, setDisplay] = useState('none')
 
@@ -41,19 +49,24 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   }
 
   const updateVictoryLabel = () => {
-    const allBottleIsComplete = arrayCallbackBottleIsComplete.every(bottleIsComplete => bottleIsComplete())
+    const allBottleIsComplete = arrayCallbackBottleIsComplete.every(
+      bottleIsComplete => bottleIsComplete()
+    )
     if (allBottleIsComplete) {
       setDisplay('block')
     }
   }
 
-  const onClickHandler = (isSelect: boolean, selectColor: InstanceType<typeof FillTypeColor>,
-                          keyHtmlElement: string,
-                          callbackUnSelect: () => void,
-                          callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
-                          callbackRemoveColor: () => void
+  const onClickHandler = (
+    isSelect: boolean,
+    selectColor: InstanceType<typeof FillTypeColor>,
+    keyHtmlElement: string,
+    callbackUnSelect: () => void,
+    callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
+    callbackRemoveColor: () => void
   ) => {
-    const needAddSelectedColorInBottle = selectColorBottle !== undefined
+    const needAddSelectedColorInBottle =
+      selectColorBottle !== FillTypeColor.TypeEmptyColor
     const needSelectColorFromBottle = isSelect && !needAddSelectedColorInBottle
     if (selectKeyForBottle === keyHtmlElement) {
       clearSelectedColor()
@@ -87,7 +100,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
       if (callbackUnSelectBottle !== undefined) {
         callbackUnSelectBottle()
       }
-      setSelectColorBottle(undefined)
+      setSelectColorBottle(FillTypeColor.TypeEmptyColor)
       setSelectKeyForBottle('-1')
     }
   }
@@ -97,7 +110,6 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     setDisplay('none')
     setArrayCallbackBottleIsComplete([])
     const orderColor: InstanceType<typeof FillTypeColor>[] = []
-    let keyBottle = '0'
 
     for (let i = 0; i < countColor; i++) {
       for (let j = 0; j < 4; j++) {
@@ -108,15 +120,11 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     FunctionArray.shuffleArray(orderColor)
 
     for (let i = 0; i < countColor; i++) {
-      const bottleColors = [
-        orderColor.pop(), orderColor.pop(),
-        orderColor.pop(), orderColor.pop()
-      ]
+      const bottleColors = orderColor.splice(0, 4);
       infoForRenderBottle.push(new InfoForRenderBottle(bottleColors))
     }
 
     for (let i = 0; i < 2; i++) {
-      keyBottle = String(countColor + i)
       infoForRenderBottle.push(new InfoForRenderBottle([]))
     }
 
@@ -127,7 +135,9 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     setArraySettingsBottle(createArrayBottle())
   }
 
-  function onChangeCountColorInLevel(event: React.ChangeEvent<HTMLSelectElement>) {
+  function onChangeCountColorInLevel(
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) {
     setCountColor(Number(event.target.value))
   }
 
@@ -142,13 +152,27 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
           <option>5</option>
           <option>6</option>
         </select>
-        <button onClick={reCreateAllBottles} style={{ 'marginLeft': '20px' }}>Применить</button>
+        <button onClick={reCreateAllBottles} style={{ marginLeft: '20px' }}>
+          Применить
+        </button>
       </div>
-      {arraySettingsBottle.map((bottle, idx) => <Bottle onSaveFinishCallback={saveCallbackFinishBottle}
-                                                        key={idx} keyHtmlElement={idx}
-                                                        bottleColors={bottle.bottleColors}
-                                                        height={200} width={100} onClickHandler={onClickHandler}/>)}
-      <div style={{ marginTop: '20px', marginLeft: '20px', display: victoryLabelDisplay }}>
+      {arraySettingsBottle.map((bottle, idx) => (
+        <Bottle
+          onSaveFinishCallback={saveCallbackFinishBottle}
+          key={idx}
+          keyHtmlElement={String(idx)}
+          bottleColors={bottle.bottleColors}
+          height={200}
+          width={100}
+          onClickHandler={onClickHandler}
+        />
+      ))}
+      <div
+        style={{
+          marginTop: '20px',
+          marginLeft: '20px',
+          display: victoryLabelDisplay
+        }}>
         <label>Победа!</label>
       </div>
     </div>
