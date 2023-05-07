@@ -45,6 +45,11 @@ const Navigation = () => {
 
     },
     {
+      path: '/finish',
+      title: 'Finish',
+
+    },
+    {
       path: '/error400',
       title: 'Error 400',
     },
