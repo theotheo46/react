@@ -93,6 +93,7 @@ const PHONE = {
 const PASSWORD = {
   id: 'password',
   type: 'password',
+  required: true,
   label: 'Пароль',
   name: 'password',
   regex: REGULAR_EXPRESSON.PASSWORD,
@@ -120,6 +121,7 @@ const NEW_PASSWORD = {
 const REPEAT_PASSWORD = {
   id: 'confirm_new_password',
   type: 'password',
+  required: true,
   label: 'Повторить новый пароль',
   name: 'confirm_new_password',
   regex: REGULAR_EXPRESSON.PASSWORD,

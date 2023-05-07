@@ -37,14 +37,14 @@ const SignInPage = () => {
       />
       {error && (
         <Modal
-          title="Окно с ошибкой"
+          title="Не удалось войти в аккаунт"
           onClose={() => {
             setError('')
           }}>
           <ErrorInformer
-            errorCode=""
+            errorCode="401"
             errorText={error}
-            errorStatus="Ошибка при попытке входа в аккаунт"
+            errorStatus="Попробуйте ещё раз войти в аккаунт"
           />
         </Modal>
       )}

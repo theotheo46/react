@@ -38,14 +38,14 @@ const SignUpPage = () => {
       />
       {error && (
         <Modal
-          title="Окно с ошибкой"
+          title="Не удалось создать аккаунт"
           onClose={() => {
             setError('')
           }}>
           <ErrorInformer
-            errorCode=""
+            errorCode="401"
             errorText={error}
-            errorStatus="Ошибка при попытке создания аккаунта"
+            errorStatus="Попробуйте создать аккаунт ещё раз."
           />
         </Modal>
       )}
