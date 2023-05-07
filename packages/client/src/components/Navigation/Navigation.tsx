@@ -42,12 +42,10 @@ const Navigation = () => {
     {
       path: '/start',
       title: 'Start',
-
     },
     {
       path: '/finish',
       title: 'Finish',
-
     },
     {
       path: '/error400',

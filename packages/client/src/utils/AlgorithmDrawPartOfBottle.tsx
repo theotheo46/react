@@ -9,7 +9,6 @@ interface Props {
 }
 
 export const AlgorithmDrawPartOfBottle = {
-
   getDesiredAlgorithm: (count: number, layerProps: Props) => {
     if (count <= 0) {
       AlgorithmDrawPartOfBottle.top(layerProps)
@@ -35,8 +34,12 @@ export const AlgorithmDrawPartOfBottle = {
     layerProps.context.beginPath()
 
     layerProps.context.fillStyle = layerProps.colorShadedPart
-    layerProps.context.fillRect(layerProps.offsetX, layerProps.offsetY + layerProps.offsetYForSelectBottle,
-      layerProps.width, layerProps.height)
+    layerProps.context.fillRect(
+      layerProps.offsetX,
+      layerProps.offsetY + layerProps.offsetYForSelectBottle,
+      layerProps.width,
+      layerProps.height
+    )
 
     layerProps.context.closePath()
   },
@@ -44,17 +47,41 @@ export const AlgorithmDrawPartOfBottle = {
     layerProps.context.fillStyle = layerProps.colorShadedPart
 
     layerProps.context.beginPath()
-    layerProps.context.moveTo(layerProps.offsetX, layerProps.offsetY + layerProps.offsetYForSelectBottle)
-    layerProps.context.lineTo(layerProps.offsetX, layerProps.offsetY + layerProps.height + layerProps.offsetYForSelectBottle)
-    layerProps.context.arcTo(layerProps.offsetX + layerProps.width / 2, layerProps.offsetY + layerProps.height + layerProps.width / 2 + layerProps.offsetYForSelectBottle,
-      layerProps.offsetX + layerProps.width, layerProps.offsetY + layerProps.height + layerProps.offsetYForSelectBottle,
-      layerProps.width / 2 + 10)
+    layerProps.context.moveTo(
+      layerProps.offsetX,
+      layerProps.offsetY + layerProps.offsetYForSelectBottle
+    )
+    layerProps.context.lineTo(
+      layerProps.offsetX,
+      layerProps.offsetY + layerProps.height + layerProps.offsetYForSelectBottle
+    )
+    layerProps.context.arcTo(
+      layerProps.offsetX + layerProps.width / 2,
+      layerProps.offsetY +
+        layerProps.height +
+        layerProps.width / 2 +
+        layerProps.offsetYForSelectBottle,
+      layerProps.offsetX + layerProps.width,
+      layerProps.offsetY +
+        layerProps.height +
+        layerProps.offsetYForSelectBottle,
+      layerProps.width / 2 + 10
+    )
 
-    layerProps.context.lineTo(layerProps.offsetX + layerProps.width, layerProps.offsetY + layerProps.height + layerProps.offsetYForSelectBottle)
-    layerProps.context.lineTo(layerProps.offsetX + layerProps.width, layerProps.offsetY + layerProps.offsetYForSelectBottle)
-    layerProps.context.lineTo(layerProps.offsetX, layerProps.offsetY + layerProps.offsetYForSelectBottle)
+    layerProps.context.lineTo(
+      layerProps.offsetX + layerProps.width,
+      layerProps.offsetY + layerProps.height + layerProps.offsetYForSelectBottle
+    )
+    layerProps.context.lineTo(
+      layerProps.offsetX + layerProps.width,
+      layerProps.offsetY + layerProps.offsetYForSelectBottle
+    )
+    layerProps.context.lineTo(
+      layerProps.offsetX,
+      layerProps.offsetY + layerProps.offsetYForSelectBottle
+    )
     layerProps.context.closePath()
 
     layerProps.context.fill()
-  }
+  },
 }

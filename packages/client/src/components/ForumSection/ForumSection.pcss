@@ -1,37 +1,37 @@
 .forum-section {
-    height: 120px;
-    width: 600px;
+  height: 120px;
+  width: 600px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: normal;
+  align-items: left;
+  border: 2px solid var(--color-bg-overlay);
+  border-radius: var(--border-radius);
+  border-top-color: var(--color-orange);
+  padding: 5px;
+  margin: 5px;
+  &-header {
+    height: 35px;
     display: flex;
-    flex-flow: column nowrap;
-    justify-content: normal;
+    flex-flow: row nowrap;
+    justify-content: space-between;
     align-items: left;
-    border: 2px solid var(--color-bg-overlay);
-    border-radius:  var(--border-radius);
-    border-top-color: var(--color-orange);
-    padding: 5px;
-    margin: 5px;
-    &-header{
-      height: 35px;
+    .header-left {
+      font-size: var(--font-header-size);
+    }
+    .header-right {
+      width: 65%;
       display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: left;
-      .header-left {
-        font-size: var(--font-header-size);
-      }
-      .header-right {
-        width: 65%;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: left;
-      }
     }
-    &-body{
-      overflow: hidden;
-      text-align: justify;
-      text-justify: inter-word;
-      word-break: break-word;
-      font-size: var(--font-small-size);
-    }
+  }
+  &-body {
+    overflow: hidden;
+    text-align: justify;
+    text-justify: inter-word;
+    word-break: break-word;
+    font-size: var(--font-small-size);
+  }
 }
