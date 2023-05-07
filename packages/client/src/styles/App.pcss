@@ -3,8 +3,17 @@
   width: 100%;
   padding: 3rem;
 
+  .page-title {
+    text-align: center;
+    margin: 2.25rem 0;
+  }
+
   &_blue {
     background-color: var(--color-bg-blue);
+  }
+
+  &_lightblue {
+    background-color: var(--color-bg-lightblue);
   }
 
   h1,
@@ -35,16 +44,26 @@
   }
 
   .container {
+    position: relative;
     width: 100%;
     height: 100%;
     margin-right: auto;
     margin-left: auto;
+    z-index: 10;
   }
+
   .card {
     background-color: var(--color-white);
-    border-radius: 32px;
+    border-radius: var(--border-radius-card);
     &_full {
       padding: 3rem;
     }
+  }
+
+  &__wave {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
   }
 }

@@ -13,7 +13,7 @@ interface Props {
   onSubmit: SubmitHandler<Record<string, unknown>>
 }
 
-const Form = ({ title, className, inputs, buttonLabel }: Props) => {
+const Form = ({ title, className, inputs, buttonLabel, onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
@@ -21,9 +21,7 @@ const Form = ({ title, className, inputs, buttonLabel }: Props) => {
   } = useForm({
     mode: 'onBlur',
   })
-  const onSubmit: SubmitHandler<Record<string, unknown>> = data => {
-    console.log(JSON.stringify(data))
-  }
+
   const navLink =
     title === 'Регистрация'
       ? {

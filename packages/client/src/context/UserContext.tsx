@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 import { baseApi } from '../api/baseApi'
+import { useNavigate } from 'react-router-dom'
 
 export interface User {
   id: number
@@ -23,6 +24,10 @@ export interface RequestUpdateUserData {
   data: Omit<User, 'avatar'>
 }
 
+export interface RequestCreateUserData {
+  data: Omit<User, 'avatar' | 'display_name'>
+}
+
 export interface RequestUpdatePasswordData {
   oldPassword: string
   newPassword: string
@@ -33,6 +38,8 @@ interface UserContextProps {
   error: string
   isPending: boolean
   getUser: () => void
+  logout: () => void
+  createUser: (data: RequestCreateUserData) => void
   loginUser: (data: RequestLoginData) => void
   updateUser: (data: RequestUpdateUserData) => void
   updateAvatar: (data: FormData) => void
@@ -44,6 +51,8 @@ export const UserContext = createContext<UserContextProps>({
   error: '',
   isPending: false,
   getUser: () => {},
+  logout: () => {},
+  createUser: (data: RequestCreateUserData) => {},
   loginUser: (data: RequestLoginData) => {},
   updateUser: (data: RequestUpdateUserData) => {},
   updateAvatar: (data: FormData) => {},
@@ -55,7 +64,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState('')
   const [isPending, setIsPending] = useState(false)
   const firstRender = useRef(true)
-
+  const navigate = useNavigate()
   // Тестовый юзер, пока нет формы авторизации
   const testUser: RequestLoginData = {
     login: 'Bret123',
@@ -64,10 +73,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (firstRender.current) {
-      getUser()
+      getUser().catch(reject => {
+        navigate('/signin')
+      })
     }
     if (!firstRender.current && !user) {
-      loginUser()
+      navigate('/signin')
     }
     firstRender.current = false
   }, [error])
@@ -87,12 +98,45 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function createUser(data: RequestCreateUserData) {
+    try {
+      setIsPending(true)
+      setError('')
+      await baseApi.post('/auth/signup', data)
+      await getUser()
+      navigate('/start')
+    } catch (error) {
+      const { message } = error as Error
+      setError(message)
+      console.error(message)
+    } finally {
+      setIsPending(false)
+    }
+  }
+
   async function loginUser(data = testUser) {
     try {
       setIsPending(true)
       setError('')
       await baseApi.post('/auth/signin', data)
       await getUser()
+      navigate('/start')
+    } catch (error) {
+      const { message } = error as Error
+      setError(message)
+      console.error(message)
+    } finally {
+      setIsPending(false)
+    }
+  }
+
+  async function logout() {
+    try {
+      setIsPending(true)
+      setError('')
+      await baseApi.post('/auth/logout')
+      setUser(null)
+      navigate('/signin')
     } catch (error) {
       const { message } = error as Error
       setError(message)
@@ -152,6 +196,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         user,
         getUser,
         loginUser,
+        createUser,
+        logout,
         error,
         isPending,
         updateUser,

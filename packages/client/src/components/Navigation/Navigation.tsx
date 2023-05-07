@@ -28,6 +28,15 @@ const Navigation = () => {
       title: 'Leaderbord',
     },
     {
+      path: '/level',
+      title: 'Level Page',
+    },
+    {
+      path: '/start',
+      title: 'Start',
+
+    },
+    {
       path: '/error400',
       title: 'Error 400',
     },

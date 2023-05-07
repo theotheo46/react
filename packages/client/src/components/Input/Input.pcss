@@ -27,13 +27,13 @@
     }
     &:not(:placeholder-shown) {
       + .input-label {
-        transform: scale(0.85) translateY(-32px);
+        transform: scale(0.85) translateY(-40px);
       }
     }
     &:focus {
       background: var(--color-bg-darkgray);
       + .input-label {
-        transform: scale(0.85) translateY(-32px);
+        transform: scale(0.85) translateY(-40px);
       }
     }
   }
@@ -41,8 +41,8 @@
   .input-label {
     pointer-events: none;
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 16px;
+    left: 16px;
     white-space: nowrap;
     color: var(--color-text-gray);
     transition: transform 0.3s ease-in-out;

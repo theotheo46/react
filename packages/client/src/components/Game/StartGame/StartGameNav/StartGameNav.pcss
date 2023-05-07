@@ -1,0 +1,31 @@
+.game-start-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2.25rem;
+  &__switch-mode {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__btn-group {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .game-start-nav {
+    &__switch-mode {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    &__btn-group {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}

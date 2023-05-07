@@ -9,6 +9,7 @@
     "color-function-notation": null,
     "shorthand-property-no-redundant-values": null,
     "no-empty-source": null,
-    "selector-class-pattern": null
+    "selector-class-pattern": null,
+    "media-feature-range-notation": "prefix"
   }
 }
