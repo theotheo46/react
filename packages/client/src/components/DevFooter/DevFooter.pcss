@@ -1,39 +1,39 @@
 .dev-footer {
-    height: 110px;
-    width: 800px;
+  height: 110px;
+  width: 800px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: left;
+  &-header {
+    font-size: var(--font-header-size);
+  }
+  &-body {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     justify-content: space-between;
     align-items: left;
-    &-header{
-      font-size: var(--font-header-size);
-    }
-    &-body{
+    .element {
       display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: left;
-        .element{
+      .devavatar {
+        border: 1px double green;
+      }
+      .dev-name-mail {
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: column nowrap;
         justify-content: space-between;
         align-items: left;
-        .devavatar{
-          border: 1px double green;
+        padding: 5px;
+        .devname {
+          font-size: var(--font-small-small-size);
         }
-        .dev-name-mail {
-          display: flex;
-          flex-flow: column nowrap;
-          justify-content: space-between;
-          align-items: left;
-          padding: 5px;
-        .devname{
-            font-size: var(--font-small-small-size);
-          }
-        .devmail{
-            font-size: var(--font-small-size);
-          }
+        .devmail {
+          font-size: var(--font-small-size);
         }
       }
     }
+  }
 }

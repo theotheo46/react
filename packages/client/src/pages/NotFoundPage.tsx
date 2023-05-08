@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage = () => {
   return (
     <>
       <h1>404 Error page</h1>

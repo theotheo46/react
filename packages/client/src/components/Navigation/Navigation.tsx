@@ -28,7 +28,7 @@ const Navigation = () => {
       title: 'Sign in',
     },
     {
-      path: '/singup',
+      path: '/signup',
       title: 'Sign up',
     },
     {
@@ -42,12 +42,10 @@ const Navigation = () => {
     {
       path: '/start',
       title: 'Start',
-
     },
     {
       path: '/finish',
       title: 'Finish',
-
     },
     {
       path: '/error400',

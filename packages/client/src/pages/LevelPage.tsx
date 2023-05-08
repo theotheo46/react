@@ -21,7 +21,7 @@ const colorForLevel = [
   '#A78BFA',
   '#fa8989',
   '#fac289',
-  '#89fade'
+  '#89fade',
 ]
 
 const LevelPage = ({ initCountColor = 2 }: Props) => {
@@ -34,9 +34,13 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   const [callbackUnSelectBottle, setCallbackUnSelectBottle] =
     useState<() => () => void>()
 
-  const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
+  const [arraySettingsBottle, setArraySettingsBottle] = useState<
+    InfoForRenderBottle[]
+  >([])
 
-  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(FillTypeColor.TypeEmptyColor)
+  const [selectColorBottle, setSelectColorBottle] = useState<
+    InstanceType<typeof FillTypeColor>
+  >(FillTypeColor.TypeEmptyColor)
 
   const [victoryLabelDisplay, setDisplay] = useState('none')
 
@@ -120,7 +124,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     FunctionArray.shuffleArray(orderColor)
 
     for (let i = 0; i < countColor; i++) {
-      const bottleColors = orderColor.splice(0, 4);
+      const bottleColors = orderColor.splice(0, 4)
       infoForRenderBottle.push(new InfoForRenderBottle(bottleColors))
     }
 
@@ -171,7 +175,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         style={{
           marginTop: '20px',
           marginLeft: '20px',
-          display: victoryLabelDisplay
+          display: victoryLabelDisplay,
         }}>
         <label>Победа!</label>
       </div>

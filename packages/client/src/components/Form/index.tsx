@@ -5,7 +5,7 @@ import Button from '../Button'
 import { NavLink } from 'react-router-dom'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { REGEX_ERRORS, REGULAR_EXPRESSON } from '../../utils/validate-data'
-interface FormProps {
+interface Props {
   title: string
   className: string
   inputs: InputProps[]
@@ -13,12 +13,7 @@ interface FormProps {
   onSubmit: SubmitHandler<Record<string, unknown>>
 }
 
-const Form: React.FC<FormProps> = ({
-  title,
-  className,
-  inputs,
-  buttonLabel,
-}) => {
+const Form = ({ title, className, inputs, buttonLabel, onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
@@ -26,9 +21,7 @@ const Form: React.FC<FormProps> = ({
   } = useForm({
     mode: 'onBlur',
   })
-  const onSubmit: SubmitHandler<Record<string, unknown>> = data => {
-    console.log(JSON.stringify(data))
-  }
+
   const navLink =
     title === 'Регистрация'
       ? {
@@ -49,7 +42,7 @@ const Form: React.FC<FormProps> = ({
         <Input
           key={key}
           {...input}
-          isValid={!!errors[input.name]}
+          hasError={!!errors[input.name]}
           refs={register(input.name, {
             required: {
               value: input.required || false,
