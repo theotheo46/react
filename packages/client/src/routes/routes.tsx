@@ -50,7 +50,7 @@ const RoutesBase = () => {
           }
         />
         <Route path="/signin" element={<SignInPage />} />
-        <Route path="/singup" element={<SignUpPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/leaderbord" element={<LeaderbordPage />} />
         <Route path="/level" element={<LevelPage />} />
         <Route path="/start" element={<StartPage />} />

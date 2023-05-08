@@ -28,7 +28,7 @@ const Navigation = () => {
       title: 'Sign in',
     },
     {
-      path: '/singup',
+      path: '/signup',
       title: 'Sign up',
     },
     {
