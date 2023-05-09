@@ -20,6 +20,7 @@ const ErrorPage: React.FC<ErrorInformerProps> = ({
       <Button type="submit" width="150px" height="48px">
         На главную
       </Button>
+      <img className="error-page-wave" src="wave.png" alt="wave" />
     </div>
   )
 }

@@ -68,6 +68,7 @@ const MiniLendingPage = () => {
           devFooterElementArray={devFooterElementArray}
         />
       </div>
+      <img className="mini-lending-page-wave" src="wave.png" alt="wave" />
     </div>
   )
 }
