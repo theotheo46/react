@@ -44,6 +44,7 @@ const ForumTopicPage = ({ title, className, name, user, timestamp }: Props) => {
         <p className="message-title">Новое сообщение</p>
         <div className="lower-pane"></div>
       </div>
+      <img className={`${className}-wave`} src="wave.png" alt="wave" />
     </div>
   )
 }

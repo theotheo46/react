@@ -137,7 +137,37 @@ const ForumSectionPage = ({
           timestamp="12:05:47 22/04/2023"
           childrenElements={messages1}
         />
+                <ForumSection
+          className="forum-section"
+          name="Тема2"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={messages1}
+        />
+        <ForumSection
+          className="forum-section"
+          name="Тема3"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={messages1}
+        />
+
+<ForumSection
+          className="forum-section"
+          name="Тема2"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={messages1}
+        />
+        <ForumSection
+          className="forum-section"
+          name="Тема3"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={messages1}
+        />
       </div>
+      <img className={`${className}-wave`} src="wave.png" alt="wave" />
     </div>
   )
 }
