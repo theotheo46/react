@@ -3,35 +3,7 @@
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 import { baseApi } from '../api/baseApi'
 import { useNavigate } from 'react-router-dom'
-
-export interface User {
-  id: number
-  first_name: string
-  second_name: string
-  display_name: string
-  login: string
-  email: string
-  phone: string
-  avatar: string
-}
-
-export interface RequestLoginData {
-  login: string
-  password: string
-}
-
-export interface RequestUpdateUserData {
-  data: Omit<User, 'avatar'>
-}
-
-export interface RequestCreateUserData {
-  data: Omit<User, 'avatar' | 'display_name'>
-}
-
-export interface RequestUpdatePasswordData {
-  oldPassword: string
-  newPassword: string
-}
+import { RequestCreateUserData, RequestLoginData, RequestUpdatePasswordData, RequestUpdateUserData, User } from '../store/slices/userSlice/types'
 
 interface UserContextProps {
   user: User | null

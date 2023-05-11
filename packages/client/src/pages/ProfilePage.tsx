@@ -23,6 +23,7 @@ const ProfilePage = () => {
         </Button>
         <Profile />
       </main>
+      <img className="page-wrap__wave" src="wave.png" alt="wave" />
     </div>
   )
 }

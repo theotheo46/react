@@ -1,13 +1,12 @@
-import { useContext } from 'react'
 import './Profile.pcss'
 import ProfileAvatar from './ProfileAvatar'
 import ProfileBody from './ProfileBody'
-import { UserContext } from '../../context/UserContext'
 import Button from '../Button'
 import { useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../../store/hooks'
 
 const Profile = () => {
-  const { user } = useContext(UserContext)
+  const { user } = useAppSelector(state => state.user)
   const navigate = useNavigate()
 
   return (

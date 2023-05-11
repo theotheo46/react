@@ -24,6 +24,7 @@ const LeaderbordPage = () => {
         <h1 className="page-title">Таблица лидеров</h1>
         <LeaderboardList />
       </main>
+      <img className="page-wrap__wave" src="wave.png" alt="wave" />
     </div>
   )
 }

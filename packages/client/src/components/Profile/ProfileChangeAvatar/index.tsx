@@ -1,13 +1,15 @@
-import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react'
+import { ChangeEvent, FormEvent, useRef, useState } from 'react'
 import Button from '../../Button'
 import './ProfileChangeAvatar.pcss'
-import { UserContext } from '../../../context/UserContext'
+import { useAppDispatch } from '../../../store/hooks'
+import { updateAvatar } from '../../../store/slices/userSlice/userAsyncThunks'
 
 const ProfileChangeAvatar = () => {
   const [file, setFile] = useState<File>()
   const [successMessage, setSuccessMessage] = useState('')
   const inputFile = useRef<HTMLInputElement | null>(null)
-  const { updateAvatar } = useContext(UserContext)
+
+  const dispatch = useAppDispatch()
 
   function changeFileHandler(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files) {
@@ -17,18 +19,22 @@ const ProfileChangeAvatar = () => {
 
   const isSubmit = !!file
 
-  function formHandler(e: FormEvent) {
+  async function formHandler(e: FormEvent) {
     e.preventDefault()
     if (!file) {
       return
     }
     const data = new FormData()
     data.append('avatar', file)
-    updateAvatar(data)
-    setSuccessMessage('Аватар обновлен!')
-    setFile(undefined)
-    if (inputFile.current) {
-      inputFile.current.value = ''
+
+    const res = await dispatch(updateAvatar(data))
+
+    if (updateAvatar.fulfilled.match(res)) {
+      setSuccessMessage('Аватар обновлен!')
+      setFile(undefined)
+      if (inputFile.current) {
+        inputFile.current.value = ''
+      }
     }
   }
 

@@ -1,8 +1,9 @@
-import { FormEvent, useContext, useState } from 'react'
+import { FormEvent, useState } from 'react'
 import Button from '../../Button'
 import Input from '../../Input'
 import './ProfileChangePassword.pcss'
-import { UserContext } from '../../../context/UserContext'
+import { useAppDispatch } from '../../../store/hooks'
+import { updatePassword } from '../../../store/slices/userSlice/userAsyncThunks'
 
 const ProfileChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('')
@@ -10,7 +11,7 @@ const ProfileChangePassword = () => {
   const [newPasswordTo, setNewPasswordTo] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
 
-  const { updatePassword } = useContext(UserContext)
+  const dispatch = useAppDispatch()
 
   // TODO: Сделать нормальную валидацию для формы
   const isSubmit =
@@ -19,13 +20,17 @@ const ProfileChangePassword = () => {
     !!newPasswordTo &&
     newPassword === newPasswordTo
 
-  function formHandler(e: FormEvent) {
+  async function formHandler(e: FormEvent) {
     e.preventDefault()
-    updatePassword({ oldPassword, newPassword })
-    setOldPassword('')
-    setNewPassword('')
-    setNewPasswordTo('')
-    setSuccessMessage('Пароль изменен!')
+
+    const res = await dispatch(updatePassword({ oldPassword, newPassword }))
+
+    if (updatePassword.fulfilled.match(res)) {
+      setOldPassword('')
+      setNewPassword('')
+      setNewPasswordTo('')
+      setSuccessMessage('Пароль изменен!')
+    }
   }
 
   return (
