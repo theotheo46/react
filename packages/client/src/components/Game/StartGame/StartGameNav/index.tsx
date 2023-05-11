@@ -3,8 +3,8 @@ import Button from '../../../Button'
 import './StartGameNav.pcss'
 import iconModeBattle from '../../../../assets/icons/icon-mode-1.svg'
 import iconModePuzzle from '../../../../assets/icons/icon-mode-2.svg'
-import { UserContext } from '../../../../context/UserContext'
-import { useContext } from 'react'
+import { useAppDispatch } from '../../../../store/hooks'
+import { logoutUser } from '../../../../store/slices/userSlice/userAsyncThunks'
 
 interface Props {
   onStart: () => void
@@ -12,11 +12,14 @@ interface Props {
 
 const StartGameNav = ({ onStart }: Props) => {
   const navigate = useNavigate()
-  const { logout } = useContext(UserContext)
+  const dispatch = useAppDispatch()
   const handleQuit = async () => {
-    logout()
-    navigate('/signin')
+    const res = await dispatch(logoutUser())
+    if (logoutUser.fulfilled.match(res)) {
+      navigate('/signin')
+    }
   }
+
   return (
     <div className="game-start-nav">
       <div className="game-start-nav__switch-mode">
