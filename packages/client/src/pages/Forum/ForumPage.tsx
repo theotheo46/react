@@ -119,7 +119,36 @@ const ForumPage = ({ title, className }: Props) => {
           timestamp="12:05:47 22/04/2023"
           childrenElements={topics1}
         />
+        <ForumSection
+          className="forum-section"
+          name="Раздел3"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={topics1}
+        />
+                <ForumSection
+          className="forum-section"
+          name="Раздел3"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={topics1}
+        />
+                <ForumSection
+          className="forum-section"
+          name="Раздел3"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={topics1}
+        />
+                <ForumSection
+          className="forum-section"
+          name="Раздел3"
+          user="Дмитрий Козицкий"
+          timestamp="12:05:47 22/04/2023"
+          childrenElements={topics1}
+        />
       </div>
+      <img className={`${className}-wave`} src="wave.png" alt="wave" />
     </div>
   )
 }
