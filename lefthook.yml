@@ -3,4 +3,4 @@ pre-commit:
   commands:
     tsc:
       glob: '*.{ts,tsx}'
-      run: yarn tsc
+      run: yarn tsc && yarn format
