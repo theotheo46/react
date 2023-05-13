@@ -145,29 +145,28 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     setCountColor(Number(event.target.value))
   }
 
-  function activateFullscreen(element : Element) {
-    if(element.requestFullscreen) {
-      element.requestFullscreen();        // W3C spec
+  function activateFullscreen(element: Element) {
+    if (element.requestFullscreen) {
+      element.requestFullscreen() // W3C spec
     }
-  };
-  
+  }
+
   function deactivateFullscreen() {
-    if(document.exitFullscreen) {
-      document.exitFullscreen();
+    if (document.exitFullscreen) {
+      document.exitFullscreen()
     }
-  };
+  }
 
   function fullScreenToggle() {
-    let caption = document!.getElementById("toggler")!.innerHTML; 
-    if (caption == "Полный экран") {
-      activateFullscreen(document.documentElement);
-      caption = "В окне"
+    let caption = document!.getElementById('toggler')!.innerHTML
+    if (caption == 'Полный экран') {
+      activateFullscreen(document.documentElement)
+      caption = 'В окне'
+    } else {
+      deactivateFullscreen()
+      caption = 'Полный экран'
     }
-    else {
-      deactivateFullscreen();
-      caption = "Полный экран"
-    }
-    document!.getElementById("toggler")!.innerHTML = caption;
+    document!.getElementById('toggler')!.innerHTML = caption
   }
 
   return (
@@ -184,7 +183,10 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         <button onClick={reCreateAllBottles} style={{ marginLeft: '20px' }}>
           Применить
         </button>
-        <button id="toggler" onClick={fullScreenToggle} style={{ marginLeft: '20px' }}>
+        <button
+          id="toggler"
+          onClick={fullScreenToggle}
+          style={{ marginLeft: '20px' }}>
           Полный экран
         </button>
       </div>
