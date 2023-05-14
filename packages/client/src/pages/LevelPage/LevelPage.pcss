@@ -1,0 +1,60 @@
+.level-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 150px;
+
+    .header {
+
+    }
+
+    &-top {
+        width: 100%;
+        height: 150px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 50px
+    }
+    &-middle {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+        canvas {
+            margin:  0 20px 0 20px;
+        }
+
+        .panel-with-bottles-middle {
+            flex-wrap: wrap;
+            width: 75%;
+        }
+
+        .panel-with-buttons-middle {
+            margin: 20px 20px 20px 0px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            align-self: center;
+        }
+
+
+        .panel-with-info-middle {
+            margin: 0px 0px 0px 10px;
+            height: 100%;
+            width: 15%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-end;
+            align-self: center;
+        }
+    }
+}
