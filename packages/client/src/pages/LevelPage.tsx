@@ -145,6 +145,31 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     setCountColor(Number(event.target.value))
   }
 
+  function activateFullscreen(element : Element) {
+    if(element.requestFullscreen) {
+      element.requestFullscreen();        // W3C spec
+    }
+  };
+  
+  function deactivateFullscreen() {
+    if(document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  };
+
+  function fullScreenToggle() {
+    let caption = document!.getElementById("toggler")!.innerHTML; 
+    if (caption == "Полный экран") {
+      activateFullscreen(document.documentElement);
+      caption = "В окне"
+    }
+    else {
+      deactivateFullscreen();
+      caption = "Полный экран"
+    }
+    document!.getElementById("toggler")!.innerHTML = caption;
+  }
+
   return (
     <div>
       <div style={{ margin: '20px' }}>
@@ -158,6 +183,9 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         </select>
         <button onClick={reCreateAllBottles} style={{ marginLeft: '20px' }}>
           Применить
+        </button>
+        <button id="toggler" onClick={fullScreenToggle} style={{ marginLeft: '20px' }}>
+          Полный экран
         </button>
       </div>
       {arraySettingsBottle.map((bottle, idx) => (

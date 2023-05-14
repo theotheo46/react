@@ -8,7 +8,10 @@ import Modal from '../../components/Modal'
 import { SubmitHandler } from 'react-hook-form'
 import { useAppDispatch } from '../../store/hooks'
 import { RequestUpdateUserData } from '../../store/slices/userSlice/types'
-import { createUser, getUser } from '../../store/slices/userSlice/userAsyncThunks'
+import {
+  createUser,
+  getUser,
+} from '../../store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.registration
@@ -22,12 +25,14 @@ const SignUpPage = () => {
     e
   ) => {
     e?.preventDefault()
-    const res = await dispatch(createUser(data as unknown as RequestUpdateUserData))
-    if(createUser.fulfilled.match(res)) {
+    const res = await dispatch(
+      createUser(data as unknown as RequestUpdateUserData)
+    )
+    if (createUser.fulfilled.match(res)) {
       await dispatch(getUser())
       navigate('/start')
     } else {
-        setError(res.payload || res.error.message || 'Error')
+      setError(res.payload || res.error.message || 'Error')
     }
   }
 

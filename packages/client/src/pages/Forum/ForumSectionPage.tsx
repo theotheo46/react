@@ -137,7 +137,7 @@ const ForumSectionPage = ({
           timestamp="12:05:47 22/04/2023"
           childrenElements={messages1}
         />
-                <ForumSection
+        <ForumSection
           className="forum-section"
           name="Тема2"
           user="Дмитрий Козицкий"
@@ -152,7 +152,7 @@ const ForumSectionPage = ({
           childrenElements={messages1}
         />
 
-<ForumSection
+        <ForumSection
           className="forum-section"
           name="Тема2"
           user="Дмитрий Козицкий"

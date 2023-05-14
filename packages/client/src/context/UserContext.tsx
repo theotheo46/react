@@ -3,7 +3,13 @@
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
 import { baseApi } from '../api/baseApi'
 import { useNavigate } from 'react-router-dom'
-import { RequestCreateUserData, RequestLoginData, RequestUpdatePasswordData, RequestUpdateUserData, User } from '../store/slices/userSlice/types'
+import {
+  RequestCreateUserData,
+  RequestLoginData,
+  RequestUpdatePasswordData,
+  RequestUpdateUserData,
+  User,
+} from '../store/slices/userSlice/types'
 
 interface UserContextProps {
   user: User | null
