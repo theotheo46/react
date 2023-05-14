@@ -3,6 +3,7 @@ import FillTypeColor from './FillTypeColor'
 import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { setSelectedColor } from '../../store/slices/levelSlice'
+import { setCurrentCountAttempts } from '../../store/slices/gameSlice'
 
 interface Props
   extends React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>,
@@ -39,8 +40,12 @@ const Bottle = ({
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isSelect, setSelect] = useState(false)
 
+  const dispatch = useAppDispatch()
   const { countLayersInBottle, selectedColor } =
     useAppSelector(state => state.level)
+
+  const { currentAttempts } =
+    useAppSelector(state => state.game)
 
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
@@ -123,6 +128,8 @@ const Bottle = ({
 
   const addNewColorInBottle = () => {
     if (bottleColors.length < countLayersInBottle) {
+      const addAttempts = currentAttempts + 1
+      dispatch(setCurrentCountAttempts(addAttempts))
       bottleColors.push(JSON.parse(selectedColor))
       unSelectBottle()
     }

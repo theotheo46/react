@@ -47,6 +47,9 @@ const LevelPage = () => {
   } =
     useAppSelector(state => state.level)
 
+  const { currentAttempts } =
+    useAppSelector(state => state.game)
+
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
   }
@@ -250,7 +253,7 @@ const LevelPage = () => {
               </div>
             </div>
             <div className="panel-with-info-middle">
-              <div style={{ marginBottom: '10px' }}>Переливаний: 1</div>
+              <div style={{ marginBottom: '10px' }}>Переливаний: {currentAttempts}</div>
               <div>Время: 05:55</div>
               <div></div>
             </div>
