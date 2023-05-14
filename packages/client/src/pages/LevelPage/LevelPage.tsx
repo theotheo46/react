@@ -11,6 +11,7 @@ import {
 import Button from '../../components/Button/index'
 import './LevelPage.pcss'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { setStartColorsForRestart } from '../../store/slices/levelSlice'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -20,16 +21,8 @@ class InfoForRenderBottle {
   }
 }
 
-const colorForLevel = [
-  '#36d35d',
-  '#fafa89',
-  '#A78BFA',
-  '#fa8989',
-  '#fac289',
-  '#89fade'
-]
-
 const LevelPage = () => {
+  const dispatch = useAppDispatch()
   const iconStyle = { fill: 'var(--color-white)', fontSize: '1.25rem' }
   const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] =
     useState<(() => boolean)[]>([])
@@ -50,7 +43,7 @@ const LevelPage = () => {
 
   const [selectKeyForBottle, setSelectKeyForBottle] = useState('-1')
 
-  const { countColors, countEmptyBottles, countLayersInBottle } =
+  const { countColors, countEmptyBottles, countLayersInBottle, startColorsForRestart } =
     useAppSelector(state => state.level)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
@@ -115,18 +108,31 @@ const LevelPage = () => {
   }
 
   function createArrayBottle(): InfoForRenderBottle[] {
+    let orderColorFromSave: string[] = []
+    let orderColor: InstanceType<typeof FillTypeColor>[] =
+      FunctionArray.getShuffledArrayByNumberColor(countColors, countLayersInBottle)
+
+    orderColor.forEach(color => {
+      orderColorFromSave.push(JSON.stringify(color))
+    })
+    dispatch(setStartColorsForRestart(orderColorFromSave))
+
+    return createArrayBottleByArrayOrderColor(orderColor)
+  }
+
+  function repeatCreateStartArrayBottle(): InfoForRenderBottle[] {
+    let orderColor: InstanceType<typeof FillTypeColor>[] = []
+    startColorsForRestart.forEach(color => {
+      orderColor.push(JSON.parse(color))
+    })
+
+    return createArrayBottleByArrayOrderColor(orderColor)
+  }
+
+  function createArrayBottleByArrayOrderColor(orderColor: InstanceType<typeof FillTypeColor>[]): InfoForRenderBottle[] {
     const infoForRenderBottle: InfoForRenderBottle[] = []
     setDisplay('none')
     setArrayCallbackBottleIsComplete([])
-    const orderColor: InstanceType<typeof FillTypeColor>[] = []
-
-    for (let i = 0; i < countColors; i++) {
-      for (let j = 0; j < countLayersInBottle; j++) {
-        orderColor.push(new FillTypeColor(i, colorForLevel[i]))
-      }
-    }
-
-    FunctionArray.shuffleArray(orderColor)
 
     for (let i = 0; i < countColors; i++) {
       const bottleColors = orderColor.splice(0, countLayersInBottle)
@@ -140,8 +146,8 @@ const LevelPage = () => {
     return infoForRenderBottle
   }
 
-  function reCreateAllBottles() {
-    setArraySettingsBottle(createArrayBottle())
+  function restartLevel() {
+    setArraySettingsBottle(repeatCreateStartArrayBottle())
   }
 
   function onChangeFullScreenState() {
@@ -181,7 +187,7 @@ const LevelPage = () => {
     document.addEventListener('webkitfullscreenchange', exitFullScreenHandler)
     document.addEventListener('mozfullscreenchange', exitFullScreenHandler)
     document.addEventListener('MSFullscreenChange', exitFullScreenHandler)
-    reCreateAllBottles()
+    setArraySettingsBottle(createArrayBottle())
     return () => {
       document.removeEventListener('fullscreenchange', exitFullScreenHandler)
       document.removeEventListener('webkitfullscreenchange', exitFullScreenHandler)
@@ -215,10 +221,10 @@ const LevelPage = () => {
           </div>
           <div className="level-page-middle">
             <div className="panel-with-buttons-middle">
-              <Button styleType="primary" onClick={reCreateAllBottles}>
+              <Button styleType="primary" onClick={restartLevel}>
                 <FaSync style={iconStyle}/>
               </Button>
-              <Button style={{ display: 'none' }} styleType="primary" onClick={reCreateAllBottles}>
+              <Button style={{ display: 'none' }} styleType="primary">
                 <FaReply style={iconStyle}/>
               </Button>
             </div>

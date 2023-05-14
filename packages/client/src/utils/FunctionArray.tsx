@@ -1,6 +1,28 @@
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 
+const colorForLevel = [
+  '#36d35d',
+  '#fafa89',
+  '#A78BFA',
+  '#fa8989',
+  '#fac289',
+  '#89fade'
+]
+
 export class FunctionArray {
+  public static getShuffledArrayByNumberColor(countColors: number, countLayersInBottle: number): InstanceType<typeof FillTypeColor>[] {
+
+    let orderColor: InstanceType<typeof FillTypeColor>[] = []
+    for (let i = 0; i < countColors; i++) {
+      for (let j = 0; j < countLayersInBottle; j++) {
+        orderColor.push(new FillTypeColor(i, colorForLevel[i]))
+      }
+    }
+
+    this.shuffleArray(orderColor)
+    return orderColor
+  }
+
   public static shuffleArray(array: InstanceType<typeof FillTypeColor>[]) {
     const arrayCopy = array
     let resultArray: InstanceType<typeof FillTypeColor>[] = arrayCopy
