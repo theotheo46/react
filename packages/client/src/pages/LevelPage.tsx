@@ -1,7 +1,11 @@
 import Bottle from '../components/Bottle/index'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FillTypeColor from '../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../utils/FunctionArray'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { useNavigate } from 'react-router-dom'
+import { useTimer } from '../hooks/useTimer'
+import { setCurrentTime } from '../store/slices/gameSlice'
 
 interface Props {
   initCountColor?: number
@@ -46,7 +50,17 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
 
   const [selectKeyForBottle, setSelectKeyForBottle] = useState('-1')
 
-  const [countColor, setCountColor] = useState(initCountColor)
+  // const [countColor, setCountColor] = useState(initCountColor)
+  
+  // Три переменные из стора для инициализации уровя
+  const { countColors, countEmptyBottles, countLayersInBottle } =
+    useAppSelector(state => state.level)
+  const { currentLevel } = useAppSelector(state => state.game)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const { timerStart, timerStop, getTime } = useTimer()
+
+  const [countColor, setCountColor] = useState(countColors)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
@@ -57,7 +71,9 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
       bottleIsComplete => bottleIsComplete()
     )
     if (allBottleIsComplete) {
-      setDisplay('block')
+      // setDisplay('block')
+      dispatch(setCurrentTime(getTime()))
+      navigate('/finish')
     }
   }
 
@@ -135,6 +151,14 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     return infoForRenderBottle
   }
 
+  useEffect(() => {
+    reCreateAllBottles()
+    timerStart()
+    return () => {
+      timerStop()
+    }
+  }, [])
+
   function reCreateAllBottles() {
     setArraySettingsBottle(createArrayBottle())
   }
@@ -145,29 +169,28 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     setCountColor(Number(event.target.value))
   }
 
-  function activateFullscreen(element : Element) {
-    if(element.requestFullscreen) {
-      element.requestFullscreen();        // W3C spec
+  function activateFullscreen(element: Element) {
+    if (element.requestFullscreen) {
+      element.requestFullscreen() // W3C spec
     }
-  };
-  
+  }
+
   function deactivateFullscreen() {
-    if(document.exitFullscreen) {
-      document.exitFullscreen();
+    if (document.exitFullscreen) {
+      document.exitFullscreen()
     }
-  };
+  }
 
   function fullScreenToggle() {
-    let caption = document!.getElementById("toggler")!.innerHTML; 
-    if (caption == "Полный экран") {
-      activateFullscreen(document.documentElement);
-      caption = "В окне"
+    let caption = document!.getElementById('toggler')!.innerHTML
+    if (caption == 'Полный экран') {
+      activateFullscreen(document.documentElement)
+      caption = 'В окне'
+    } else {
+      deactivateFullscreen()
+      caption = 'Полный экран'
     }
-    else {
-      deactivateFullscreen();
-      caption = "Полный экран"
-    }
-    document!.getElementById("toggler")!.innerHTML = caption;
+    document!.getElementById('toggler')!.innerHTML = caption
   }
 
   return (
@@ -184,9 +207,14 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
         <button onClick={reCreateAllBottles} style={{ marginLeft: '20px' }}>
           Применить
         </button>
-        <button id="toggler" onClick={fullScreenToggle} style={{ marginLeft: '20px' }}>
+        <button
+          id="toggler"
+          onClick={fullScreenToggle}
+          style={{ marginLeft: '20px' }}>
           Полный экран
         </button>
+        <div>Время: {getTime()}</div>
+        <div>Уровень: {currentLevel}</div>
       </div>
       {arraySettingsBottle.map((bottle, idx) => (
         <Bottle

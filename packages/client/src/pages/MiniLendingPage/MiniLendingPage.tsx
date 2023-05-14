@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
 import DevFooter, { DevFooterElement } from '../../components/DevFooter'
 import Memo from '../../components/Memo'
@@ -26,6 +27,9 @@ const MiniLendingPage = () => {
       devAvatar: 'kseniya.png',
     },
   ]
+
+  const navigate = useNavigate()
+
   return (
     <div className="mini-lending-page">
       <div className="first-screen">
@@ -37,7 +41,7 @@ const MiniLendingPage = () => {
           rws={4}
           cls={80}
         />
-        <Button type="submit" width="150px" height="48px">
+        <Button onClick={() => navigate('/start')} type="submit" width="150px" height="48px">
           Начать игру
         </Button>
         <img

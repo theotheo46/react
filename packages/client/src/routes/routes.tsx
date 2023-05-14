@@ -19,7 +19,8 @@ const RoutesBase = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
+        {/* <Route index element={<HomePage />} /> */}
+        <Route index element={<MiniLendingPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route
           path="/forum"
@@ -75,7 +76,7 @@ const RoutesBase = () => {
             />
           }
         />
-        <Route path="/minilending" element={<MiniLendingPage />} />
+        {/* <Route path="/minilending" element={<MiniLendingPage />} /> */}
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
