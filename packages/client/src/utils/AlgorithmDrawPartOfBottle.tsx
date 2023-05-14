@@ -9,13 +9,9 @@ interface Props {
 }
 
 export const AlgorithmDrawPartOfBottle = {
-  getDesiredAlgorithm: (count: number, layerProps: Props) => {
-    if (count <= 0) {
+  getDesiredAlgorithm: (count: number, countLayersInBottle: number, layerProps: Props) => {
+    if (count < countLayersInBottle - 1) {
       AlgorithmDrawPartOfBottle.top(layerProps)
-    } else if (count === 1) {
-      AlgorithmDrawPartOfBottle.preTop(layerProps)
-    } else if (count === 2) {
-      AlgorithmDrawPartOfBottle.preBottom(layerProps)
     } else {
       AlgorithmDrawPartOfBottle.bottom(layerProps)
     }
@@ -58,13 +54,13 @@ export const AlgorithmDrawPartOfBottle = {
     layerProps.context.arcTo(
       layerProps.offsetX + layerProps.width / 2,
       layerProps.offsetY +
-        layerProps.height +
-        layerProps.width / 2 +
-        layerProps.offsetYForSelectBottle,
+      layerProps.height +
+      layerProps.width / 2 +
+      layerProps.offsetYForSelectBottle,
       layerProps.offsetX + layerProps.width,
       layerProps.offsetY +
-        layerProps.height +
-        layerProps.offsetYForSelectBottle,
+      layerProps.height +
+      layerProps.offsetYForSelectBottle,
       layerProps.width / 2 + 10
     )
 
@@ -83,5 +79,5 @@ export const AlgorithmDrawPartOfBottle = {
     layerProps.context.closePath()
 
     layerProps.context.fill()
-  },
+  }
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import FillTypeColor from './FillTypeColor'
 import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
+import { useAppSelector } from '../../store/hooks'
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -39,6 +40,9 @@ const Bottle = ({
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isSelect, setSelect] = useState(false)
 
+  const { countLayersInBottle } =
+    useAppSelector(state => state.level)
+
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
     const widthCanvas = width - offsetX * 2
@@ -53,8 +57,8 @@ const Bottle = ({
     widthCanvas: number,
     heightCanvas: number
   ) => {
-    let count = 4 - bottleColors.length
-    const heightLayer = heightCanvas / 4
+    let count = countLayersInBottle - bottleColors.length
+    const heightLayer = heightCanvas / countLayersInBottle
     let offsetYForShadedPartBottle: number = offsetY + count * heightLayer
     drawAllPartOfBottle()
 
@@ -70,7 +74,7 @@ const Bottle = ({
           height: heightLayer + 1,
           colorShadedPart: bottleColors[i].color,
         }
-        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(count, layerProps)
+        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(count, countLayersInBottle, layerProps)
         count++
         offsetYForShadedPartBottle = offsetYForShadedPartBottle + heightLayer
       }
@@ -119,7 +123,7 @@ const Bottle = ({
   }
 
   const addNewColorInBottle = (color: InstanceType<typeof FillTypeColor>) => {
-    if (bottleColors.length < 4) {
+    if (bottleColors.length < countLayersInBottle) {
       bottleColors.push(color)
       unSelectBottle()
     }
@@ -135,7 +139,7 @@ const Bottle = ({
   const bottleIsComplete = (): boolean => {
     const isEmpty = bottleColors.length === 0
     let isComplete = false
-    if (bottleColors.length === 4) {
+    if (bottleColors.length === countLayersInBottle) {
       const lastIdColor = bottleColors[0].id
       isComplete = !bottleColors.some(color => lastIdColor !== color.id)
     }

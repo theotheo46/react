@@ -1,5 +1,5 @@
 import Bottle from '../../components/Bottle/index'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FillTypeColor from '../../components/Bottle/FillTypeColor'
 import { FunctionArray } from '../../utils/FunctionArray'
 import {
@@ -52,8 +52,6 @@ const LevelPage = () => {
 
   const { countColors, countEmptyBottles, countLayersInBottle } =
     useAppSelector(state => state.level)
-
-  const [countColor, setCountColor] = useState(countColors)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
@@ -122,20 +120,20 @@ const LevelPage = () => {
     setArrayCallbackBottleIsComplete([])
     const orderColor: InstanceType<typeof FillTypeColor>[] = []
 
-    for (let i = 0; i < countColor; i++) {
-      for (let j = 0; j < 4; j++) {
+    for (let i = 0; i < countColors; i++) {
+      for (let j = 0; j < countLayersInBottle; j++) {
         orderColor.push(new FillTypeColor(i, colorForLevel[i]))
       }
     }
 
     FunctionArray.shuffleArray(orderColor)
 
-    for (let i = 0; i < countColor; i++) {
-      const bottleColors = orderColor.splice(0, 4)
+    for (let i = 0; i < countColors; i++) {
+      const bottleColors = orderColor.splice(0, countLayersInBottle)
       infoForRenderBottle.push(new InfoForRenderBottle(bottleColors))
     }
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < countEmptyBottles; i++) {
       infoForRenderBottle.push(new InfoForRenderBottle([]))
     }
 
