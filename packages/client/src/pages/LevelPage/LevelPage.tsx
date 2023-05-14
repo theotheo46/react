@@ -11,7 +11,7 @@ import {
 import Button from '../../components/Button/index'
 import './LevelPage.pcss'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { setStartColorsForRestart } from '../../store/slices/levelSlice'
+import { setSelectedColor, setStartColorsForRestart } from '../../store/slices/levelSlice'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -35,15 +35,16 @@ const LevelPage = () => {
 
   const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
 
-  const [selectColorBottle, setSelectColorBottle] = useState<InstanceType<typeof FillTypeColor>>(FillTypeColor.TypeEmptyColor)
-
   const [victoryLabelDisplay, setDisplay] = useState('none')
   const [iconFullScreenDisplay, setIconFullScreenDisplay] = useState('block')
   const [iconNotFullScreenDisplay, setIconNotFullScreenDisplay] = useState('none')
 
   const [selectKeyForBottle, setSelectKeyForBottle] = useState('-1')
 
-  const { countColors, countEmptyBottles, countLayersInBottle, startColorsForRestart } =
+  const {
+    countColors, countEmptyBottles, countLayersInBottle,
+    startColorsForRestart, selectedColor
+  } =
     useAppSelector(state => state.level)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
@@ -64,11 +65,10 @@ const LevelPage = () => {
     selectColor: InstanceType<typeof FillTypeColor>,
     keyHtmlElement: string,
     callbackUnSelect: () => void,
-    callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
+    callbackAddNewColor: () => void,
     callbackRemoveColor: () => void
   ) => {
-    const needAddSelectedColorInBottle =
-      selectColorBottle !== FillTypeColor.TypeEmptyColor
+    const needAddSelectedColorInBottle = !FillTypeColor.isEmptyColor(selectedColor)
     const needSelectColorFromBottle = isSelect && !needAddSelectedColorInBottle
     if (selectKeyForBottle === keyHtmlElement) {
       clearSelectedColor()
@@ -84,12 +84,12 @@ const LevelPage = () => {
       setSelectKeyForBottle(keyHtmlElement)
       setCallbackUnSelectBottle(() => callbackUnSelect)
       setCallbackRemoveColorBottle(() => callbackRemoveColor)
-      setSelectColorBottle(selectColor)
+      dispatch(setSelectedColor(JSON.stringify(selectColor)))
     }
 
     function addSelectedColorInBottle() {
       if (needAddSelectedColorInBottle) {
-        callbackAddNewColor(selectColorBottle)
+        callbackAddNewColor()
         if (callbackRemoveColorBottle !== undefined) {
           callbackRemoveColorBottle()
         }
@@ -102,14 +102,14 @@ const LevelPage = () => {
       if (callbackUnSelectBottle !== undefined) {
         callbackUnSelectBottle()
       }
-      setSelectColorBottle(FillTypeColor.TypeEmptyColor)
+      dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
       setSelectKeyForBottle('-1')
     }
   }
 
   function createArrayBottle(): InfoForRenderBottle[] {
     let orderColorFromSave: string[] = []
-    let orderColor: InstanceType<typeof FillTypeColor>[] =
+    const orderColor: InstanceType<typeof FillTypeColor>[] =
       FunctionArray.getShuffledArrayByNumberColor(countColors, countLayersInBottle)
 
     orderColor.forEach(color => {
