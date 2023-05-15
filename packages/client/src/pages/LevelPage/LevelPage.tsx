@@ -17,6 +17,7 @@ import {
   setStartColorsForRestart,
   setSelectedKeyBottle,
 } from '../../store/slices/levelSlice'
+import { useNavigate } from 'react-router-dom'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -28,6 +29,7 @@ class InfoForRenderBottle {
 
 const LevelPage = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const iconStyle = { fill: 'var(--color-white)', fontSize: '1.25rem' }
   const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] =
     useState<(() => boolean)[]>([])
@@ -179,6 +181,10 @@ const LevelPage = () => {
     }
   }
 
+  function goToStartScreen() {
+    navigate('/start')
+  }
+
   useEffect(() => {
     document.addEventListener('fullscreenchange', exitFullScreenHandler)
     document.addEventListener('webkitfullscreenchange', exitFullScreenHandler)
@@ -201,9 +207,9 @@ const LevelPage = () => {
       <main className="container">
         <div className="level-page">
           <div className="level-page-top">
-            <Button styleType="primary">
+            <Button styleType="primary" onClick={goToStartScreen}>
               <FaArrowLeft style={iconStyle} />
-              Выйти
+              Назад
             </Button>
             <div style={{ fontSize: '40px' }}>Решите головоломку</div>
             <Button styleType="primary" onClick={onChangeFullScreenState}>
