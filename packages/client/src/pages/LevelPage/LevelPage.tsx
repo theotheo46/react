@@ -30,9 +30,6 @@ const LevelPage = () => {
   const [callbackRemoveColorBottle, setCallbackRemoveColorBottle] =
     useState<(countColorNeedDelete: number) => (countColorNeedDelete: number) => void>()
 
-  const [callbackUnSelectBottle, setCallbackUnSelectBottle] =
-    useState<() => () => void>()
-
   const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
 
   const [victoryLabelDisplay, setDisplay] = useState('none')
@@ -42,11 +39,9 @@ const LevelPage = () => {
   const {
     countColors, countEmptyBottles, countLayersInBottle,
     startColorsForRestart, selectedColor
-  } =
-    useAppSelector(state => state.level)
+  } = useAppSelector(state => state.level)
 
-  const { currentAttempts } =
-    useAppSelector(state => state.game)
+  const { currentAttempts } = useAppSelector(state => state.game)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
@@ -63,12 +58,10 @@ const LevelPage = () => {
 
   const onClickHandler = (
     isSelect: boolean,
-    callbackUnSelect: () => void,
     callbackAddNewColor: () => number,
     callbackRemoveColor: (countColorNeedDelete: number) => void
   ) => {
-    const needAddSelectedColorInBottle = !FillTypeColor.isEmptyColor(selectedColor)
-    const needSelectColorFromBottle = isSelect && !needAddSelectedColorInBottle
+    const needSelectColorFromBottle = isSelect && FillTypeColor.isEmptyColor(selectedColor)
     if (needSelectColorFromBottle) {
       selectColorFromBottle()
     } else {
@@ -76,30 +69,14 @@ const LevelPage = () => {
     }
 
     function selectColorFromBottle() {
-      setCallbackUnSelectBottle(() => callbackUnSelect)
       setCallbackRemoveColorBottle(() => callbackRemoveColor)
     }
 
     function addSelectedColorInBottle() {
-      if (needAddSelectedColorInBottle) {
-        const countRemoveColor = callbackAddNewColor()
-        if (callbackRemoveColorBottle !== undefined && countRemoveColor > 0) {
-          callbackRemoveColorBottle(countRemoveColor)
-        }
-        if (countRemoveColor <= 0) {
-          callbackUnSelect()
-        }
-        clearSelectedColor()
-        updateVictoryLabel()
+      if (callbackRemoveColorBottle !== undefined) {
+        callbackRemoveColorBottle(callbackAddNewColor())
       }
-    }
-
-    function clearSelectedColor() {
-      if (callbackUnSelectBottle !== undefined) {
-        callbackUnSelectBottle()
-      }
-      dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
-      dispatch(setSelectedKeyBottle('-1'))
+      updateVictoryLabel()
     }
   }
 
@@ -127,8 +104,7 @@ const LevelPage = () => {
 
   function createArrayBottleByArrayOrderColor(orderColor: InstanceType<typeof FillTypeColor>[]): InfoForRenderBottle[] {
     const infoForRenderBottle: InfoForRenderBottle[] = []
-    setDisplay('none')
-    setArrayCallbackBottleIsComplete([])
+    clearAllState()
 
     for (let i = 0; i < countColors; i++) {
       const bottleColors = orderColor.splice(0, countLayersInBottle)
@@ -140,6 +116,13 @@ const LevelPage = () => {
     }
 
     return infoForRenderBottle
+
+    function clearAllState() {
+      setDisplay('none')
+      setArrayCallbackBottleIsComplete([])
+      dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
+      dispatch(setSelectedKeyBottle('-1'))
+    }
   }
 
   function restartLevel() {

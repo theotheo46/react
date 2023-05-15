@@ -19,7 +19,6 @@ interface Props
   offsetYForSelectBottle?: number
   onClickHandler: (
     isSelect: boolean,
-    callbackUnSelect: () => void,
     callbackAddNewColor: () => number,
     callbackRemoveColor: (countColorNeedDelete: number) => void
   ) => void
@@ -120,6 +119,7 @@ const Bottle = ({
     setContext(newContext)
     drawEntireBottle(newContext)
     onSaveFinishCallback(bottleIsComplete)
+    setSelect(false)
   }, [bottleColors])
 
   const unSelectBottle = () => {
@@ -141,9 +141,9 @@ const Bottle = ({
         for (let i = 0; i < countColorNeedDelete; i++) {
           bottleColors.push(newColor)
         }
-        unSelectBottle()
       }
     }
+    unSelectBottle()
     return countColorNeedDelete
   }
 
@@ -152,8 +152,10 @@ const Bottle = ({
       for (let i = 0; i < countColorNeedDelete; i++) {
         bottleColors.pop()
       }
-      drawEntireBottle(context)
     }
+    dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
+    dispatch(setSelectedKeyBottle('-1'))
+    unSelectBottle()
   }
 
   const selectColorForTransfuse = () => {
@@ -202,7 +204,6 @@ const Bottle = ({
     selectColorForTransfuse()
     onClickHandler(
       !isSelect,
-      unSelectBottle,
       addNewColorInBottle,
       removeFirstTopColor
     )
