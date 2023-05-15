@@ -15,9 +15,8 @@ interface Props
   offsetYForSelectBottle?: number
   onClickHandler: (
     isSelect: boolean,
-    selectColor: InstanceType<typeof FillTypeColor>,
     callbackUnSelect: () => void,
-    callbackAddNewColor: () => void,
+    callbackAddNewColor: () => boolean,
     callbackRemoveColor: () => void
   ) => void
   onSaveFinishCallback: (callbackFinishBottle: () => boolean) => void
@@ -135,8 +134,10 @@ const Bottle = ({
         dispatch(setCurrentCountAttempts(addAttempts))
         bottleColors.push(newColor)
         unSelectBottle()
+        return true
       }
     }
+    return false
   }
 
   const removeFirstTopColor = () => {
@@ -171,10 +172,10 @@ const Bottle = ({
       offsetYForSelectBottle = !isSelect ? -20 : 0
       drawEntireBottle(context)
       dispatch(setSelectedKeyBottle(keyHtmlElement))
+      dispatch(setSelectedColor(JSON.stringify(currentSelectColor)))
     }
     onClickHandler(
       !isSelect,
-      currentSelectColor,
       unSelectBottle,
       addNewColorInBottle,
       removeFirstTopColor

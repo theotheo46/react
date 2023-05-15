@@ -63,9 +63,8 @@ const LevelPage = () => {
 
   const onClickHandler = (
     isSelect: boolean,
-    selectColor: InstanceType<typeof FillTypeColor>,
     callbackUnSelect: () => void,
-    callbackAddNewColor: () => void,
+    callbackAddNewColor: () => boolean,
     callbackRemoveColor: () => void
   ) => {
     const needAddSelectedColorInBottle = !FillTypeColor.isEmptyColor(selectedColor)
@@ -79,14 +78,16 @@ const LevelPage = () => {
     function selectColorFromBottle() {
       setCallbackUnSelectBottle(() => callbackUnSelect)
       setCallbackRemoveColorBottle(() => callbackRemoveColor)
-      dispatch(setSelectedColor(JSON.stringify(selectColor)))
     }
 
     function addSelectedColorInBottle() {
       if (needAddSelectedColorInBottle) {
-        callbackAddNewColor()
-        if (callbackRemoveColorBottle !== undefined) {
+        const needRemoveColor = callbackAddNewColor()
+        if (callbackRemoveColorBottle !== undefined && needRemoveColor) {
           callbackRemoveColorBottle()
+        }
+        if (!needRemoveColor){
+          callbackUnSelect()
         }
         clearSelectedColor()
         updateVictoryLabel()
