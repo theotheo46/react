@@ -17,7 +17,7 @@ const initialState: GameState = {
   currentAttempts: 0,
   currentTime: '',
   isSetupLevelSettings: false,
-  lastUpdateParam: ''
+  lastUpdateParam: '',
   // selectedDifficulty: null,
 }
 
@@ -40,9 +40,9 @@ const gameSlice = createSlice({
     setLastUpdateParam(state, action: PayloadAction<string>) {
       state.lastUpdateParam = action.payload
     },
-    setCurrentAttempts(state, action:PayloadAction<number>) {
+    setCurrentAttempts(state, action: PayloadAction<number>) {
       state.currentAttempts = action.payload
-    }
+    },
   },
 })
 
@@ -52,6 +52,6 @@ export const {
   setCurrentTime,
   setNextLevel,
   setLastUpdateParam,
-  setCurrentAttempts
+  setCurrentAttempts,
 } = gameSlice.actions
 export default gameSlice.reducer

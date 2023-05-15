@@ -51,7 +51,7 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
   const [selectKeyForBottle, setSelectKeyForBottle] = useState('-1')
 
   // const [countColor, setCountColor] = useState(initCountColor)
-  
+
   // Три переменные из стора для инициализации уровя
   const { countColors, countEmptyBottles, countLayersInBottle } =
     useAppSelector(state => state.level)
