@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import FillTypeColor from './FillTypeColor'
 import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { setSelectedColor } from '../../store/slices/levelSlice'
+import { setSelectedColor, setSelectedKeyBottle } from '../../store/slices/levelSlice'
 import { setCurrentCountAttempts } from '../../store/slices/gameSlice'
 
 interface Props
@@ -16,7 +16,6 @@ interface Props
   onClickHandler: (
     isSelect: boolean,
     selectColor: InstanceType<typeof FillTypeColor>,
-    keyHtmlElement: string,
     callbackUnSelect: () => void,
     callbackAddNewColor: () => void,
     callbackRemoveColor: () => void
@@ -41,7 +40,7 @@ const Bottle = ({
   const [isSelect, setSelect] = useState(false)
 
   const dispatch = useAppDispatch()
-  const { countLayersInBottle, selectedColor } =
+  const { countLayersInBottle, selectedColor, selectedKeyBottle } =
     useAppSelector(state => state.level)
 
   const { currentAttempts } =
@@ -128,10 +127,15 @@ const Bottle = ({
 
   const addNewColorInBottle = () => {
     if (bottleColors.length < countLayersInBottle) {
-      const addAttempts = currentAttempts + 1
-      dispatch(setCurrentCountAttempts(addAttempts))
-      bottleColors.push(JSON.parse(selectedColor))
-      unSelectBottle()
+      const currentTopColor: InstanceType<typeof FillTypeColor> =
+        bottleColors.slice(-1)[0]
+      const newColor: InstanceType<typeof FillTypeColor> = JSON.parse(selectedColor)
+      if ((bottleColors.length === 0) || (currentTopColor.id === newColor.id)) {
+        const addAttempts = currentAttempts + 1
+        dispatch(setCurrentCountAttempts(addAttempts))
+        bottleColors.push(newColor)
+        unSelectBottle()
+      }
     }
   }
 
@@ -153,17 +157,24 @@ const Bottle = ({
   }
 
   const clickEventOnBottle = () => {
+    if (selectedKeyBottle === keyHtmlElement) {
+      unSelectBottle()
+      dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
+      dispatch(setSelectedKeyBottle('-1'))
+      return
+    }
+
     const currentSelectColor: InstanceType<typeof FillTypeColor> =
       bottleColors.slice(-1)[0]
     if (currentSelectColor !== undefined) {
       setSelect(prevState => !prevState)
       offsetYForSelectBottle = !isSelect ? -20 : 0
       drawEntireBottle(context)
+      dispatch(setSelectedKeyBottle(keyHtmlElement))
     }
     onClickHandler(
       !isSelect,
       currentSelectColor,
-      keyHtmlElement,
       unSelectBottle,
       addNewColorInBottle,
       removeFirstTopColor

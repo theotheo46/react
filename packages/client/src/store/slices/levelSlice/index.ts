@@ -7,6 +7,7 @@ interface LevelState {
   countEmptyBottles: number
   startColorsForRestart: string[]
   selectedColor: string
+  selectedKeyBottle: string
 }
 
 
@@ -15,6 +16,7 @@ const initialState: LevelState = {
   countLayersInBottle: 4,
   countEmptyBottles: 2,
   startColorsForRestart: [],
+  selectedKeyBottle: '-1',
   selectedColor: JSON.stringify(FillTypeColor.TypeEmptyColor)
 }
 
@@ -27,9 +29,12 @@ const levelSlice = createSlice({
     },
     setSelectedColor: (state, action: PayloadAction<string>) => {
       state.selectedColor = action.payload
+    },
+    setSelectedKeyBottle: (state, action: PayloadAction<string>) => {
+      state.selectedKeyBottle = action.payload
     }
   }
 })
 
-export const { setStartColorsForRestart, setSelectedColor } = levelSlice.actions
+export const { setStartColorsForRestart, setSelectedColor, setSelectedKeyBottle } = levelSlice.actions
 export default levelSlice.reducer

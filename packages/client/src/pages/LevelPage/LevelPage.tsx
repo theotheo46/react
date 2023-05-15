@@ -11,7 +11,7 @@ import {
 import Button from '../../components/Button/index'
 import './LevelPage.pcss'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { setSelectedColor, setStartColorsForRestart } from '../../store/slices/levelSlice'
+import { setSelectedColor, setStartColorsForRestart, setSelectedKeyBottle } from '../../store/slices/levelSlice'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -39,8 +39,6 @@ const LevelPage = () => {
   const [iconFullScreenDisplay, setIconFullScreenDisplay] = useState('block')
   const [iconNotFullScreenDisplay, setIconNotFullScreenDisplay] = useState('none')
 
-  const [selectKeyForBottle, setSelectKeyForBottle] = useState('-1')
-
   const {
     countColors, countEmptyBottles, countLayersInBottle,
     startColorsForRestart, selectedColor
@@ -66,25 +64,19 @@ const LevelPage = () => {
   const onClickHandler = (
     isSelect: boolean,
     selectColor: InstanceType<typeof FillTypeColor>,
-    keyHtmlElement: string,
     callbackUnSelect: () => void,
     callbackAddNewColor: () => void,
     callbackRemoveColor: () => void
   ) => {
     const needAddSelectedColorInBottle = !FillTypeColor.isEmptyColor(selectedColor)
     const needSelectColorFromBottle = isSelect && !needAddSelectedColorInBottle
-    if (selectKeyForBottle === keyHtmlElement) {
-      clearSelectedColor()
+    if (needSelectColorFromBottle) {
+      selectColorFromBottle()
     } else {
-      if (needSelectColorFromBottle) {
-        selectColorFromBottle()
-      } else {
-        addSelectedColorInBottle()
-      }
+      addSelectedColorInBottle()
     }
 
     function selectColorFromBottle() {
-      setSelectKeyForBottle(keyHtmlElement)
       setCallbackUnSelectBottle(() => callbackUnSelect)
       setCallbackRemoveColorBottle(() => callbackRemoveColor)
       dispatch(setSelectedColor(JSON.stringify(selectColor)))
@@ -106,7 +98,7 @@ const LevelPage = () => {
         callbackUnSelectBottle()
       }
       dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
-      setSelectKeyForBottle('-1')
+      dispatch(setSelectedKeyBottle('-1'))
     }
   }
 
