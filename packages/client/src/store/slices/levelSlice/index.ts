@@ -54,9 +54,11 @@ const levelSlice = createSlice({
       state.minCountLayersInBottle =
         state.countColors === LIMIT ? state.countColors : state.countColors + 1
     },
-    setNextLevel: () => {
-      console.log('next level')
-    },
+    resetLevel: (state) => {
+      state.countColors = INIT_COUNT_COLORS
+      state.countEmptyBottles = INIT_EMPTY_BOTTLES
+      state.countLayersInBottle = INIT_COUNT_LAYERS
+    }
   },
 })
 
@@ -65,5 +67,6 @@ export const {
   setCountLayersInBottle,
   setCountEmptyBottles,
   updateLayersInBottle,
+  resetLevel
 } = levelSlice.actions
 export default levelSlice.reducer

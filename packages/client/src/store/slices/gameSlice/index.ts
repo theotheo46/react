@@ -7,6 +7,7 @@ interface GameState {
   currentLevel: number
   currentAttempts: number
   currentTime: string
+  lastUpdateParam: string
   // selectedDifficulty: GameDifficulty | null
 }
 
@@ -16,6 +17,7 @@ const initialState: GameState = {
   currentAttempts: 0,
   currentTime: '',
   isSetupLevelSettings: false,
+  lastUpdateParam: ''
   // selectedDifficulty: null,
 }
 
@@ -35,6 +37,12 @@ const gameSlice = createSlice({
     setNextLevel: state => {
       state.currentLevel += 1
     },
+    setLastUpdateParam(state, action: PayloadAction<string>) {
+      state.lastUpdateParam = action.payload
+    },
+    setCurrentAttempts(state, action:PayloadAction<number>) {
+      state.currentAttempts = action.payload
+    }
   },
 })
 
@@ -43,5 +51,7 @@ export const {
   setIsSetupLevelSettings,
   setCurrentTime,
   setNextLevel,
+  setLastUpdateParam,
+  setCurrentAttempts
 } = gameSlice.actions
 export default gameSlice.reducer

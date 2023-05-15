@@ -41,7 +41,11 @@ const MiniLendingPage = () => {
           rws={4}
           cls={80}
         />
-        <Button onClick={() => navigate('/start')} type="submit" width="150px" height="48px">
+        <Button
+          onClick={() => navigate('/start')}
+          type="submit"
+          width="150px"
+          height="48px">
           Начать игру
         </Button>
         <img

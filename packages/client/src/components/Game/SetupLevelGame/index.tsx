@@ -71,7 +71,7 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
           Количество ярусов в бутылке:
           <select
             onChange={e => dispatch(setCountLayersInBottle(+e.target.value))}
-            value={countEmptyBottles}>
+            value={countLayersInBottle}>
             {getLayersRange().map(num => (
               <option key={num} value={num}>
                 {num}
@@ -83,7 +83,7 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
           Количество пустых бутылок:
           <select
             onChange={e => dispatch(setCountEmptyBottles(+e.target.value))}
-            value={countLayersInBottle}>
+            value={countEmptyBottles}>
             {getBottlesRange().map(num => (
               <option key={num} value={num}>
                 {num}
