@@ -14,8 +14,10 @@ import {
   setCurrentAttempts,
   setCurrentTime,
   setLastUpdateParam,
+  setMode,
   setNextLevel,
 } from '../../../store/slices/gameSlice'
+import { useNavigate } from 'react-router-dom'
 
 const FinishGame = () => {
   const countAttempts = 10
@@ -23,13 +25,31 @@ const FinishGame = () => {
   const { currentTime, currentLevel, lastUpdateParam } = useAppSelector(
     state => state.game
   )
+
+  const navigate = useNavigate()
+
   const { countColors, countLayersInBottle, countEmptyBottles } =
     useAppSelector(state => state.level)
   const dispatch = useAppDispatch()
   const { gameIsLoading, startGameHandler } = useStartLevel()
 
+  function startNextLevel() {
+    updateLevel()
+    dispatch(setCurrentTime(''))
+    dispatch(setCurrentAttempts(0))
+    dispatch(setNextLevel())
+    startGameHandler()
+  }
+
+  function exitGameHandler() {
+    dispatch(setCurrentTime(''))
+    dispatch(setCurrentAttempts(0))
+    dispatch(setMode(null))
+    navigate('/start')
+  }
+
   /*
-  Алгоритм изменения уровня 
+  Алгоритм обновления уровня 
 Шаг N
     Увеличить Количество цветов на 1
 Шаг N+1
@@ -42,14 +62,6 @@ const FinishGame = () => {
 При достижении кейса Количество цветов = Количество ярусов = 10 и Количество пустых бутылок = 1 и если при этом игрок дошел до разрешения головоломки
  - игра не оканчивается и при нажатии на кнопку продолжить переходим на начальную конфигурацию уровня 3-4-2
   */
-
-  function startNextLevel() {
-    updateLevel()
-    dispatch(setCurrentTime(''))
-    dispatch(setCurrentAttempts(0))
-    dispatch(setNextLevel())
-    startGameHandler()
-  }
 
   function updateLevel() {
     if (
@@ -80,7 +92,7 @@ const FinishGame = () => {
       dispatch(setLastUpdateParam('epmtyBottles'))
     } else {
       dispatch(setLastUpdateParam(''))
-      setNextLevel()
+      updateLevel()
     }
   }
 
@@ -104,6 +116,9 @@ const FinishGame = () => {
           </div>
         </div>
         <div className="finish-game__btn">
+          <Button onClick={exitGameHandler} styleType="primary">
+            Главное меню
+          </Button>
           <Button onClick={startNextLevel} styleType="primary">
             Продолжить
           </Button>

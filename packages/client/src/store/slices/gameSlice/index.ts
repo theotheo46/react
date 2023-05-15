@@ -1,4 +1,4 @@
-import { GameDifficulty, GameMode } from './types'
+import { GameMode } from './types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface GameState {
@@ -8,17 +8,15 @@ interface GameState {
   currentAttempts: number
   currentTime: string
   lastUpdateParam: string
-  // selectedDifficulty: GameDifficulty | null
 }
 
 const initialState: GameState = {
   mode: null,
-  currentLevel: 0,
+  currentLevel: 1,
   currentAttempts: 0,
   currentTime: '',
   isSetupLevelSettings: false,
   lastUpdateParam: '',
-  // selectedDifficulty: null,
 }
 
 const gameSlice = createSlice({

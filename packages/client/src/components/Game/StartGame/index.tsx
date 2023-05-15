@@ -9,7 +9,6 @@ import SetupLevelGame from '../SetupLevelGame'
 import { GameMode } from '../../../store/slices/gameSlice/types'
 import {
   setIsSetupLevelSettings,
-  setNextLevel,
   setMode,
 } from '../../../store/slices/gameSlice'
 
@@ -38,7 +37,6 @@ const StartGame = () => {
           onCancelSettings={cancelSettingsHandler}
           onStart={() => {
             dispatch(setIsSetupLevelSettings(false))
-            dispatch(setNextLevel())
             startGameHandler()
           }}
         />

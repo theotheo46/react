@@ -8,6 +8,7 @@ import {
 } from '../../../store/slices/levelSlice'
 import Button from '../../Button'
 import { FaArrowLeft } from 'react-icons/fa'
+import './SetupLevelGame.pcss'
 
 interface Props {
   onCancelSettings: () => void
@@ -49,11 +50,15 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
         <FaArrowLeft style={iconBackStyle} />
         Назад
       </Button>
-      <h1>Головоломка</h1>
-      <p>Настройте начальный уровень сложности</p>
-      <div>
-        <div>
-          Количество цветов:
+      <div className="setup-level-header">
+        <h1 className="setup-level-header__title">Головоломка</h1>
+        <div className="setup-level-header__subtitle">
+          Настройте начальный уровень сложности
+        </div>
+      </div>
+      <div className="setup-level-body">
+        <div className="setup-level-body__selector">
+          <label className="setup-level-body__label">Количество цветов:</label>
           <select
             onChange={e => {
               dispatch(setCountColors(+e.target.value))
@@ -67,8 +72,10 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
             ))}
           </select>
         </div>
-        <div>
-          Количество ярусов в бутылке:
+        <div className="setup-level-body__selector">
+          <label className="setup-level-body__label">
+            Количество ярусов в бутылке:
+          </label>
           <select
             onChange={e => dispatch(setCountLayersInBottle(+e.target.value))}
             value={countLayersInBottle}>
@@ -79,8 +86,10 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
             ))}
           </select>
         </div>
-        <div>
-          Количество пустых бутылок:
+        <div className="setup-level-body__selector">
+          <label className="setup-level-body__label">
+            Количество пустых бутылок:
+          </label>
           <select
             onChange={e => dispatch(setCountEmptyBottles(+e.target.value))}
             value={countEmptyBottles}>
@@ -92,7 +101,9 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
           </select>
         </div>
       </div>
-      <Button onClick={onStart}>Start</Button>
+      <div className="setup-level-btn">
+        <Button onClick={onStart}>Начать</Button>
+      </div>
     </div>
   )
 }
