@@ -7,7 +7,7 @@ const store = configureStore({
   reducer: {
     user: userReducer,
     game: gameReducer,
-    level: levelReducer
+    level: levelReducer,
   },
 })
 

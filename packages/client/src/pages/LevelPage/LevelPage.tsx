@@ -6,12 +6,17 @@ import {
   FaArrowLeft,
   FaSync,
   FaCompressArrowsAlt,
-  FaExpand, FaReply
+  FaExpand,
+  FaReply,
 } from 'react-icons/fa'
 import Button from '../../components/Button/index'
 import './LevelPage.pcss'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { setSelectedColor, setStartColorsForRestart, setSelectedKeyBottle } from '../../store/slices/levelSlice'
+import {
+  setSelectedColor,
+  setStartColorsForRestart,
+  setSelectedKeyBottle,
+} from '../../store/slices/levelSlice'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -28,17 +33,25 @@ const LevelPage = () => {
     useState<(() => boolean)[]>([])
 
   const [callbackRemoveColorBottle, setCallbackRemoveColorBottle] =
-    useState<(countColorNeedDelete: number) => (countColorNeedDelete: number) => void>()
+    useState<
+      (countColorNeedDelete: number) => (countColorNeedDelete: number) => void
+    >()
 
-  const [arraySettingsBottle, setArraySettingsBottle] = useState<InfoForRenderBottle[]>([])
+  const [arraySettingsBottle, setArraySettingsBottle] = useState<
+    InfoForRenderBottle[]
+  >([])
 
   const [victoryLabelDisplay, setDisplay] = useState('none')
   const [iconFullScreenDisplay, setIconFullScreenDisplay] = useState('block')
-  const [iconNotFullScreenDisplay, setIconNotFullScreenDisplay] = useState('none')
+  const [iconNotFullScreenDisplay, setIconNotFullScreenDisplay] =
+    useState('none')
 
   const {
-    countColors, countEmptyBottles, countLayersInBottle,
-    startColorsForRestart, selectedColor
+    countColors,
+    countEmptyBottles,
+    countLayersInBottle,
+    startColorsForRestart,
+    selectedColor,
   } = useAppSelector(state => state.level)
 
   const { currentAttempts } = useAppSelector(state => state.game)
@@ -61,7 +74,8 @@ const LevelPage = () => {
     callbackAddNewColor: () => number,
     callbackRemoveColor: (countColorNeedDelete: number) => void
   ) => {
-    const needSelectColorFromBottle = isSelect && FillTypeColor.isEmptyColor(selectedColor)
+    const needSelectColorFromBottle =
+      isSelect && FillTypeColor.isEmptyColor(selectedColor)
     if (needSelectColorFromBottle) {
       selectColorFromBottle()
     } else {
@@ -83,7 +97,10 @@ const LevelPage = () => {
   function createArrayBottle(): InfoForRenderBottle[] {
     let orderColorFromSave: string[] = []
     const orderColor: InstanceType<typeof FillTypeColor>[] =
-      FunctionArray.getShuffledArrayByNumberColor(countColors, countLayersInBottle)
+      FunctionArray.getShuffledArrayByNumberColor(
+        countColors,
+        countLayersInBottle
+      )
 
     orderColor.forEach(color => {
       orderColorFromSave.push(JSON.stringify(color))
@@ -102,7 +119,9 @@ const LevelPage = () => {
     return createArrayBottleByArrayOrderColor(orderColor)
   }
 
-  function createArrayBottleByArrayOrderColor(orderColor: InstanceType<typeof FillTypeColor>[]): InfoForRenderBottle[] {
+  function createArrayBottleByArrayOrderColor(
+    orderColor: InstanceType<typeof FillTypeColor>[]
+  ): InfoForRenderBottle[] {
     const infoForRenderBottle: InfoForRenderBottle[] = []
     clearAllState()
 
@@ -132,8 +151,7 @@ const LevelPage = () => {
   function onChangeFullScreenState() {
     if (iconFullScreenDisplay === 'block') {
       activateFullScreen(document.documentElement)
-    }
-    else {
+    } else {
       deactivateFullScreen()
     }
 
@@ -169,7 +187,10 @@ const LevelPage = () => {
     setArraySettingsBottle(createArrayBottle())
     return () => {
       document.removeEventListener('fullscreenchange', exitFullScreenHandler)
-      document.removeEventListener('webkitfullscreenchange', exitFullScreenHandler)
+      document.removeEventListener(
+        'webkitfullscreenchange',
+        exitFullScreenHandler
+      )
       document.removeEventListener('mozfullscreenchange', exitFullScreenHandler)
       document.removeEventListener('MSFullscreenChange', exitFullScreenHandler)
     }
@@ -181,30 +202,34 @@ const LevelPage = () => {
         <div className="level-page">
           <div className="level-page-top">
             <Button styleType="primary">
-              <FaArrowLeft style={iconStyle}/>
+              <FaArrowLeft style={iconStyle} />
               Выйти
             </Button>
             <div style={{ fontSize: '40px' }}>Решите головоломку</div>
             <Button styleType="primary" onClick={onChangeFullScreenState}>
-              <FaExpand style={{
-                fill: 'var(--color-white)',
-                fontSize: '1.25rem',
-                display: iconFullScreenDisplay
-              }}/>
-              <FaCompressArrowsAlt style={{
-                fill: 'var(--color-white)',
-                fontSize: '1.25rem',
-                display: iconNotFullScreenDisplay
-              }}/>
+              <FaExpand
+                style={{
+                  fill: 'var(--color-white)',
+                  fontSize: '1.25rem',
+                  display: iconFullScreenDisplay,
+                }}
+              />
+              <FaCompressArrowsAlt
+                style={{
+                  fill: 'var(--color-white)',
+                  fontSize: '1.25rem',
+                  display: iconNotFullScreenDisplay,
+                }}
+              />
             </Button>
           </div>
           <div className="level-page-middle">
             <div className="panel-with-buttons-middle">
               <Button styleType="primary" onClick={restartLevel}>
-                <FaSync style={iconStyle}/>
+                <FaSync style={iconStyle} />
               </Button>
               <Button style={{ display: 'none' }} styleType="primary">
-                <FaReply style={iconStyle}/>
+                <FaReply style={iconStyle} />
               </Button>
             </div>
             <div className="panel-with-bottles-middle">
@@ -223,13 +248,15 @@ const LevelPage = () => {
                 style={{
                   marginTop: '20px',
                   marginLeft: '20px',
-                  display: victoryLabelDisplay
+                  display: victoryLabelDisplay,
                 }}>
                 <label>Победа!</label>
               </div>
             </div>
             <div className="panel-with-info-middle">
-              <div style={{ marginBottom: '10px' }}>Переливаний: {currentAttempts}</div>
+              <div style={{ marginBottom: '10px' }}>
+                Переливаний: {currentAttempts}
+              </div>
               <div>Время: 05:55</div>
               <div></div>
             </div>

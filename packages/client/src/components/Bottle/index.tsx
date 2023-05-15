@@ -5,13 +5,15 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   setSelectedColor,
   setSelectedKeyBottle,
-  setCountColorNeedTransfuse
+  setCountColorNeedTransfuse,
 } from '../../store/slices/levelSlice'
 import { setCurrentCountAttempts } from '../../store/slices/gameSlice'
 
 interface Props
-  extends React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>,
-    HTMLCanvasElement> {
+  extends React.DetailedHTMLProps<
+    React.CanvasHTMLAttributes<HTMLCanvasElement>,
+    HTMLCanvasElement
+  > {
   height?: number
   width?: number
   offsetX?: number
@@ -28,25 +30,28 @@ interface Props
 }
 
 const Bottle = ({
-                  height = 50,
-                  width = 50,
-                  offsetX = 10,
-                  offsetY = 20,
-                  offsetYForSelectBottle = 0,
-                  onClickHandler,
-                  onSaveFinishCallback,
-                  keyHtmlElement,
-                  bottleColors = []
-                }: Props) => {
+  height = 50,
+  width = 50,
+  offsetX = 10,
+  offsetY = 20,
+  offsetYForSelectBottle = 0,
+  onClickHandler,
+  onSaveFinishCallback,
+  keyHtmlElement,
+  bottleColors = [],
+}: Props) => {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isSelect, setSelect] = useState(false)
 
   const dispatch = useAppDispatch()
-  let { countLayersInBottle, selectedColor, selectedKeyBottle, countColorNeedTransfuse } =
-    useAppSelector(state => state.level)
+  let {
+    countLayersInBottle,
+    selectedColor,
+    selectedKeyBottle,
+    countColorNeedTransfuse,
+  } = useAppSelector(state => state.level)
 
-  const { currentAttempts } =
-    useAppSelector(state => state.game)
+  const { currentAttempts } = useAppSelector(state => state.game)
 
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
@@ -77,9 +82,13 @@ const Bottle = ({
           offsetYForSelectBottle: offsetYForSelectBottle,
           width: widthCanvas,
           height: heightLayer + 1,
-          colorShadedPart: bottleColors[i].color
+          colorShadedPart: bottleColors[i].color,
         }
-        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(count, countLayersInBottle, layerProps)
+        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(
+          count,
+          countLayersInBottle,
+          layerProps
+        )
         count++
         offsetYForShadedPartBottle = offsetYForShadedPartBottle + heightLayer
       }
@@ -133,11 +142,15 @@ const Bottle = ({
     if (bottleColors.length < countLayersInBottle) {
       const currentTopColor: InstanceType<typeof FillTypeColor> =
         bottleColors.slice(-1)[0]
-      const newColor: InstanceType<typeof FillTypeColor> = JSON.parse(selectedColor)
-      if ((bottleColors.length === 0) || (currentTopColor.id === newColor.id)) {
+      const newColor: InstanceType<typeof FillTypeColor> =
+        JSON.parse(selectedColor)
+      if (bottleColors.length === 0 || currentTopColor.id === newColor.id) {
         const addAttempts = currentAttempts + 1
         dispatch(setCurrentCountAttempts(addAttempts))
-        countColorNeedDelete = Math.min(countColorNeedTransfuse, countLayersInBottle - bottleColors.length)
+        countColorNeedDelete = Math.min(
+          countColorNeedTransfuse,
+          countLayersInBottle - bottleColors.length
+        )
         for (let i = 0; i < countColorNeedDelete; i++) {
           bottleColors.push(newColor)
         }
@@ -202,11 +215,7 @@ const Bottle = ({
       return
     }
     selectColorForTransfuse()
-    onClickHandler(
-      !isSelect,
-      addNewColorInBottle,
-      removeFirstTopColor
-    )
+    onClickHandler(!isSelect, addNewColorInBottle, removeFirstTopColor)
   }
 
   return (

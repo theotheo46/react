@@ -10,8 +10,10 @@ class FillTypeColor {
   public static TypeEmptyColor = new FillTypeColor(-1, '')
   public static isEmptyColor = (strTypeColor: string): boolean => {
     const typeColor = JSON.parse(strTypeColor)
-    return (typeColor.id === FillTypeColor.TypeEmptyColor.id) &&
-      (typeColor.color === FillTypeColor.TypeEmptyColor.color)
+    return (
+      typeColor.id === FillTypeColor.TypeEmptyColor.id &&
+      typeColor.color === FillTypeColor.TypeEmptyColor.color
+    )
   }
 }
 

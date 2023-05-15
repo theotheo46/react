@@ -6,12 +6,18 @@ const colorForLevel = [
   '#A78BFA',
   '#fa8989',
   '#fac289',
-  '#89fade'
+  '#011813',
+  '#934d06',
+  '#069370',
+  '#930606',
+  '#060693',
 ]
 
 export class FunctionArray {
-  public static getShuffledArrayByNumberColor(countColors: number, countLayersInBottle: number): InstanceType<typeof FillTypeColor>[] {
-
+  public static getShuffledArrayByNumberColor(
+    countColors: number,
+    countLayersInBottle: number
+  ): InstanceType<typeof FillTypeColor>[] {
     let orderColor: InstanceType<typeof FillTypeColor>[] = []
     for (let i = 0; i < countColors; i++) {
       for (let j = 0; j < countLayersInBottle; j++) {
