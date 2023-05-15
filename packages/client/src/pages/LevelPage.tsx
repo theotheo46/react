@@ -5,7 +5,11 @@ import { FunctionArray } from '../utils/FunctionArray'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { useNavigate } from 'react-router-dom'
 import { useTimer } from '../hooks/useTimer'
-import { setCurrentTime } from '../store/slices/gameSlice'
+import {
+  setCurrentAttempts,
+  setCurrentTime,
+  setMode,
+} from '../store/slices/gameSlice'
 
 interface Props {
   initCountColor?: number
@@ -193,6 +197,13 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
     document!.getElementById('toggler')!.innerHTML = caption
   }
 
+  function exitGameHandler() {
+    dispatch(setCurrentTime(''))
+    dispatch(setCurrentAttempts(0))
+    dispatch(setMode(null))
+    navigate('/start')
+  }
+
   return (
     <div>
       <div style={{ margin: '20px' }}>
@@ -212,6 +223,9 @@ const LevelPage = ({ initCountColor = 2 }: Props) => {
           onClick={fullScreenToggle}
           style={{ marginLeft: '20px' }}>
           Полный экран
+        </button>
+        <button onClick={exitGameHandler} style={{ marginLeft: '20px' }}>
+          Выйти
         </button>
         <div>Время: {getTime()}</div>
         <div>Уровень: {currentLevel}</div>

@@ -16,7 +16,7 @@ const LeaderbordPage = () => {
 
   return (
     <div className="page-wrap page-wrap_lightblue">
-      <main className="container card card_full">
+      <main className="container card card_height-full">
         <Button onClick={() => navigate(-1)} styleType="tertiary">
           <FaArrowLeft style={iconBackStyle} />
           Назад

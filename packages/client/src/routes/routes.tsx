@@ -78,7 +78,16 @@ const RoutesBase = () => {
         />
         {/* <Route path="/minilending" element={<MiniLendingPage />} /> */}
       </Route>
-      <Route path="*" element={<NotFoundPage />} />
+      <Route
+        path="*"
+        element={
+          <ErrorPage
+            errorCode="404"
+            errorText="К сожалению, запрашиваемая страница не найдена"
+            errorStatus="Some status"
+          />
+        }
+      />
     </Routes>
   )
 }
