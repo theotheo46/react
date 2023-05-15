@@ -28,7 +28,7 @@ const LevelPage = () => {
     useState<(() => boolean)[]>([])
 
   const [callbackRemoveColorBottle, setCallbackRemoveColorBottle] =
-    useState<() => () => void>()
+    useState<(countColorNeedDelete: number) => (countColorNeedDelete: number) => void>()
 
   const [callbackUnSelectBottle, setCallbackUnSelectBottle] =
     useState<() => () => void>()
@@ -64,8 +64,8 @@ const LevelPage = () => {
   const onClickHandler = (
     isSelect: boolean,
     callbackUnSelect: () => void,
-    callbackAddNewColor: () => boolean,
-    callbackRemoveColor: () => void
+    callbackAddNewColor: () => number,
+    callbackRemoveColor: (countColorNeedDelete: number) => void
   ) => {
     const needAddSelectedColorInBottle = !FillTypeColor.isEmptyColor(selectedColor)
     const needSelectColorFromBottle = isSelect && !needAddSelectedColorInBottle
@@ -82,11 +82,11 @@ const LevelPage = () => {
 
     function addSelectedColorInBottle() {
       if (needAddSelectedColorInBottle) {
-        const needRemoveColor = callbackAddNewColor()
-        if (callbackRemoveColorBottle !== undefined && needRemoveColor) {
-          callbackRemoveColorBottle()
+        const countRemoveColor = callbackAddNewColor()
+        if (callbackRemoveColorBottle !== undefined && countRemoveColor > 0) {
+          callbackRemoveColorBottle(countRemoveColor)
         }
-        if (!needRemoveColor){
+        if (countRemoveColor <= 0) {
           callbackUnSelect()
         }
         clearSelectedColor()
