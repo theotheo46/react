@@ -8,8 +8,9 @@ const errorLabelContainerClass = 'error-label error'
 inputProps.hasError = true
 
 test('input text check', () => {
+  const mockSave = jest.fn()
   const { container } = render(
-    <Input {...inputProps} value={inputText} onChange={() => {}}></Input>
+    <Input {...inputProps} value={inputText} onChange={() => mockSave}></Input>
   )
   const input = screen.getByDisplayValue(inputText)
   expect(input).toBeTruthy()
