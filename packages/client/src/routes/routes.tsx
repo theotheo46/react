@@ -1,8 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import Layout from '../layouts/Layout'
 import ProfilePage from '../pages/ProfilePage'
-import HomePage from '../pages/HomePage'
-import NotFoundPage from '../pages/NotFoundPage'
 import ForumPage from '../pages/Forum/ForumPage'
 import SignInPage from '../pages/SignInPage'
 import SignUpPage from '../pages/SignUpPage'
@@ -19,7 +17,6 @@ const RoutesBase = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        {/* <Route index element={<HomePage />} /> */}
         <Route index element={<MiniLendingPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route
@@ -76,7 +73,6 @@ const RoutesBase = () => {
             />
           }
         />
-        {/* <Route path="/minilending" element={<MiniLendingPage />} /> */}
       </Route>
       <Route
         path="*"
