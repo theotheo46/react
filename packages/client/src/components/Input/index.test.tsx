@@ -12,9 +12,6 @@ test('input text check', () => {
   const input = screen.getByDisplayValue(inputText)
   expect(input).toBeTruthy();
   expect(container.getElementsByClassName(errorLabelContainerClass).length).toBe(1);
-  //screen.debug();
-  //expect(input.innerText).toBe('$23')
-  //console.log(screen.getByText(inputText));
 });
 
 
