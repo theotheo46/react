@@ -1,8 +1,8 @@
-import Button from '../components/Button'
-import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 import Profile from '../components/Profile'
 import { useEffect } from 'react'
+import { FaArrowLeft } from 'react-icons/fa'
+import Button from '../components/Button'
 
 const ProfilePage = () => {
   const navigate = useNavigate()
@@ -21,6 +21,7 @@ const ProfilePage = () => {
           <FaArrowLeft style={iconBackStyle} />
           Назад
         </Button>
+
         <Profile />
       </main>
       <img className="page-wrap__wave" src="wave.png" alt="wave" />

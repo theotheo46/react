@@ -8,7 +8,6 @@ import { useAppSelector } from '../../store/hooks'
 const Profile = () => {
   const { user } = useAppSelector(state => state.user)
   const navigate = useNavigate()
-
   return (
     <>
       {user ? (
