@@ -64,35 +64,32 @@ const FinishGame = () => {
   */
 
   function updateLevel() {
-    if (
-      countColors === 10 &&
-      countLayersInBottle === 10 &&
-      countEmptyBottles === 1
-    ) {
-      dispatch(resetLevel())
-    } else if (
-      (lastUpdateParam === '' || lastUpdateParam === 'epmtyBottles') &&
-      countColors < 10
-    ) {
-      dispatch(setCountColors(countColors + 1))
-      dispatch(setLastUpdateParam('countColors'))
-    } else if (
-      (lastUpdateParam === '' || lastUpdateParam === 'countColors') &&
-      countLayersInBottle < 10
-    ) {
-      dispatch(setCountLayersInBottle(countLayersInBottle + 1))
-      dispatch(setLastUpdateParam('countLayers'))
-    } else if (
-      (lastUpdateParam === '' || lastUpdateParam === 'countLayers') &&
-      countEmptyBottles >= 1
-    ) {
-      countEmptyBottles === 1
-        ? dispatch(setCountEmptyBottles(countEmptyBottles + 1))
-        : dispatch(setCountEmptyBottles(countEmptyBottles - 1))
-      dispatch(setLastUpdateParam('epmtyBottles'))
-    } else {
-      dispatch(setLastUpdateParam(''))
-      updateLevel()
+    switch (true) {
+      case countColors === 10 &&
+        countLayersInBottle === 10 &&
+        countEmptyBottles === 1:
+        dispatch(resetLevel())
+        break
+      case (!lastUpdateParam || lastUpdateParam === 'epmtyBottles') &&
+        countColors < 10:
+        dispatch(setCountColors(countColors + 1))
+        dispatch(setLastUpdateParam('countColors'))
+        break
+      case (!lastUpdateParam || lastUpdateParam === 'countColors') &&
+        countLayersInBottle < 10:
+        dispatch(setCountLayersInBottle(countLayersInBottle + 1))
+        dispatch(setLastUpdateParam('countLayers'))
+        break
+      case (!lastUpdateParam || lastUpdateParam === 'countLayers') &&
+        countEmptyBottles >= 1:
+        countEmptyBottles === 1
+          ? dispatch(setCountEmptyBottles(countEmptyBottles + 1))
+          : dispatch(setCountEmptyBottles(countEmptyBottles - 1))
+        dispatch(setLastUpdateParam('epmtyBottles'))
+        break
+      default:
+        dispatch(setLastUpdateParam(''))
+        break
     }
   }
 
