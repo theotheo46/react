@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Form from '../../components/Form'
 import { InputProps } from '../../components/Input'
 import { VALIDATE_FIELDS } from '../../utils/validate-data'

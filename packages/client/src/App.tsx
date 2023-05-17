@@ -5,6 +5,17 @@ import { useAppDispatch } from './store/hooks'
 import { getUser } from './store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
 
+window.addEventListener('load', async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const reg = navigator.serviceWorker.register('/sw.js', { type: 'module' })
+      console.log('service worker register success:', reg)
+    } catch (e) {
+      console.error('service worker register fail', e)
+    }
+  }
+})
+
 function App() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
