@@ -62,7 +62,7 @@ const LevelPage = () => {
     selectedColor,
   } = useAppSelector(state => state.level)
 
-  const { currentAttempts, currentLevel} = useAppSelector(state => state.game)
+  const { currentAttempts, currentLevel } = useAppSelector(state => state.game)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
@@ -267,9 +267,7 @@ const LevelPage = () => {
               <div style={{ marginBottom: '10px' }}>
                 Переливаний: {currentAttempts}
               </div>
-              <div style={{ marginBottom: '10px' }}>
-                Время: {getTime()}
-                </div>
+              <div style={{ marginBottom: '10px' }}>Время: {getTime()}</div>
               <div>Уровень: {currentLevel}</div>
               <div></div>
             </div>
