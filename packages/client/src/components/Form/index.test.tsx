@@ -5,6 +5,7 @@ import { VALIDATE_FIELDS } from '../../utils/validate-data'
 import { BrowserRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import { REGEX_ERRORS } from '../../utils/validate-data'
+import React from 'react'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.login
 const mockSave = jest.fn()
@@ -21,7 +22,9 @@ const reactForm: React.ReactElement = (
   </BrowserRouter>
 )
 
-test('form subcomponents check', () => {
+describe('Form component', () => {
+
+test('elements check', () => {
   const { container } = render(reactForm)
   const loginInput = container.querySelector('#login')
   const passwordInput = container.querySelector('#password')
@@ -29,13 +32,13 @@ test('form subcomponents check', () => {
   expect(passwordInput).toBeTruthy()
 })
 
-test('form false validation check', async () => {
+test('false validation check', async () => {
   inputs[0].value = '1'
   inputs[1].value = '1'
   const user = userEvent.setup()
   render(reactForm)
-  const loginInput = screen.getByLabelText('Логин') as HTMLInputElement
-  const passwordInput = screen.getByLabelText('Пароль') as HTMLInputElement
+  const loginInput = screen.getByLabelText('Логин')
+  const passwordInput = screen.getByLabelText('Пароль')
   await user.click(loginInput)
   await user.click(passwordInput)
   await user.click(loginInput)
@@ -43,16 +46,17 @@ test('form false validation check', async () => {
   expect(screen.getByText(REGEX_ERRORS.PASSWORD)).toBeTruthy()
 })
 
-test('form true validation check', async () => {
+test('true validation check', async () => {
   inputs[0].value = 'theo1'
   inputs[1].value = 'Aaa101010'
   const user = userEvent.setup()
   render(reactForm)
-  const loginInput = screen.getByLabelText('Логин') as HTMLInputElement
-  const passwordInput = screen.getByLabelText('Пароль') as HTMLInputElement
+  const loginInput = screen.getByLabelText('Логин')
+  const passwordInput = screen.getByLabelText('Пароль')
   await user.click(loginInput)
   await user.click(passwordInput)
   await user.click(loginInput)
   expect(screen.queryByText(REGEX_ERRORS.LOGIN)).toBeFalsy()
   expect(screen.queryByText(REGEX_ERRORS.PASSWORD)).toBeFalsy()
+})
 })

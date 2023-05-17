@@ -5,7 +5,7 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   moduleNameMapper: {
-    '\\.(css|pcss)$': '<rootDir>/styleMock.js',
+    '\\.(css|pcss|jpg|png|svg)$': '<rootDir>/styleMock.js',
   },
   testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
   globals: {
