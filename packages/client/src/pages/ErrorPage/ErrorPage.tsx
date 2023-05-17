@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
 import ErrorInformer, {
   ErrorInformerProps,
@@ -9,6 +10,8 @@ const ErrorPage: React.FC<ErrorInformerProps> = ({
   errorText,
   errorStatus,
 }) => {
+  const navigate = useNavigate()
+
   return (
     <div className="error-page">
       <ErrorInformer
@@ -17,7 +20,11 @@ const ErrorPage: React.FC<ErrorInformerProps> = ({
         errorText={errorText}
         errorStatus={errorStatus}
       />
-      <Button type="submit" width="150px" height="48px">
+      <Button
+        onClick={() => navigate('/')}
+        type="submit"
+        width="150px"
+        height="48px">
         На главную
       </Button>
       <img className="error-page-wave" src="wave.png" alt="wave" />

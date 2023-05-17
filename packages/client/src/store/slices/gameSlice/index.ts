@@ -1,32 +1,55 @@
-import { GameDifficulty, GameMode } from './types'
-import { createSlice } from '@reduxjs/toolkit'
-import { PayloadAction } from '@reduxjs/toolkit/dist/createAction'
+import { GameMode } from './types'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface GameState {
   mode: GameMode | null
+  isSetupLevelSettings: boolean
   currentLevel: number
   currentAttempts: number
   currentTime: string
-  selectedDifficulty: GameDifficulty | null
+  lastUpdateParam: string
 }
 
 const initialState: GameState = {
   mode: null,
-  currentLevel: 0,
+  currentLevel: 1,
   currentAttempts: 0,
   currentTime: '',
-  selectedDifficulty: null,
+  isSetupLevelSettings: false,
+  lastUpdateParam: ''
 }
 
 const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    setCurrentCountAttempts: (state, action: PayloadAction<number>) => {
-      state.currentAttempts = action.payload
+    setMode: (state, action: PayloadAction<GameMode | null>) => {
+      state.mode = action.payload
     },
-  },
+    setIsSetupLevelSettings: (state, action: PayloadAction<boolean>) => {
+      state.isSetupLevelSettings = action.payload
+    },
+    setCurrentTime: (state, action: PayloadAction<string>) => {
+      state.currentTime = action.payload
+    },
+    setNextLevel: state => {
+      state.currentLevel += 1
+    },
+    setLastUpdateParam(state, action: PayloadAction<string>) {
+      state.lastUpdateParam = action.payload
+    },
+    setCurrentAttempts(state, action: PayloadAction<number>) {
+      state.currentAttempts = action.payload
+    }
+  }
 })
 
-export const { setCurrentCountAttempts } = gameSlice.actions
+export const {
+  setMode,
+  setIsSetupLevelSettings,
+  setCurrentTime,
+  setNextLevel,
+  setLastUpdateParam,
+  setCurrentAttempts
+} = gameSlice.actions
 export default gameSlice.reducer

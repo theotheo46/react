@@ -18,6 +18,12 @@ import {
   setSelectedKeyBottle,
 } from '../../store/slices/levelSlice'
 import { useNavigate } from 'react-router-dom'
+import { useTimer } from '../../hooks/useTimer'
+import {
+  setCurrentAttempts,
+  setCurrentTime,
+  setMode,
+} from '../../store/slices/gameSlice'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -30,6 +36,7 @@ class InfoForRenderBottle {
 const LevelPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const { timerStart, timerStop, getTime, timerReset } = useTimer()
   const iconStyle = { fill: 'var(--color-white)', fontSize: '1.25rem' }
   const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] =
     useState<(() => boolean)[]>([])
@@ -43,7 +50,6 @@ const LevelPage = () => {
     InfoForRenderBottle[]
   >([])
 
-  const [victoryLabelDisplay, setDisplay] = useState('none')
   const [iconFullScreenDisplay, setIconFullScreenDisplay] = useState('block')
   const [iconNotFullScreenDisplay, setIconNotFullScreenDisplay] =
     useState('none')
@@ -56,7 +62,7 @@ const LevelPage = () => {
     selectedColor,
   } = useAppSelector(state => state.level)
 
-  const { currentAttempts } = useAppSelector(state => state.game)
+  const { currentAttempts, currentLevel} = useAppSelector(state => state.game)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
     arrayCallbackBottleIsComplete.push(callbackFinishBottle)
@@ -67,7 +73,8 @@ const LevelPage = () => {
       bottleIsComplete => bottleIsComplete()
     )
     if (allBottleIsComplete) {
-      setDisplay('block')
+      dispatch(setCurrentTime(getTime()))
+      navigate('/finish')
     }
   }
 
@@ -139,7 +146,6 @@ const LevelPage = () => {
     return infoForRenderBottle
 
     function clearAllState() {
-      setDisplay('none')
       setArrayCallbackBottleIsComplete([])
       dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
       dispatch(setSelectedKeyBottle('-1'))
@@ -148,6 +154,7 @@ const LevelPage = () => {
 
   function restartLevel() {
     setArraySettingsBottle(repeatCreateStartArrayBottle())
+    timerReset()
   }
 
   function onChangeFullScreenState() {
@@ -181,7 +188,10 @@ const LevelPage = () => {
     }
   }
 
-  function goToStartScreen() {
+  function exitGameHandler() {
+    dispatch(setCurrentTime(''))
+    dispatch(setCurrentAttempts(0))
+    dispatch(setMode(null))
     navigate('/start')
   }
 
@@ -191,7 +201,9 @@ const LevelPage = () => {
     document.addEventListener('mozfullscreenchange', exitFullScreenHandler)
     document.addEventListener('MSFullscreenChange', exitFullScreenHandler)
     setArraySettingsBottle(createArrayBottle())
+    timerStart()
     return () => {
+      timerStop()
       document.removeEventListener('fullscreenchange', exitFullScreenHandler)
       document.removeEventListener(
         'webkitfullscreenchange',
@@ -207,7 +219,7 @@ const LevelPage = () => {
       <main className="container">
         <div className="level-page">
           <div className="level-page-top">
-            <Button styleType="primary" onClick={goToStartScreen}>
+            <Button styleType="primary" onClick={exitGameHandler}>
               <FaArrowLeft style={iconStyle} />
               Назад
             </Button>
@@ -250,20 +262,15 @@ const LevelPage = () => {
                   onClickHandler={onClickHandler}
                 />
               ))}
-              <div
-                style={{
-                  marginTop: '20px',
-                  marginLeft: '20px',
-                  display: victoryLabelDisplay,
-                }}>
-                <label>Победа!</label>
-              </div>
             </div>
             <div className="panel-with-info-middle">
               <div style={{ marginBottom: '10px' }}>
                 Переливаний: {currentAttempts}
               </div>
-              <div>Время: 05:55</div>
+              <div style={{ marginBottom: '10px' }}>
+                Время: {getTime()}
+                </div>
+              <div>Уровень: {currentLevel}</div>
               <div></div>
             </div>
           </div>

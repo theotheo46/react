@@ -7,7 +7,7 @@ import {
   setSelectedKeyBottle,
   setCountColorNeedTransfuse,
 } from '../../store/slices/levelSlice'
-import { setCurrentCountAttempts } from '../../store/slices/gameSlice'
+import { setCurrentAttempts } from '../../store/slices/gameSlice'
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -146,7 +146,7 @@ const Bottle = ({
         JSON.parse(selectedColor)
       if (bottleColors.length === 0 || currentTopColor.id === newColor.id) {
         const addAttempts = currentAttempts + 1
-        dispatch(setCurrentCountAttempts(addAttempts))
+        dispatch(setCurrentAttempts(addAttempts))
         countColorNeedDelete = Math.min(
           countColorNeedTransfuse,
           countLayersInBottle - bottleColors.length
