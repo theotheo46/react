@@ -9,26 +9,16 @@ interface Props {
 }
 
 export const AlgorithmDrawPartOfBottle = {
-  getDesiredAlgorithm: (count: number, layerProps: Props) => {
-    if (count <= 0) {
-      AlgorithmDrawPartOfBottle.top(layerProps)
-    } else if (count === 1) {
-      AlgorithmDrawPartOfBottle.preTop(layerProps)
-    } else if (count === 2) {
-      AlgorithmDrawPartOfBottle.preBottom(layerProps)
+  getDesiredAlgorithm: (
+    count: number,
+    countLayersInBottle: number,
+    layerProps: Props
+  ) => {
+    if (count < countLayersInBottle - 1) {
+      AlgorithmDrawPartOfBottle.fillRect(layerProps)
     } else {
       AlgorithmDrawPartOfBottle.bottom(layerProps)
     }
-  },
-
-  top: (layerProps: Props) => {
-    AlgorithmDrawPartOfBottle.fillRect(layerProps)
-  },
-  preTop: (layerProps: Props) => {
-    AlgorithmDrawPartOfBottle.fillRect(layerProps)
-  },
-  preBottom: (layerProps: Props) => {
-    AlgorithmDrawPartOfBottle.fillRect(layerProps)
   },
   fillRect: (layerProps: Props) => {
     layerProps.context.beginPath()

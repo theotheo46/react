@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import FillTypeColor from '../../../components/Bottle/FillTypeColor'
 
 interface LevelState {
   countColors: number
   countLayersInBottle: number
   countEmptyBottles: number
+  startColorsForRestart: string[]
+  selectedColor: string
+  countColorNeedTransfuse: number
+  selectedKeyBottle: string
   minCountColors: number
   maxCountColors: number
   minCountLayersInBottle: number
@@ -20,6 +25,10 @@ const MIN_EMPTY_BOTTLES = 1
 const LIMIT_EMPTY_BOTTLES = 3
 
 const initialState: LevelState = {
+  startColorsForRestart: [],
+  selectedKeyBottle: '-1',
+  countColorNeedTransfuse: 1,
+  selectedColor: JSON.stringify(FillTypeColor.TypeEmptyColor),
   countColors: INIT_COUNT_COLORS,
   countLayersInBottle: INIT_COUNT_LAYERS,
   countEmptyBottles: INIT_EMPTY_BOTTLES,
@@ -35,6 +44,18 @@ const levelSlice = createSlice({
   name: 'level',
   initialState,
   reducers: {
+    setStartColorsForRestart: (state, action: PayloadAction<string[]>) => {
+      state.startColorsForRestart = action.payload
+    },
+    setSelectedColor: (state, action: PayloadAction<string>) => {
+      state.selectedColor = action.payload
+    },
+    setSelectedKeyBottle: (state, action: PayloadAction<string>) => {
+      state.selectedKeyBottle = action.payload
+    },
+    setCountColorNeedTransfuse: (state, action: PayloadAction<number>) => {
+      state.countColorNeedTransfuse = action.payload
+    },
     setCountColors: (state, action: PayloadAction<number>) => {
       state.countColors = action.payload
     },
@@ -63,6 +84,10 @@ const levelSlice = createSlice({
 })
 
 export const {
+  setStartColorsForRestart,
+  setSelectedColor,
+  setSelectedKeyBottle,
+  setCountColorNeedTransfuse,
   setCountColors,
   setCountLayersInBottle,
   setCountEmptyBottles,
