@@ -1,5 +1,4 @@
 export const assetsUrls = [
-  'src/App.test.tsx',
   'src/App.tsx',
   'src/api/baseApi.ts',
   'src/assets/.keep',
@@ -12,6 +11,7 @@ export const assetsUrls = [
   'src/components/Bottle/FillTypeColor.tsx',
   'src/components/Bottle/index.tsx',
   'src/components/Button/Button.pcss',
+  'src/components/Button/index.test.tsx',
   'src/components/Button/index.tsx',
   'src/components/DevFooter/DevFooter.pcss',
   'src/components/DevFooter/index.tsx',
@@ -21,6 +21,7 @@ export const assetsUrls = [
   'src/components/ErrorInformer/ErrorInformer.pcss',
   'src/components/ErrorInformer/index.tsx',
   'src/components/Form/Form.pcss',
+  'src/components/Form/index.test.tsx',
   'src/components/Form/index.tsx',
   'src/components/ForumSection/ForumSection.pcss',
   'src/components/ForumSection/index.tsx',
@@ -39,6 +40,7 @@ export const assetsUrls = [
   'src/components/Game/StartGame/StartGameNav/index.tsx',
   'src/components/Game/StartGame/index.tsx',
   'src/components/Input/Input.pcss',
+  'src/components/Input/index.test.tsx',
   'src/components/Input/index.tsx',
   'src/components/Leaderboard/LeaderboardItem/LeaderboardItem.pcss',
   'src/components/Leaderboard/LeaderboardItem/index.tsx',
@@ -85,6 +87,7 @@ export const assetsUrls = [
   'src/pages/MiniLendingPage/MiniLendingPage.tsx',
   'src/pages/NotFoundPage.tsx',
   'src/pages/ProfilePage.tsx',
+  'src/pages/SignInPage/index.test.tsx',
   'src/pages/SignInPage/index.tsx',
   'src/pages/SignUpPage/EntryPage.pcss',
   'src/pages/SignUpPage/index.tsx',
@@ -109,5 +112,5 @@ export const assetsUrls = [
   'index.html',
   'wave.png',
   'minilending.svg',
-  'home.svg',
-]
+  'home.svg'
+];
