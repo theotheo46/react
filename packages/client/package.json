@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "node create-cache-urls-file.js && vite",
+    "build": "node create-cache-urls-file.js && tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . & stylelint **/*.{css,pcss}",
     "format": "prettier --write .",
