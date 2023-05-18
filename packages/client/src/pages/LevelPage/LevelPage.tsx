@@ -104,7 +104,7 @@ const LevelPage = () => {
   }
 
   function createArrayBottle(): InfoForRenderBottle[] {
-    let orderColorFromSave: string[] = []
+    const orderColorFromSave: string[] = []
     const orderColor: InstanceType<typeof FillTypeColor>[] =
       FunctionArray.getShuffledArrayByNumberColor(
         countColors,
@@ -120,7 +120,7 @@ const LevelPage = () => {
   }
 
   function repeatCreateStartArrayBottle(): InfoForRenderBottle[] {
-    let orderColor: InstanceType<typeof FillTypeColor>[] = []
+    const orderColor: InstanceType<typeof FillTypeColor>[] = []
     startColorsForRestart.forEach(color => {
       orderColor.push(JSON.parse(color))
     })
