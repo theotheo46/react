@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import FillTypeColor from './FillTypeColor'
 import { AlgorithmDrawPartOfBottle } from '../../utils/AlgorithmDrawPartOfBottle'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import {
+  setSelectedColor,
+  setSelectedKeyBottle,
+  setCountColorNeedTransfuse,
+} from '../../store/slices/levelSlice'
+import { setCurrentAttempts } from '../../store/slices/gameSlice'
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -14,11 +21,8 @@ interface Props
   offsetYForSelectBottle?: number
   onClickHandler: (
     isSelect: boolean,
-    selectColor: InstanceType<typeof FillTypeColor>,
-    keyHtmlElement: string,
-    callbackUnSelect: () => void,
-    callbackAddNewColor: (color: InstanceType<typeof FillTypeColor>) => void,
-    callbackRemoveColor: () => void
+    callbackAddNewColor: () => number,
+    callbackRemoveColor: (countColorNeedDelete: number) => void
   ) => void
   onSaveFinishCallback: (callbackFinishBottle: () => boolean) => void
   keyHtmlElement: string
@@ -39,6 +43,16 @@ const Bottle = ({
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null)
   const [isSelect, setSelect] = useState(false)
 
+  const dispatch = useAppDispatch()
+  let {
+    countLayersInBottle,
+    selectedColor,
+    selectedKeyBottle,
+    countColorNeedTransfuse,
+  } = useAppSelector(state => state.level)
+
+  const { currentAttempts } = useAppSelector(state => state.game)
+
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
     const widthCanvas = width - offsetX * 2
@@ -53,8 +67,8 @@ const Bottle = ({
     widthCanvas: number,
     heightCanvas: number
   ) => {
-    let count = 4 - bottleColors.length
-    const heightLayer = heightCanvas / 4
+    let count = countLayersInBottle - bottleColors.length
+    const heightLayer = heightCanvas / countLayersInBottle
     let offsetYForShadedPartBottle: number = offsetY + count * heightLayer
     drawAllPartOfBottle()
 
@@ -70,7 +84,11 @@ const Bottle = ({
           height: heightLayer + 1,
           colorShadedPart: bottleColors[i].color,
         }
-        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(count, layerProps)
+        AlgorithmDrawPartOfBottle.getDesiredAlgorithm(
+          count,
+          countLayersInBottle,
+          layerProps
+        )
         count++
         offsetYForShadedPartBottle = offsetYForShadedPartBottle + heightLayer
       }
@@ -110,6 +128,7 @@ const Bottle = ({
     setContext(newContext)
     drawEntireBottle(newContext)
     onSaveFinishCallback(bottleIsComplete)
+    setSelect(false)
   }, [bottleColors])
 
   const unSelectBottle = () => {
@@ -118,24 +137,70 @@ const Bottle = ({
     drawEntireBottle(context)
   }
 
-  const addNewColorInBottle = (color: InstanceType<typeof FillTypeColor>) => {
-    if (bottleColors.length < 4) {
-      bottleColors.push(color)
-      unSelectBottle()
+  const addNewColorInBottle = () => {
+    let countColorNeedDelete = 0
+    if (bottleColors.length < countLayersInBottle) {
+      const currentTopColor: InstanceType<typeof FillTypeColor> =
+        bottleColors.slice(-1)[0]
+      const newColor: InstanceType<typeof FillTypeColor> =
+        JSON.parse(selectedColor)
+      if (bottleColors.length === 0 || currentTopColor.id === newColor.id) {
+        const addAttempts = currentAttempts + 1
+        dispatch(setCurrentAttempts(addAttempts))
+        countColorNeedDelete = Math.min(
+          countColorNeedTransfuse,
+          countLayersInBottle - bottleColors.length
+        )
+        for (let i = 0; i < countColorNeedDelete; i++) {
+          bottleColors.push(newColor)
+        }
+      }
     }
+    unSelectBottle()
+    return countColorNeedDelete
   }
 
-  const removeFirstTopColor = () => {
+  const removeFirstTopColor = (countColorNeedDelete: number) => {
     if (bottleColors.length > 0) {
-      bottleColors.pop()
+      for (let i = 0; i < countColorNeedDelete; i++) {
+        bottleColors.pop()
+      }
+    }
+    dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
+    dispatch(setSelectedKeyBottle('-1'))
+    unSelectBottle()
+  }
+
+  const selectColorForTransfuse = () => {
+    const currentSelectColor: InstanceType<typeof FillTypeColor> =
+      bottleColors.slice(-1)[0]
+
+    if (currentSelectColor !== undefined) {
+      setSelect(prevState => !prevState)
+      offsetYForSelectBottle = !isSelect ? -20 : 0
       drawEntireBottle(context)
+      dispatch(setSelectedKeyBottle(keyHtmlElement))
+      dispatch(setSelectedColor(JSON.stringify(currentSelectColor)))
+      dispatch(setCountColorNeedTransfuse(getCountColorNeedTransfuse()))
+    }
+
+    function getCountColorNeedTransfuse(): number {
+      let newCountColorNeedTransfuse = 1
+      for (let i = bottleColors.length - 2; i >= 0; i--) {
+        if (currentSelectColor.id === bottleColors[i].id) {
+          newCountColorNeedTransfuse++
+        } else {
+          return newCountColorNeedTransfuse
+        }
+      }
+      return newCountColorNeedTransfuse
     }
   }
 
   const bottleIsComplete = (): boolean => {
     const isEmpty = bottleColors.length === 0
     let isComplete = false
-    if (bottleColors.length === 4) {
+    if (bottleColors.length === countLayersInBottle) {
       const lastIdColor = bottleColors[0].id
       isComplete = !bottleColors.some(color => lastIdColor !== color.id)
     }
@@ -143,21 +208,14 @@ const Bottle = ({
   }
 
   const clickEventOnBottle = () => {
-    const selectColor: InstanceType<typeof FillTypeColor> =
-      bottleColors.slice(-1)[0]
-    if (selectColor !== undefined) {
-      setSelect(prevState => !prevState)
-      offsetYForSelectBottle = !isSelect ? -20 : 0
-      drawEntireBottle(context)
+    if (selectedKeyBottle === keyHtmlElement) {
+      unSelectBottle()
+      dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
+      dispatch(setSelectedKeyBottle('-1'))
+      return
     }
-    onClickHandler(
-      !isSelect,
-      selectColor,
-      keyHtmlElement,
-      unSelectBottle,
-      addNewColorInBottle,
-      removeFirstTopColor
-    )
+    selectColorForTransfuse()
+    onClickHandler(!isSelect, addNewColorInBottle, removeFirstTopColor)
   }
 
   return (
