@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node create-cache-urls-file.js && vite",
+    "dev": "vite",
     "build": "node create-cache-urls-file.js && tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . & stylelint **/*.{css,pcss}",

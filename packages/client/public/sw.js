@@ -21,18 +21,8 @@ self.addEventListener('activate', async event => {
 
 self.addEventListener('fetch', event => {
   const { request } = event
-  const url = new URL(request.url)
-  if (url.origin === location.origin) {
-    event.respondWith(cacheFirst(request))
-  } else {
-    event.respondWith(networkFirst(request))
-  }
+  event.respondWith(networkFirst(request))
 })
-
-async function cacheFirst(request) {
-  const cached = await caches.match(request)
-  return cached ?? (await fetch(request))
-}
 
 async function networkFirst(request) {
   const cache = await caches.open(dynamicCacheName)
