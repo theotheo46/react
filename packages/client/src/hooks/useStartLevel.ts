@@ -5,7 +5,7 @@ export const useStartLevel = () => {
   const [gameIsLoading, setGameIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  function startGameHandler() {
+  function startGame() {
     setGameIsLoading(true)
     delayBeforeGoToLevel()
   }
@@ -18,5 +18,5 @@ export const useStartLevel = () => {
     }, 2000)
   }
 
-  return { gameIsLoading, startGameHandler }
+  return { gameIsLoading, startGame }
 }

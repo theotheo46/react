@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import FillTypeColor from '../../../components/Bottle/FillTypeColor'
 
+export interface Level {
+  countColors: number
+  countLayersInBottle: number
+  countEmptyBottles: number
+}
+
 interface LevelState {
   countColors: number
   countLayersInBottle: number
@@ -15,14 +21,16 @@ interface LevelState {
   maxCountLayersInBottle: number
   minCountEmptyBottles: number
   maxCountEmptyBottles: number
+  levels: Level[]
 }
 
 const LIMIT = 10
 const INIT_COUNT_COLORS = 3
-const INIT_COUNT_LAYERS = 4
+const INIT_COUNT_LAYERS = 3
 const INIT_EMPTY_BOTTLES = 2
 const MIN_EMPTY_BOTTLES = 1
-const LIMIT_EMPTY_BOTTLES = 3
+const LIMIT_EMPTY_BOTTLES = 4
+const MAX_COUNT_LEVELS = 15
 
 const initialState: LevelState = {
   startColorsForRestart: [],
@@ -38,6 +46,7 @@ const initialState: LevelState = {
   maxCountColors: LIMIT,
   maxCountLayersInBottle: LIMIT,
   maxCountEmptyBottles: LIMIT_EMPTY_BOTTLES,
+  levels: [],
 }
 
 const levelSlice = createSlice({
@@ -67,13 +76,39 @@ const levelSlice = createSlice({
     },
     updateLayersInBottle: state => {
       if (state.countColors !== state.countLayersInBottle) {
-        state.countLayersInBottle =
-          state.countColors === LIMIT
-            ? state.countColors
-            : state.countColors + 1
+        state.countLayersInBottle = state.countColors
       }
-      state.minCountLayersInBottle =
-        state.countColors === LIMIT ? state.countColors : state.countColors + 1
+      // state.minCountLayersInBottle = state.countColors
+    },
+    createLevels: state => {
+      let countLevels = MAX_COUNT_LEVELS
+      let level: Level = {
+        countColors: INIT_COUNT_COLORS,
+        countLayersInBottle: INIT_COUNT_LAYERS,
+        countEmptyBottles: INIT_EMPTY_BOTTLES,
+      }
+      while (countLevels > 0) {
+        if (countLevels === MAX_COUNT_LEVELS) {
+          state.levels = [...state.levels, level]
+        } else {
+          if (level.countColors === level.countLayersInBottle) {
+            level = {
+              ...level,
+              countLayersInBottle: level.countLayersInBottle + 1,
+            }
+          } else {
+            level = { ...level, countColors: level.countColors + 1 }
+          }
+          if (countLevels < 8) {
+            level = { ...level, countEmptyBottles: 3 }
+          }
+          if (countLevels < 5) {
+            level = { ...level, countEmptyBottles: 4 }
+          }
+          state.levels = [...state.levels, level]
+        }
+        countLevels--
+      }
     },
     resetLevel: state => {
       state.countColors = INIT_COUNT_COLORS
@@ -92,6 +127,7 @@ export const {
   setCountLayersInBottle,
   setCountEmptyBottles,
   updateLayersInBottle,
+  createLevels,
   resetLevel,
 } = levelSlice.actions
 export default levelSlice.reducer

@@ -13,7 +13,7 @@ import {
 } from '../../../store/slices/gameSlice'
 
 const StartGame = () => {
-  const { gameIsLoading, startGameHandler } = useStartLevel()
+  const { gameIsLoading, startGame } = useStartLevel()
   const { mode, isSetupLevelSettings } = useAppSelector(state => state.game)
 
   const dispatch = useAppDispatch()
@@ -37,7 +37,7 @@ const StartGame = () => {
           onCancelSettings={cancelSettingsHandler}
           onStart={() => {
             dispatch(setIsSetupLevelSettings(false))
-            startGameHandler()
+            startGame()
           }}
         />
       ) : (

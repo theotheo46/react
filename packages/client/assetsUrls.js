@@ -67,6 +67,7 @@ export const assetsUrls = [
   'src/context/UserContext.tsx',
   'src/helpers/createRange.ts',
   'src/helpers/isEqual.ts',
+  'src/hooks/useNextLevel.ts',
   'src/hooks/useStartLevel.ts',
   'src/hooks/useTimer.ts',
   'src/layouts/Layout.tsx',

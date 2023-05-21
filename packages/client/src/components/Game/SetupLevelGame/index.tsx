@@ -9,6 +9,8 @@ import {
 import Button from '../../Button'
 import { FaArrowLeft } from 'react-icons/fa'
 import './SetupLevelGame.pcss'
+import { useEffect } from 'react'
+import { setCurrentLevel } from '../../../store/slices/gameSlice'
 
 interface Props {
   onCancelSettings: () => void
@@ -28,9 +30,14 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
     maxCountLayersInBottle,
     minCountEmptyBottles,
     maxCountEmptyBottles,
+    levels,
   } = useAppSelector(state => state.level)
 
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    findLevel(countColors, countLayersInBottle, countEmptyBottles)
+  }, [countColors, countLayersInBottle, countEmptyBottles])
 
   const getColorsRange = () => {
     return createRange(minCountColors, maxCountColors)
@@ -42,6 +49,24 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
 
   const getBottlesRange = () => {
     return createRange(minCountEmptyBottles, maxCountEmptyBottles)
+  }
+
+  function findLevel(colors: number, layers: number, emptyBottles: number) {
+    const levelIndex = levels.findIndex(
+      level =>
+        level.countColors === colors &&
+        level.countLayersInBottle === layers &&
+        level.countEmptyBottles === emptyBottles
+    )
+    setLevel(levelIndex)
+  }
+
+  function setLevel(index: number) {
+    if (index > -1) {
+      dispatch(setCurrentLevel(index + 1))
+    } else {
+      dispatch(setCurrentLevel(null))
+    }
   }
 
   return (
