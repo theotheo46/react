@@ -10,6 +10,7 @@
     "shorthand-property-no-redundant-values": null,
     "no-empty-source": null,
     "selector-class-pattern": null,
-    "media-feature-range-notation": "prefix"
+    "media-feature-range-notation": "prefix",
+    "declaration-empty-line-before": null
   }
 }
