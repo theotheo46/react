@@ -7,9 +7,7 @@ const inputText = 'test'
 
 test('Inout component text check', () => {
   const mockSave = jest.fn()
-  render(
-    <Input {...inputProps} value={inputText} onChange={mockSave}></Input>
-  )
+  render(<Input {...inputProps} value={inputText} onChange={mockSave}></Input>)
   const input = screen.getByDisplayValue(inputText)
   expect(input).toBeTruthy()
 })

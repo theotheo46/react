@@ -4,7 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface GameState {
   mode: GameMode | null
   isSetupLevelSettings: boolean
-  currentLevel: number
+  currentLevel: number | null
   currentAttempts: number
   currentTime: string
   lastUpdateParam: string
@@ -12,7 +12,7 @@ interface GameState {
 
 const initialState: GameState = {
   mode: null,
-  currentLevel: 1,
+  currentLevel: null,
   currentAttempts: 0,
   currentTime: '',
   isSetupLevelSettings: false,
@@ -33,7 +33,12 @@ const gameSlice = createSlice({
       state.currentTime = action.payload
     },
     setNextLevel: state => {
-      state.currentLevel += 1
+      if (state.currentLevel) {
+        state.currentLevel += 1
+      }
+    },
+    setCurrentLevel: (state, action: PayloadAction<number | null>) => {
+      state.currentLevel = action.payload
     },
     setLastUpdateParam(state, action: PayloadAction<string>) {
       state.lastUpdateParam = action.payload
@@ -51,5 +56,6 @@ export const {
   setNextLevel,
   setLastUpdateParam,
   setCurrentAttempts,
+  setCurrentLevel,
 } = gameSlice.actions
 export default gameSlice.reducer

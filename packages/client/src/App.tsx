@@ -4,6 +4,7 @@ import RoutesBase from './routes/routes'
 import { useAppDispatch } from './store/hooks'
 import { getUser } from './store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
+import { createLevels } from './store/slices/levelSlice'
 
 window.addEventListener('load', async () => {
   if ('serviceWorker' in navigator) {
@@ -29,6 +30,7 @@ function App() {
     }
     fetchServerData()
     loadUser()
+    dispatch(createLevels())
   }, [])
 
   async function loadUser() {

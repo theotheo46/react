@@ -17,11 +17,13 @@ const LeaderbordPage = () => {
   return (
     <div className="page-wrap page-wrap_lightblue">
       <main className="container card card_full">
-        <Button onClick={() => navigate(-1)} styleType="tertiary">
-          <FaArrowLeft style={iconBackStyle} />
-          Назад
-        </Button>
-        <h1 className="page-title">Таблица лидеров</h1>
+        <div className="card__header">
+          <Button onClick={() => navigate(-1)} styleType="tertiary">
+            <FaArrowLeft style={iconBackStyle} />
+            Назад
+          </Button>
+          <h1 className="page-title">Таблица лидеров</h1>
+        </div>
         <LeaderboardList />
       </main>
       <img className="page-wrap__wave" src="wave.png" alt="wave" />

@@ -93,7 +93,6 @@ const ProfileBody = ({ user }: Props) => {
             type="button"
             padding="0px 0px"
             height="24px"
-            margin="0 0 24px 0"
             styleType="link">
             Изменить пароль
           </Button>

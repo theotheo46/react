@@ -268,7 +268,7 @@ const LevelPage = () => {
                 Переливаний: {currentAttempts}
               </div>
               <div style={{ marginBottom: '10px' }}>Время: {getTime()}</div>
-              <div>Уровень: {currentLevel}</div>
+              {currentLevel && <div>Уровень: {currentLevel}</div>}
               <div></div>
             </div>
           </div>
