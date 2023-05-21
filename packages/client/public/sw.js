@@ -1,6 +1,6 @@
 import { assetsUrls } from '../assetsUrls.js'
-const staticCacheName = 'static-cache-wp-app-v6'
-const dynamicCacheName = 'dynamic-cache-wp-app-v1'
+const staticCacheName = 'static-cache-wp-app'
+const dynamicCacheName = 'dynamic-cache-wp-app'
 
 self.addEventListener('install', async event => {
   console.log('service worker is installed!', event)
@@ -19,19 +19,19 @@ self.addEventListener('activate', async event => {
   )
 })
 
-self.addEventListener('fetch', event => {
-  const { request } = event
-  event.respondWith(networkFirst(request))
-})
+// self.addEventListener('fetch', event => {
+//   const { request } = event
+//   event.respondWith(networkFirst(request))
+// })
 
-async function networkFirst(request) {
-  const cache = await caches.open(dynamicCacheName)
-  try {
-    const response = await fetch(request)
-    await cache.put(request, response.clone())
-    return response
-  } catch (e) {
-    const cached = await caches.match(request)
-    return cached ?? (await caches.match(staticCacheName))
-  }
-}
+// async function networkFirst(request) {
+//   const cache = await caches.open(dynamicCacheName)
+//   try {
+//     const response = await fetch(request)
+//     await cache.put(request, response.clone())
+//     return response
+//   } catch (e) {
+//     const cached = await caches.match(request)
+//     return cached ?? (await caches.match('index.html'))
+//   }
+// }
