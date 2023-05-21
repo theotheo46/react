@@ -41,7 +41,7 @@ const StartGameNav = ({ onSetupSettings }: Props) => {
       <div className="game-start-nav__btn-group">
         <Button
           width="100%"
-          onClick={() => navigate('/forum1')}
+          onClick={() => navigate('/forum')}
           styleType="primary">
           Форум
         </Button>
