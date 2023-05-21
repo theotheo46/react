@@ -71,12 +71,14 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
 
   return (
     <div className="card card_full">
-      <Button onClick={onCancelSettings} styleType="tertiary">
-        <FaArrowLeft style={iconBackStyle} />
-        Назад
-      </Button>
+      <div className="card__header">
+        <Button onClick={onCancelSettings} styleType="tertiary">
+          <FaArrowLeft style={iconBackStyle} />
+          Назад
+        </Button>
+        <h1 className="page-title">Головоломка</h1>
+      </div>
       <div className="setup-level-header">
-        <h1 className="setup-level-header__title">Головоломка</h1>
         <div className="setup-level-header__subtitle">
           Настройте начальный уровень сложности
         </div>

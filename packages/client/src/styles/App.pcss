@@ -6,7 +6,7 @@
 
   .page-title {
     text-align: center;
-    margin: 2.25rem 0;
+    margin: 2rem 0;
   }
 
   &_blue {
@@ -57,13 +57,24 @@
   .card {
     background-color: var(--color-white);
     border-radius: var(--border-radius-card);
+    position: relative;
+    &__header {
+      position: relative;
+      > button.tertiary {
+        left: 0;
+        position: absolute;
+      }
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     &_full {
       width: 100%;
       max-width: 800px;
       padding: 3rem;
       height: auto;
-      max-height: calc(100vh - 6rem);
-      overflow-y: auto;
+      /* max-height: calc(100vh - 6rem); */
+       /* overflow-y: auto; */
     }
     &_height-full {
       width: 100%;
