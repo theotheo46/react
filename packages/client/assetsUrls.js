@@ -9,6 +9,7 @@ export const assetsUrls = [
   'src/assets/images/thumb-up.png',
   'src/client.d.ts',
   'src/components/Bottle/FillTypeColor.tsx',
+  'src/components/Bottle/TypeContourBottle.tsx',
   'src/components/Bottle/index.tsx',
   'src/components/Button/Button.pcss',
   'src/components/Button/index.test.tsx',
@@ -106,12 +107,12 @@ export const assetsUrls = [
   'src/styles/index.pcss',
   'src/styles/palettes.pcss',
   'src/styles/vars.pcss',
-  'src/utils/AlgorithmDrawPartOfBottle.tsx',
   'src/utils/FunctionArray.tsx',
+  'src/utils/TypeBottleArray.tsx',
   'src/utils/validate-data.ts',
   'src/vite-env.d.ts',
   'index.html',
   'wave.png',
   'minilending.svg',
-  'home.svg',
-]
+  'home.svg'
+];

@@ -8,6 +8,7 @@ interface GameState {
   currentAttempts: number
   currentTime: string
   lastUpdateParam: string
+  idTypeContourBottle: number
 }
 
 const initialState: GameState = {
@@ -17,6 +18,7 @@ const initialState: GameState = {
   currentTime: '',
   isSetupLevelSettings: false,
   lastUpdateParam: '',
+  idTypeContourBottle: 0,
 }
 
 const gameSlice = createSlice({
@@ -46,6 +48,9 @@ const gameSlice = createSlice({
     setCurrentAttempts(state, action: PayloadAction<number>) {
       state.currentAttempts = action.payload
     },
+    setIdTypeContourBottle(state, action: PayloadAction<number>) {
+      state.idTypeContourBottle = action.payload
+    },
   },
 })
 
@@ -57,5 +62,6 @@ export const {
   setLastUpdateParam,
   setCurrentAttempts,
   setCurrentLevel,
+  setIdTypeContourBottle,
 } = gameSlice.actions
 export default gameSlice.reducer
