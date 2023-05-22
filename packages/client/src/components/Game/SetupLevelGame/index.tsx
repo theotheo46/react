@@ -4,6 +4,7 @@ import {
   setCountColors,
   setCountEmptyBottles,
   setCountLayersInBottle,
+  setIdTypeContourBottle,
   updateLayersInBottle,
 } from '../../../store/slices/levelSlice'
 import Button from '../../Button'
@@ -30,6 +31,8 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
     maxCountLayersInBottle,
     minCountEmptyBottles,
     maxCountEmptyBottles,
+    idTypeContourBottle,
+    maxIdTypeContourBottle,
     levels,
   } = useAppSelector(state => state.level)
 
@@ -49,6 +52,10 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
 
   const getBottlesRange = () => {
     return createRange(minCountEmptyBottles, maxCountEmptyBottles)
+  }
+
+  const getTypeBottlesRange = () => {
+    return createRange(1, maxIdTypeContourBottle)
   }
 
   function findLevel(colors: number, layers: number, emptyBottles: number) {
@@ -121,6 +128,18 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
             onChange={e => dispatch(setCountEmptyBottles(+e.target.value))}
             value={countEmptyBottles}>
             {getBottlesRange().map(num => (
+              <option key={num} value={num}>
+                {num}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="setup-level-body__selector">
+          <label className="setup-level-body__label">Тип бутылки:</label>
+          <select
+            onChange={e => dispatch(setIdTypeContourBottle(+e.target.value))}
+            value={idTypeContourBottle}>
+            {getTypeBottlesRange().map(num => (
               <option key={num} value={num}>
                 {num}
               </option>

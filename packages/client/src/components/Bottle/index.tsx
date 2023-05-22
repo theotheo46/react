@@ -47,11 +47,10 @@ const Bottle = ({
     selectedColor,
     selectedKeyBottle,
     countColorNeedTransfuse,
+    idTypeContourBottle,
   } = useAppSelector(state => state.level)
 
-  const { currentAttempts, idTypeContourBottle } = useAppSelector(
-    state => state.game
-  )
+  const { currentAttempts } = useAppSelector(state => state.game)
 
   const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
     if (!context) return
