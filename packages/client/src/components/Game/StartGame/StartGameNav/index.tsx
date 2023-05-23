@@ -47,6 +47,18 @@ const StartGameNav = ({ onSetupSettings }: Props) => {
         </Button>
         <Button
           width="100%"
+          onClick={() => navigate('/forumsection')}
+          styleType="primary">
+          Раздел форума
+        </Button>
+        <Button
+          width="100%"
+          onClick={() => navigate('/forumtopic')}
+          styleType="primary">
+          Тема форума
+        </Button>
+        <Button
+          width="100%"
           onClick={() => navigate('/profile')}
           styleType="primary">
           Профиль
