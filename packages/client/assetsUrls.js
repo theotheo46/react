@@ -65,6 +65,7 @@ export const assetsUrls = [
   'src/components/Profile/ProfileChangePassword/ProfileChangePassword.pcss',
   'src/components/Profile/ProfileChangePassword/index.tsx',
   'src/components/Profile/index.tsx',
+  'src/components/SpinBottle/index.tsx',
   'src/context/UserContext.tsx',
   'src/helpers/createRange.ts',
   'src/helpers/isEqual.ts',
