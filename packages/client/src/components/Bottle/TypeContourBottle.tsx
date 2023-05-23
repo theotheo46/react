@@ -1,10 +1,12 @@
 class TypeContourBottle {
   id: number
+  pathStr: string
   path: Path2D
 
-  constructor(id: number, path: Path2D) {
+  constructor(id: number, pathStr: string) {
     this.id = id
-    this.path = path
+    this.pathStr = pathStr
+    this.path = new Path2D(pathStr)
   }
 }
 

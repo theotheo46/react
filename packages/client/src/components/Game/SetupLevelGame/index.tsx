@@ -12,6 +12,7 @@ import { FaArrowLeft } from 'react-icons/fa'
 import './SetupLevelGame.pcss'
 import { useEffect } from 'react'
 import { setCurrentLevel } from '../../../store/slices/gameSlice'
+import SpinBottle from '../../SpinBottle/index'
 
 interface Props {
   onCancelSettings: () => void
@@ -31,8 +32,6 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
     maxCountLayersInBottle,
     minCountEmptyBottles,
     maxCountEmptyBottles,
-    idTypeContourBottle,
-    maxIdTypeContourBottle,
     levels,
   } = useAppSelector(state => state.level)
 
@@ -52,10 +51,6 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
 
   const getBottlesRange = () => {
     return createRange(minCountEmptyBottles, maxCountEmptyBottles)
-  }
-
-  const getTypeBottlesRange = () => {
-    return createRange(1, maxIdTypeContourBottle)
   }
 
   function findLevel(colors: number, layers: number, emptyBottles: number) {
@@ -135,16 +130,12 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
           </select>
         </div>
         <div className="setup-level-body__selector">
-          <label className="setup-level-body__label">Тип бутылки:</label>
-          <select
-            onChange={e => dispatch(setIdTypeContourBottle(+e.target.value))}
-            value={idTypeContourBottle}>
-            {getTypeBottlesRange().map(num => (
-              <option key={num} value={num}>
-                {num}
-              </option>
-            ))}
-          </select>
+          <label
+            style={{ alignSelf: 'center' }}
+            className="setup-level-body__label">
+            Тип бутылки:
+          </label>
+          <SpinBottle width={150} height={100} />
         </div>
       </div>
       <div className="setup-level-btn">

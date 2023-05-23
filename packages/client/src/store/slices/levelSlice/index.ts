@@ -23,7 +23,6 @@ interface LevelState {
   maxCountEmptyBottles: number
   levels: Level[]
   idTypeContourBottle: number
-  maxIdTypeContourBottle: number
 }
 
 const LIMIT = 10
@@ -50,8 +49,7 @@ const initialState: LevelState = {
   maxCountLayersInBottle: LIMIT,
   maxCountEmptyBottles: LIMIT_EMPTY_BOTTLES,
   levels: [],
-  idTypeContourBottle: 0,
-  maxIdTypeContourBottle: MAX_TYPE_BOTTLE,
+  idTypeContourBottle: 1,
 }
 
 const levelSlice = createSlice({
@@ -80,6 +78,12 @@ const levelSlice = createSlice({
       state.countEmptyBottles = action.payload
     },
     setIdTypeContourBottle(state, action: PayloadAction<number>) {
+      if (action.payload <= 0) {
+        action.payload = 1
+      }
+      if (action.payload > MAX_TYPE_BOTTLE) {
+        action.payload = MAX_TYPE_BOTTLE
+      }
       state.idTypeContourBottle = action.payload
     },
     updateLayersInBottle: state => {
