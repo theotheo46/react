@@ -4,6 +4,7 @@ import {
   setCountColors,
   setCountEmptyBottles,
   setCountLayersInBottle,
+  setIdTypeContourBottle,
   updateLayersInBottle,
 } from '../../../store/slices/levelSlice'
 import Button from '../../Button'
@@ -11,6 +12,7 @@ import { FaArrowLeft } from 'react-icons/fa'
 import './SetupLevelGame.pcss'
 import { useEffect } from 'react'
 import { setCurrentLevel } from '../../../store/slices/gameSlice'
+import SpinBottle from '../../SpinBottle/index'
 
 interface Props {
   onCancelSettings: () => void
@@ -126,6 +128,14 @@ const SetupLevelGame = ({ onCancelSettings, onStart }: Props) => {
               </option>
             ))}
           </select>
+        </div>
+        <div className="setup-level-body__selector">
+          <label
+            style={{ alignSelf: 'center' }}
+            className="setup-level-body__label">
+            Тип бутылки:
+          </label>
+          <SpinBottle width={150} height={100} />
         </div>
       </div>
       <div className="setup-level-btn">

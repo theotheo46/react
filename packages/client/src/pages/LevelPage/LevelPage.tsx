@@ -154,7 +154,6 @@ const LevelPage = () => {
 
   function restartLevel() {
     setArraySettingsBottle(repeatCreateStartArrayBottle())
-    timerReset()
   }
 
   function onChangeFullScreenState() {
@@ -273,6 +272,7 @@ const LevelPage = () => {
             </div>
           </div>
         </div>
+        <img className="page-wrap__wave" src="wave.png" alt="wave" />
       </main>
     </div>
   )
