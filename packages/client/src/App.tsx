@@ -3,7 +3,7 @@ import './styles/App.pcss'
 import RoutesBase from './routes/routes'
 import { useAppDispatch } from './store/hooks'
 import { getUser } from './store/slices/userSlice/userAsyncThunks'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { createLevels } from './store/slices/levelSlice'
 
 window.addEventListener('load', async () => {
@@ -20,7 +20,7 @@ window.addEventListener('load', async () => {
 function App() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const path = window.location.pathname
+  const location = useLocation()
 
   useEffect(() => {
     const fetchServerData = async () => {
@@ -36,10 +36,11 @@ function App() {
 
   useEffect(() => {
     loadUser()
-  }, [navigate])
+  }, [location])
 
   async function loadUser() {
-    if (path !== '/' && path !== '/level' && path !== '/finish') {
+    const openRoutes = ['/', '/level', '/finish', '/signin', '/signup']
+    if (!openRoutes.some(path => path === location.pathname)) {
       const res = await dispatch(getUser())
       if (getUser.rejected.match(res)) {
         navigate('/signin')

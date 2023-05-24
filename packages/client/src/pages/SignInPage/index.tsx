@@ -12,6 +12,7 @@ import {
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { RequestLoginData } from '../../store/slices/userSlice/types'
 import { useNavigate } from 'react-router-dom'
+import Button from '../../components/Button'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.login
 const SignInPage = () => {
@@ -33,9 +34,19 @@ const SignInPage = () => {
       setError(res.payload || res.error.message || 'Error')
     }
   }
+  const handleStartGame = (e: React.MouseEvent) => {
+    e.preventDefault()
+    navigate('/level')
+  }
 
   return (
     <main className="entry-page page-wrap">
+      <Button
+        styleType="secondary"
+        onClick={e => handleStartGame(e)}
+        className="entry-page-fast-game-btn">
+        Быстрая игра
+      </Button>
       <Form
         title="Войти в профиль"
         className="sign-in-page"

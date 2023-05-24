@@ -6,10 +6,7 @@ import { createPortal } from 'react-dom'
 import Modal from '../../Modal'
 import ProfileChangePassword from '../ProfileChangePassword'
 import isEqual from '../../../helpers/isEqual'
-import {
-  RequestUpdateUserData,
-  User
-} from '../../../store/slices/userSlice/types'
+import { User } from '../../../store/slices/userSlice/types'
 import { useAppDispatch } from '../../../store/hooks'
 import { updateUser } from '../../../store/slices/userSlice/userAsyncThunks'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -51,14 +48,11 @@ const ProfileBody = ({ user }: Props) => {
     setIsChangePasswordModal(prev => !prev)
   }
 
-  const formHandler: SubmitHandler<User> = async (userData, e) => {
-    e?.preventDefault()
+  const formHandler: SubmitHandler<User> = async userData => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { avatar, ...data } = userData
 
-    const res = await dispatch(
-      updateUser({ data } as unknown as RequestUpdateUserData)
-    )
+    const res = await dispatch(updateUser({ data }))
     if (updateUser.fulfilled.match(res)) {
       setSuccessMessage('Данные обновлены!')
     }
@@ -70,7 +64,7 @@ const ProfileBody = ({ user }: Props) => {
         <div className="success-text-message">{successMessage}</div>
       )}
       <form
-        onSubmit={handleSubmit(async (_, e) => formHandler(userLocal, e))}
+        onSubmit={handleSubmit(() => formHandler(userLocal))}
         className="profile-body__form">
         {VALIDATE_FIELDS.profile.map((field, key) => (
           <Input

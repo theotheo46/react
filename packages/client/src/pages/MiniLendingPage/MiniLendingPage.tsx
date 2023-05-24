@@ -3,8 +3,6 @@ import Button from '../../components/Button'
 import DevFooter, { DevFooterElement } from '../../components/DevFooter'
 import Memo from '../../components/Memo'
 import './MiniLendingPage.pcss'
-import { useAppDispatch } from '../../store/hooks'
-import { getUser } from '../../store/slices/userSlice/userAsyncThunks'
 
 const MiniLendingPage = () => {
   const devFooterElementArray: DevFooterElement[] = [
@@ -29,17 +27,7 @@ const MiniLendingPage = () => {
       devAvatar: 'kseniya.png'
     }
   ]
-
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const handleStart = async () => {
-    const res = await dispatch(getUser())
-    if (getUser.rejected.match(res)) {
-      navigate('/level')
-    } else {
-      navigate('/start')
-    }
-  }
 
   return (
     <div className="mini-lending-page">
@@ -52,7 +40,11 @@ const MiniLendingPage = () => {
           rws={4}
           cls={80}
         />
-        <Button onClick={handleStart} type="submit" width="150px" height="48px">
+        <Button
+          onClick={() => navigate('/start')}
+          type="submit"
+          width="150px"
+          height="48px">
           Начать игру
         </Button>
         <img
