@@ -13,7 +13,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import {
   REGEX_ERRORS,
   REGULAR_EXPRESSON,
-  VALIDATE_FIELDS
+  VALIDATE_FIELDS,
 } from '../../../utils/validate-data'
 
 interface Props {
@@ -27,9 +27,9 @@ const ProfileBody = ({ user }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid }
+    formState: { errors, isValid },
   } = useForm({
-    mode: 'onBlur'
+    mode: 'onBlur',
   })
 
   const dispatch = useAppDispatch()
@@ -76,12 +76,12 @@ const ProfileBody = ({ user }: Props) => {
             refs={register(field.name, {
               required: {
                 value: field.required || false,
-                message: 'Это поле обязательно для заполнения'
+                message: 'Это поле обязательно для заполнения',
               },
               pattern: {
                 value: field.regex || REGULAR_EXPRESSON.MESSAGE,
-                message: field.errorText || REGEX_ERRORS.MESSAGE
-              }
+                message: field.errorText || REGEX_ERRORS.MESSAGE,
+              },
             })}
           />
         ))}
