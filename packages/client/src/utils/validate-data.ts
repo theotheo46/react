@@ -3,7 +3,7 @@ enum ROUTES_NAMES {
   registration = 'registration',
   profile = 'profile',
   changeProfile = 'changeProfile',
-  changePassword = 'changePassword',
+  changePassword = 'changePassword'
 }
 
 const { login, profile, registration, changePassword, changeProfile } =
@@ -17,7 +17,7 @@ export const REGULAR_EXPRESSON = {
     /^(\+7|7|8)?[\s-]?\(?[489][0-9]{2}\)?[\s-]?[0-9]{3}[\s-]?[0-9]{2}[\s-]?[0-9]{2}$/,
   PASSWORD:
     /^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*\d)[A-Za-zА-Яа-я\d@$!%*?&_-]{6,}$/,
-  MESSAGE: /^[\w\W]{1,}$/,
+  MESSAGE: /^[\w\W]{1,}$/
 }
 
 export const REGEX_ERRORS = {
@@ -28,7 +28,7 @@ export const REGEX_ERRORS = {
   PHONE: 'Введите корректный номер телефона',
   PASSWORD:
     'Минимум 6 символов. Введите хотя бы одну заглавную букву, одну строчную букву и цифру',
-  MESSAGE: 'Это поле не должно быть пустым...',
+  MESSAGE: 'Это поле не должно быть пустым...'
 }
 
 const EMAIL = {
@@ -38,7 +38,7 @@ const EMAIL = {
   required: true,
   name: 'email',
   regex: REGULAR_EXPRESSON.EMAIL,
-  errorText: REGEX_ERRORS.EMAIL,
+  errorText: REGEX_ERRORS.EMAIL
 }
 
 const LOGIN = {
@@ -48,16 +48,17 @@ const LOGIN = {
   required: true,
   name: 'login',
   regex: REGULAR_EXPRESSON.LOGIN,
-  errorText: REGEX_ERRORS.LOGIN,
+  errorText: REGEX_ERRORS.LOGIN
 }
 
 const DISPLAY_NAME = {
   id: 'display_name',
   label: 'Публичное имя',
+  required: false,
   type: 'text',
   name: 'display_name',
   regex: REGULAR_EXPRESSON.LOGIN,
-  errorText: REGEX_ERRORS.LOGIN,
+  errorText: REGEX_ERRORS.LOGIN
 }
 
 const FIRST_NAME = {
@@ -67,7 +68,7 @@ const FIRST_NAME = {
   label: 'Имя',
   name: 'first_name',
   regex: REGULAR_EXPRESSON.NAME,
-  errorText: REGEX_ERRORS.NAME,
+  errorText: REGEX_ERRORS.NAME
 }
 
 const SECOND_NAME = {
@@ -77,7 +78,7 @@ const SECOND_NAME = {
   label: 'Фамилия',
   name: 'second_name',
   regex: REGULAR_EXPRESSON.NAME,
-  errorText: REGEX_ERRORS.NAME,
+  errorText: REGEX_ERRORS.NAME
 }
 
 const PHONE = {
@@ -87,7 +88,7 @@ const PHONE = {
   label: 'Телефон',
   name: 'phone',
   regex: REGULAR_EXPRESSON.PHONE,
-  errorText: REGEX_ERRORS.PHONE,
+  errorText: REGEX_ERRORS.PHONE
 }
 
 const PASSWORD = {
@@ -97,25 +98,27 @@ const PASSWORD = {
   label: 'Пароль',
   name: 'password',
   regex: REGULAR_EXPRESSON.PASSWORD,
-  errorText: REGEX_ERRORS.PASSWORD,
+  errorText: REGEX_ERRORS.PASSWORD
 }
 
 const OLD_PASSWORD = {
   id: 'oldPassword',
   type: 'password',
+  required: true,
   label: 'Старый пароль',
   name: 'oldPassword',
   regex: REGULAR_EXPRESSON.PASSWORD,
-  errorText: REGEX_ERRORS.PASSWORD,
+  errorText: REGEX_ERRORS.PASSWORD
 }
 
 const NEW_PASSWORD = {
   id: 'newPassword',
   type: 'password',
+  required: false,
   label: 'Новый пароль',
   name: 'newPassword',
   regex: REGULAR_EXPRESSON.PASSWORD,
-  errorText: REGEX_ERRORS.PASSWORD,
+  errorText: REGEX_ERRORS.PASSWORD
 }
 
 const REPEAT_PASSWORD = {
@@ -125,7 +128,7 @@ const REPEAT_PASSWORD = {
   label: 'Повторить новый пароль',
   name: 'confirm_new_password',
   regex: REGULAR_EXPRESSON.PASSWORD,
-  errorText: REGEX_ERRORS.PASSWORD,
+  errorText: REGEX_ERRORS.PASSWORD
 }
 
 export const VALIDATE_FIELDS = {
@@ -137,9 +140,9 @@ export const VALIDATE_FIELDS = {
     EMAIL,
     PHONE,
     PASSWORD,
-    REPEAT_PASSWORD,
+    REPEAT_PASSWORD
   ],
-  [profile]: [EMAIL, LOGIN, DISPLAY_NAME, FIRST_NAME, SECOND_NAME, PHONE],
+  [profile]: [LOGIN, FIRST_NAME, SECOND_NAME, DISPLAY_NAME, EMAIL, PHONE],
   [changePassword]: [OLD_PASSWORD, NEW_PASSWORD, REPEAT_PASSWORD],
-  [changeProfile]: [EMAIL, LOGIN, DISPLAY_NAME, FIRST_NAME, SECOND_NAME, PHONE],
+  [changeProfile]: [EMAIL, LOGIN, DISPLAY_NAME, FIRST_NAME, SECOND_NAME, PHONE]
 }

@@ -3,32 +3,43 @@ import Button from '../../components/Button'
 import DevFooter, { DevFooterElement } from '../../components/DevFooter'
 import Memo from '../../components/Memo'
 import './MiniLendingPage.pcss'
+import { useAppDispatch } from '../../store/hooks'
+import { getUser } from '../../store/slices/userSlice/userAsyncThunks'
 
 const MiniLendingPage = () => {
   const devFooterElementArray: DevFooterElement[] = [
     {
       devName: 'Дмитрий Козицкий',
       devMail: 'theotheo46@gmail.com',
-      devAvatar: 'dmitry.png',
+      devAvatar: 'dmitry.png'
     },
     {
       devName: 'Артем Журавлев',
       devMail: 'an3wer@yandex.ru',
-      devAvatar: 'artem.png',
+      devAvatar: 'artem.png'
     },
     {
       devName: 'Илья Орехов',
       devMail: 'ily4-andreevi4@yandex.ru',
-      devAvatar: 'ilya.png',
+      devAvatar: 'ilya.png'
     },
     {
       devName: 'Ксения Тюленева',
       devMail: 'deiantydj@yandex.ru',
-      devAvatar: 'kseniya.png',
-    },
+      devAvatar: 'kseniya.png'
+    }
   ]
 
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const handleStart = async () => {
+    const res = await dispatch(getUser())
+    if (getUser.rejected.match(res)) {
+      navigate('/level')
+    } else {
+      navigate('/start')
+    }
+  }
 
   return (
     <div className="mini-lending-page">
@@ -41,11 +52,7 @@ const MiniLendingPage = () => {
           rws={4}
           cls={80}
         />
-        <Button
-          onClick={() => navigate('/start')}
-          type="submit"
-          width="150px"
-          height="48px">
+        <Button onClick={handleStart} type="submit" width="150px" height="48px">
           Начать игру
         </Button>
         <img

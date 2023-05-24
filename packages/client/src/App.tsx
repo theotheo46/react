@@ -20,6 +20,7 @@ window.addEventListener('load', async () => {
 function App() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const path = window.location.pathname
 
   useEffect(() => {
     const fetchServerData = async () => {
@@ -33,14 +34,19 @@ function App() {
     dispatch(createLevels())
   }, [])
 
+  useEffect(() => {
+    loadUser()
+  }, [navigate])
+
   async function loadUser() {
-    const res = await dispatch(getUser())
-    if (getUser.rejected.match(res)) {
-      navigate('/signin')
+    if (path !== '/' && path !== '/level' && path !== '/finish') {
+      const res = await dispatch(getUser())
+      if (getUser.rejected.match(res)) {
+        navigate('/signin')
+      }
     }
   }
 
-  // return <div className="App">Вот тут будет жить ваше приложение :)</div>
   return <RoutesBase />
 }
 

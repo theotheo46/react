@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Form from '../../components/Form'
 import { InputProps } from '../../components/Input'
 import { VALIDATE_FIELDS } from '../../utils/validate-data'
@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../store/hooks'
 import { RequestUpdateUserData } from '../../store/slices/userSlice/types'
 import {
   createUser,
-  getUser,
+  getUser
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
 
@@ -35,10 +35,6 @@ const SignUpPage = () => {
       setError(res.payload || res.error.message || 'Error')
     }
   }
-
-  // useEffect(() => {
-  //   setError(errorContext)
-  // }, [errorContext])
 
   return (
     <main className="entry-page page-wrap">
