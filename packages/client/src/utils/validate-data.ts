@@ -54,6 +54,7 @@ const LOGIN = {
 const DISPLAY_NAME = {
   id: 'display_name',
   label: 'Публичное имя',
+  required: false,
   type: 'text',
   name: 'display_name',
   regex: REGULAR_EXPRESSON.LOGIN,
@@ -103,6 +104,7 @@ const PASSWORD = {
 const OLD_PASSWORD = {
   id: 'oldPassword',
   type: 'password',
+  required: true,
   label: 'Старый пароль',
   name: 'oldPassword',
   regex: REGULAR_EXPRESSON.PASSWORD,
@@ -112,6 +114,7 @@ const OLD_PASSWORD = {
 const NEW_PASSWORD = {
   id: 'newPassword',
   type: 'password',
+  required: false,
   label: 'Новый пароль',
   name: 'newPassword',
   regex: REGULAR_EXPRESSON.PASSWORD,
@@ -139,7 +142,7 @@ export const VALIDATE_FIELDS = {
     PASSWORD,
     REPEAT_PASSWORD,
   ],
-  [profile]: [EMAIL, LOGIN, DISPLAY_NAME, FIRST_NAME, SECOND_NAME, PHONE],
+  [profile]: [LOGIN, FIRST_NAME, SECOND_NAME, DISPLAY_NAME, EMAIL, PHONE],
   [changePassword]: [OLD_PASSWORD, NEW_PASSWORD, REPEAT_PASSWORD],
   [changeProfile]: [EMAIL, LOGIN, DISPLAY_NAME, FIRST_NAME, SECOND_NAME, PHONE],
 }

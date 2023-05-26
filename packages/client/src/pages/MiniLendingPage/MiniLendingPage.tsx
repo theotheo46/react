@@ -3,8 +3,11 @@ import Button from '../../components/Button'
 import DevFooter, { DevFooterElement } from '../../components/DevFooter'
 import Memo from '../../components/Memo'
 import './MiniLendingPage.pcss'
+import { useAppSelector } from '../../store/hooks'
 
 const MiniLendingPage = () => {
+  const { user } = useAppSelector(state => state.user)
+  const isAuth = !!user
   const devFooterElementArray: DevFooterElement[] = [
     {
       devName: 'Дмитрий Козицкий',
@@ -27,7 +30,6 @@ const MiniLendingPage = () => {
       devAvatar: 'kseniya.png',
     },
   ]
-
   const navigate = useNavigate()
 
   return (
@@ -42,7 +44,7 @@ const MiniLendingPage = () => {
           cls={80}
         />
         <Button
-          onClick={() => navigate('/start')}
+          onClick={() => navigate(isAuth ? '/start' : '/signin')}
           type="submit"
           width="150px"
           height="48px">

@@ -3,7 +3,7 @@ import Button from '../../../Button'
 import './StartGameNav.pcss'
 import iconModeBattle from '../../../../assets/icons/icon-mode-1.svg'
 import iconModePuzzle from '../../../../assets/icons/icon-mode-2.svg'
-import { useAppDispatch } from '../../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import { logoutUser } from '../../../../store/slices/userSlice/userAsyncThunks'
 import { GameMode } from '../../../../store/slices/gameSlice/types'
 
@@ -14,12 +14,12 @@ interface Props {
 const StartGameNav = ({ onSetupSettings }: Props) => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const { user } = useAppSelector(state => state.user)
+  const isAuth = !!user
 
   const handleQuit = async () => {
-    const res = await dispatch(logoutUser())
-    if (logoutUser.fulfilled.match(res)) {
-      navigate('/signin')
-    }
+    await dispatch(logoutUser())
+    navigate('/signin')
   }
 
   return (
@@ -41,30 +41,35 @@ const StartGameNav = ({ onSetupSettings }: Props) => {
       <div className="game-start-nav__btn-group">
         <Button
           width="100%"
+          disabled={!isAuth}
           onClick={() => navigate('/forum')}
           styleType="primary">
           Форум
         </Button>
         <Button
           width="100%"
+          disabled={!isAuth}
           onClick={() => navigate('/forumsection')}
           styleType="primary">
           Раздел форума
         </Button>
         <Button
           width="100%"
+          disabled={!isAuth}
           onClick={() => navigate('/forumtopic')}
           styleType="primary">
           Тема форума
         </Button>
         <Button
           width="100%"
+          disabled={!isAuth}
           onClick={() => navigate('/profile')}
           styleType="primary">
           Профиль
         </Button>
         <Button
           width="100%"
+          disabled={!isAuth}
           onClick={() => navigate('/leaderbord')}
           styleType="primary">
           Лидеры
@@ -73,6 +78,14 @@ const StartGameNav = ({ onSetupSettings }: Props) => {
           Выйти
         </Button>
       </div>
+      {!isAuth && (
+        <Button
+          styleType="link"
+          type="button"
+          onClick={() => navigate('/signin')}>
+          Авторизуйтесь, чтобы открыть полный доступ к приложению
+        </Button>
+      )}
     </div>
   )
 }

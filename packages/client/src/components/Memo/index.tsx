@@ -17,9 +17,12 @@ const Memo = ({ className, header, text, rws, cls, ...rest }: Props) => {
   return (
     <div className={className} {...rest}>
       <p className="header">{header}</p>
-      <textarea className="text" readOnly rows={rws} cols={cls}>
-        {text}
-      </textarea>
+      <textarea
+        value={text}
+        className="text"
+        readOnly
+        rows={rws}
+        cols={cls}></textarea>
     </div>
   )
 }

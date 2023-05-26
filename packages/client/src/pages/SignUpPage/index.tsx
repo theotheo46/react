@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Form from '../../components/Form'
 import { InputProps } from '../../components/Input'
 import { VALIDATE_FIELDS } from '../../utils/validate-data'
@@ -13,6 +13,7 @@ import {
   getUser,
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
+import Button from '../../components/Button'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.registration
 const SignUpPage = () => {
@@ -35,13 +36,25 @@ const SignUpPage = () => {
       setError(res.payload || res.error.message || 'Error')
     }
   }
-
-  // useEffect(() => {
-  //   setError(errorContext)
-  // }, [errorContext])
+  const handleStartGame = (e: React.MouseEvent) => {
+    e.preventDefault()
+    navigate('/start')
+  }
 
   return (
     <main className="entry-page page-wrap">
+      <Button
+        styleType="secondary"
+        onClick={e => handleStartGame(e)}
+        className="entry-page-fast-game-btn">
+        Оффлайн режим
+      </Button>
+      <Button
+        styleType="link"
+        onClick={() => navigate('/')}
+        className="entry-page-about-btn">
+        О приложении
+      </Button>
       <Form
         title="Регистрация"
         className="sign-up-page"

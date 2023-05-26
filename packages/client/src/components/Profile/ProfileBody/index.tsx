@@ -1,5 +1,5 @@
 import Input from '../../Input'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import './ProfileBody.pcss'
 import Button from '../../Button'
 import { createPortal } from 'react-dom'
@@ -9,6 +9,12 @@ import isEqual from '../../../helpers/isEqual'
 import { User } from '../../../store/slices/userSlice/types'
 import { useAppDispatch } from '../../../store/hooks'
 import { updateUser } from '../../../store/slices/userSlice/userAsyncThunks'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import {
+  REGEX_ERRORS,
+  REGULAR_EXPRESSON,
+  VALIDATE_FIELDS,
+} from '../../../utils/validate-data'
 
 interface Props {
   user: User
@@ -18,6 +24,13 @@ const ProfileBody = ({ user }: Props) => {
   const [userLocal, setUserLocal] = useState<User>(user)
   const [isChangePasswordModal, setIsChangePasswordModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onBlur',
+  })
 
   const dispatch = useAppDispatch()
 
@@ -35,10 +48,9 @@ const ProfileBody = ({ user }: Props) => {
     setIsChangePasswordModal(prev => !prev)
   }
 
-  async function formHandler(e: FormEvent) {
-    e.preventDefault()
+  const formHandler: SubmitHandler<User> = async userData => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { avatar, ...data } = userLocal
+    const { avatar, ...data } = userData
 
     const res = await dispatch(updateUser({ data }))
     if (updateUser.fulfilled.match(res)) {
@@ -51,42 +63,28 @@ const ProfileBody = ({ user }: Props) => {
       {successMessage && (
         <div className="success-text-message">{successMessage}</div>
       )}
-      <form onSubmit={formHandler} className="profile-body__form">
-        <Input
-          name="first_name"
-          type="text"
-          label="Имя"
-          onChange={inputHandler}
-          value={userLocal.first_name}
-        />
-        <Input
-          name="second_name"
-          type="text"
-          label="Фамилия"
-          onChange={inputHandler}
-          value={userLocal.second_name}
-        />
-        <Input
-          name="display_name"
-          type="text"
-          label="Никнейм"
-          onChange={inputHandler}
-          value={userLocal.display_name || ''}
-        />
-        <Input
-          name="email"
-          type="text"
-          label="Email"
-          onChange={inputHandler}
-          value={userLocal.email}
-        />
-        <Input
-          name="phone"
-          type="text"
-          label="Телефон"
-          onChange={inputHandler}
-          value={userLocal.phone}
-        />
+      <form
+        onSubmit={handleSubmit(() => formHandler(userLocal))}
+        className="profile-body__form">
+        {VALIDATE_FIELDS.profile.map((field, key) => (
+          <Input
+            key={key}
+            onChange={inputHandler}
+            value={userLocal[field.name as keyof User] || ''}
+            {...field}
+            hasError={!!errors[field.name]}
+            refs={register(field.name, {
+              required: {
+                value: field.required || false,
+                message: 'Это поле обязательно для заполнения',
+              },
+              pattern: {
+                value: field.regex || REGULAR_EXPRESSON.MESSAGE,
+                message: field.errorText || REGEX_ERRORS.MESSAGE,
+              },
+            })}
+          />
+        ))}
         <div className="profile-body__buttons">
           <Button
             onClick={modalHandler}
@@ -96,7 +94,10 @@ const ProfileBody = ({ user }: Props) => {
             styleType="link">
             Изменить пароль
           </Button>
-          <Button disabled={isSubmit} type="submit" styleType="primary">
+          <Button
+            disabled={isSubmit || !isValid}
+            type="submit"
+            styleType="primary">
             Сохранить
           </Button>
         </div>
