@@ -8,7 +8,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { useAppDispatch } from '../../store/hooks'
 import {
   getUser,
-  loginUser,
+  loginUser
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { RequestLoginData } from '../../store/slices/userSlice/types'
 import { useNavigate } from 'react-router-dom'
@@ -36,7 +36,7 @@ const SignInPage = () => {
   }
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault()
-    navigate('/level')
+    navigate('/start')
   }
 
   return (
@@ -45,7 +45,13 @@ const SignInPage = () => {
         styleType="secondary"
         onClick={e => handleStartGame(e)}
         className="entry-page-fast-game-btn">
-        Быстрая игра
+        Оффлайн режим
+      </Button>
+      <Button
+        styleType="tertiary"
+        onClick={() => navigate('/')}
+        className="entry-page-about-btn">
+        О приложении
       </Button>
       <Form
         title="Войти в профиль"

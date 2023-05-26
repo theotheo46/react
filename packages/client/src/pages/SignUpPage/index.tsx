@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../store/hooks'
 import { RequestUpdateUserData } from '../../store/slices/userSlice/types'
 import {
   createUser,
-  getUser,
+  getUser
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
@@ -38,7 +38,7 @@ const SignUpPage = () => {
   }
   const handleStartGame = (e: React.MouseEvent) => {
     e.preventDefault()
-    navigate('/level')
+    navigate('/start')
   }
 
   return (
@@ -47,7 +47,13 @@ const SignUpPage = () => {
         styleType="secondary"
         onClick={e => handleStartGame(e)}
         className="entry-page-fast-game-btn">
-        Быстрая игра
+        Оффлайн режим
+      </Button>
+      <Button
+        styleType="tertiary"
+        onClick={() => navigate('/')}
+        className="entry-page-about-btn">
+        О приложении
       </Button>
       <Form
         title="Регистрация"
