@@ -50,7 +50,7 @@ const SignUpPage = () => {
         Оффлайн режим
       </Button>
       <Button
-        styleType="tertiary"
+        styleType="link"
         onClick={() => navigate('/')}
         className="entry-page-about-btn">
         О приложении
