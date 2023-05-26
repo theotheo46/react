@@ -16,7 +16,7 @@ const AuthContext = ({ children }: Props) => {
     '/forum',
     '/leaderbord',
     '/forumsection',
-    '/forumtopic'
+    '/forumtopic',
   ]
   const regRoutes = ['/signin', '/signup']
 

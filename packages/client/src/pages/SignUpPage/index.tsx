@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../store/hooks'
 import { RequestUpdateUserData } from '../../store/slices/userSlice/types'
 import {
   createUser,
-  getUser
+  getUser,
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'

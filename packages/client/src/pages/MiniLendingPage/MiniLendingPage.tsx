@@ -12,23 +12,23 @@ const MiniLendingPage = () => {
     {
       devName: 'Дмитрий Козицкий',
       devMail: 'theotheo46@gmail.com',
-      devAvatar: 'dmitry.png'
+      devAvatar: 'dmitry.png',
     },
     {
       devName: 'Артем Журавлев',
       devMail: 'an3wer@yandex.ru',
-      devAvatar: 'artem.png'
+      devAvatar: 'artem.png',
     },
     {
       devName: 'Илья Орехов',
       devMail: 'ily4-andreevi4@yandex.ru',
-      devAvatar: 'ilya.png'
+      devAvatar: 'ilya.png',
     },
     {
       devName: 'Ксения Тюленева',
       devMail: 'deiantydj@yandex.ru',
-      devAvatar: 'kseniya.png'
-    }
+      devAvatar: 'kseniya.png',
+    },
   ]
   const navigate = useNavigate()
 

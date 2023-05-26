@@ -8,7 +8,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { useAppDispatch } from '../../store/hooks'
 import {
   getUser,
-  loginUser
+  loginUser,
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { RequestLoginData } from '../../store/slices/userSlice/types'
 import { useNavigate } from 'react-router-dom'
