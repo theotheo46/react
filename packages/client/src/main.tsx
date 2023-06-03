@@ -17,3 +17,18 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   </BrowserRouter>
   // </React.StrictMode>
 )
+
+if (import.meta.env.PROD) {
+  window.addEventListener('load', async () => {
+    if ('serviceWorker' in navigator) {
+      try {
+        const reg = navigator.serviceWorker.register('/sw.js', {
+          type: 'module',
+        })
+        console.log('service worker register success:', reg)
+      } catch (e) {
+        console.error('service worker register fail', e)
+      }
+    }
+  })
+}
