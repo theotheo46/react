@@ -1,3 +1,5 @@
+import Path2D from '../../../path2d-polyfill'
+
 class TypeContourBottle {
   id: number
   pathStr: string
