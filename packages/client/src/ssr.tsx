@@ -1,9 +1,8 @@
-import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
-import App from './src/App'
+import App from './App'
 import { Provider } from 'react-redux'
-import { create } from './src/store'
+import { create } from './store'
 
 interface Props {
   path: string

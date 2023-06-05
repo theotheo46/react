@@ -97,6 +97,7 @@ export const assetsUrls = [
   'src/pages/SignUpPage/index.tsx',
   'src/pages/StartPage.tsx',
   'src/routes/routes.tsx',
+  'src/ssr.tsx',
   'src/store/hooks.ts',
   'src/store/index.ts',
   'src/store/slices/gameSlice/index.ts',

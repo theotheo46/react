@@ -39,7 +39,7 @@ export const useNextLevel = () => {
       countLayersInBottle,
       levels
     )
-    if (nextLevel !== undefined) {
+    if (nextLevel !== undefined && typeof nextLevel !== 'number') {
       dispatch(setCountColors(nextLevel.countColors))
       dispatch(setCountLayersInBottle(nextLevel.countLayersInBottle))
       dispatch(setCountEmptyBottles(nextLevel.countEmptyBottles))
@@ -77,7 +77,7 @@ export const useNextLevel = () => {
     countLayersInBottle: number,
     levels: Level[]
   ) {
-    let nextLevel: Level | undefined
+    let nextLevel: Level | undefined | number
     let levelNumber = 0
     if (currentLevel) {
       nextLevel = levels[currentLevel]

@@ -6,7 +6,6 @@ import type { ViteDevServer } from 'vite'
 dotenv.config()
 
 import express from 'express'
-// import * as fs from 'fs'
 import { promises as fs } from 'fs'
 import * as path from 'path'
 
@@ -19,9 +18,15 @@ async function startServer() {
 
   let vite: ViteDevServer | undefined
 
-  const distPath = path.dirname(require.resolve('client/dist/index.html'))
   const srcPath = path.dirname(require.resolve('client'))
-  const ssrClientPath = require.resolve('client/dist-ssr/client.cjs')
+
+  let distPath = ''
+  let ssrClientPath = ''
+
+  if (!isDev()) {
+    distPath = path.dirname(require.resolve('client/dist/index.html'))
+    ssrClientPath = require.resolve('client/dist-ssr/client.cjs')
+  }
 
   if (isDev()) {
     vite = await createViteServer({
@@ -66,8 +71,9 @@ async function startServer() {
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
       } else {
-        render = (await vite!.ssrLoadModule(path.resolve(srcPath, 'ssr.tsx')))
-          .render
+        render = (
+          await vite!.ssrLoadModule(path.resolve(srcPath, '/src/ssr.tsx'))
+        ).render
       }
 
       const [appHtml] = await render({ path: url })
