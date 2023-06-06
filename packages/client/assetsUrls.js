@@ -66,6 +66,7 @@ export const assetsUrls = [
   'src/components/Profile/ProfileChangePassword/index.tsx',
   'src/components/Profile/index.tsx',
   'src/components/SpinBottle/index.tsx',
+  'src/context/AuthContext.tsx',
   'src/context/UserContext.tsx',
   'src/helpers/createRange.ts',
   'src/helpers/isEqual.ts',
@@ -115,5 +116,5 @@ export const assetsUrls = [
   'index.html',
   'wave.png',
   'minilending.svg',
-  'home.svg',
-]
+  'home.svg'
+];
