@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 import { FaArrowLeft } from 'react-icons/fa'
 import LeaderboardList from '../components/Leaderboard/LeaderboardList'
+import wave from '../assets/images/wave.png'
 
 const LeaderbordPage = () => {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ const LeaderbordPage = () => {
         </div>
         <LeaderboardList />
       </main>
-      <img className="page-wrap__wave" src="wave.png" alt="wave" />
+      <img className="page-wrap__wave" src={wave} alt="wave" />
     </div>
   )
 }

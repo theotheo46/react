@@ -13,7 +13,6 @@ export default defineConfig({
     },
     minify: false,
     rollupOptions: {
-      input: '/src/ssr.tsx',
       output: {
         dir: 'dist-ssr',
       },

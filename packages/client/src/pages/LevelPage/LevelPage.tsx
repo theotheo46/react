@@ -24,6 +24,7 @@ import {
   setCurrentTime,
   setMode,
 } from '../../store/slices/gameSlice'
+import wave from '../../assets/images/wave.png'
 
 class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -272,7 +273,7 @@ const LevelPage = () => {
             </div>
           </div>
         </div>
-        <img className="page-wrap__wave" src="wave.png" alt="wave" />
+        <img className="page-wrap__wave" src={wave} alt="wave" />
       </main>
     </div>
   )

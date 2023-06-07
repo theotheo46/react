@@ -14,6 +14,7 @@ import {
 } from '../../store/slices/userSlice/userAsyncThunks'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
+import wave from '../../assets/images/wave.png'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.registration
 const SignUpPage = () => {
@@ -77,7 +78,7 @@ const SignUpPage = () => {
           />
         </Modal>
       )}
-      <img className="entry-page-wave" src="wave.png" alt="wave" />
+      <img className="entry-page-wave" src={wave} alt="wave" />
     </main>
   )
 }

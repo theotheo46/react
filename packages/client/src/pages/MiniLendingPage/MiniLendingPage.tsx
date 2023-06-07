@@ -4,6 +4,12 @@ import DevFooter, { DevFooterElement } from '../../components/DevFooter'
 import Memo from '../../components/Memo'
 import './MiniLendingPage.pcss'
 import { useAppSelector } from '../../store/hooks'
+import wave from '../../assets/images/wave.png'
+import artemAvatar from '../../assets/images/artem.png'
+import iliyaAvatar from '../../assets/images/ilya.png'
+import kseniyaAvatar from '../../assets/images/kseniya.png'
+import dmitryAvatar from '../../assets/images/dmitry.png'
+import minilending from '../../assets/images/minilending.svg'
 
 const MiniLendingPage = () => {
   const { user } = useAppSelector(state => state.user)
@@ -12,22 +18,22 @@ const MiniLendingPage = () => {
     {
       devName: 'Дмитрий Козицкий',
       devMail: 'theotheo46@gmail.com',
-      devAvatar: 'dmitry.png',
+      devAvatar: dmitryAvatar,
     },
     {
       devName: 'Артем Журавлев',
       devMail: 'an3wer@yandex.ru',
-      devAvatar: 'artem.png',
+      devAvatar: artemAvatar,
     },
     {
       devName: 'Илья Орехов',
       devMail: 'ily4-andreevi4@yandex.ru',
-      devAvatar: 'ilya.png',
+      devAvatar: iliyaAvatar,
     },
     {
       devName: 'Ксения Тюленева',
       devMail: 'deiantydj@yandex.ru',
-      devAvatar: 'kseniya.png',
+      devAvatar: kseniyaAvatar,
     },
   ]
   const navigate = useNavigate()
@@ -52,8 +58,8 @@ const MiniLendingPage = () => {
         </Button>
         <img
           className="game-screen-image"
-          src={'minilending.svg'}
-          alt={`avatar for game main screen`}
+          src={minilending}
+          alt="avatar for game main screen"
         />
       </div>
       <div className="second-screen">
@@ -78,7 +84,7 @@ const MiniLendingPage = () => {
           devFooterElementArray={devFooterElementArray}
         />
       </div>
-      <img className="mini-lending-page-wave" src="wave.png" alt="wave" />
+      <img className="mini-lending-page-wave" src={wave} alt="wave" />
     </div>
   )
 }
