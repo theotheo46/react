@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import {
   RequestCreateUserData,
   RequestLoginData,
+  RequestOAuthData,
   RequestUpdatePasswordData,
   RequestUpdateUserData,
   User,
@@ -41,6 +42,32 @@ export const loginUser = createAsyncThunk<
 >('user/loginUser', async (data, { rejectWithValue }) => {
   try {
     const response = await baseApi.post('/auth/signin', data)
+    return response.data
+  } catch (error) {
+    return rejectWithValue((error as Error).message)
+  }
+})
+
+export const OAuth = createAsyncThunk<
+  undefined,
+  RequestOAuthData,
+  { rejectValue: string }
+>('user/OAuth', async (data, { rejectWithValue }) => {
+  try {
+    const response = await baseApi.post('/oauth/yandex', data)
+    return response.data
+  } catch (error) {
+    return rejectWithValue((error as Error).message)
+  }
+})
+
+export const getServiceId = createAsyncThunk<
+  { service_id: string },
+  undefined,
+  { rejectValue: string }
+>('user/getServiceId', async (_, { rejectWithValue }) => {
+  try {
+    const response = await baseApi.get('/oauth/yandex/service-id')
     return response.data
   } catch (error) {
     return rejectWithValue((error as Error).message)

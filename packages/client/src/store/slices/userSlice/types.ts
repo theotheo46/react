@@ -13,6 +13,10 @@ export interface RequestLoginData {
   login: string
   password: string
 }
+export interface RequestOAuthData {
+  code: string
+  redirect_uri: string
+}
 
 export interface RequestUpdateUserData {
   data: Omit<User, 'avatar'>

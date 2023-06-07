@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit'
 import { User } from './types'
 import {
+  OAuth,
   createUser,
+  getServiceId,
   getUser,
   loginUser,
   logoutUser,
@@ -43,6 +45,14 @@ const userSlice = createSlice({
         state.error = ''
       })
       .addCase(createUser.fulfilled, state => {
+        state.isPending = false
+        state.error = ''
+      })
+      .addCase(OAuth.fulfilled, state => {
+        state.isPending = false
+        state.error = ''
+      })
+      .addCase(getServiceId.fulfilled, state => {
         state.isPending = false
         state.error = ''
       })
