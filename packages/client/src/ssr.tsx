@@ -3,6 +3,7 @@ import { StaticRouter } from 'react-router-dom/server'
 import App from './App'
 import { Provider } from 'react-redux'
 import { create } from './store'
+import 'path2d-polyfill'
 
 interface Props {
   path: string
@@ -10,7 +11,6 @@ interface Props {
 
 export const render = ({ path }: Props) => {
   const store = create()
-
   const resultRender = renderToString(
     <Provider store={store}>
       <StaticRouter location={path}>
@@ -18,5 +18,8 @@ export const render = ({ path }: Props) => {
       </StaticRouter>
     </Provider>
   )
-  return [resultRender]
+  /*
+    Функция помимо html, возвразает еще store, чтобы в сервере можно было прокинуть состояние в разметку для инициализации стора на клиенте
+  */
+  return [resultRender, store]
 }

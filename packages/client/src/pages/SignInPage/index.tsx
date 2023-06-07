@@ -13,6 +13,7 @@ import {
 import { RequestLoginData } from '../../store/slices/userSlice/types'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../components/Button'
+import wave from '../../assets/images/wave.png'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.login
 const SignInPage = () => {
@@ -75,7 +76,7 @@ const SignInPage = () => {
           />
         </Modal>
       )}
-      <img className="entry-page-wave" src="wave.png" alt="wave" />
+      <img className="entry-page-wave" src={wave} alt="wave" />
     </main>
   )
 }
