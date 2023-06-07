@@ -32,12 +32,12 @@ const Form = ({ title, className, inputs, buttonLabel, onSubmit }: Props) => {
     e?.preventDefault()
     let serviceId = ''
     const redirect_url = 'http://localhost:3000' // TODO Редирект будет с сайта Яндекса, поэтому нужен полный путь. Изменить в продакшене на корректный урл.
-    const resServiceId = await dispatch(getServiceId())
-    if (getServiceId.fulfilled.match(resServiceId)) {
-      serviceId = resServiceId.payload.service_id
+    const res = await dispatch(getServiceId())
+    if (getServiceId.fulfilled.match(res)) {
+      serviceId = res.payload.service_id
       document.location = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${serviceId}&redirect_uri=${redirect_url}`
     } else {
-      setError(resServiceId.payload || resServiceId.error.message || 'Error')
+      setError(res.payload || res.error.message || 'Error')
     }
   }
 
