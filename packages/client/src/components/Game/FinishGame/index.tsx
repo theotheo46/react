@@ -35,11 +35,25 @@ const FinishGame = () => {
     dispatch(setCurrentAttempts(0))
     dispatch(setMode(null))
     navigate('/start')
-  }
+  } 
 
   if (gameIsLoading) {
     return <LoaderGame />
   } else {
+    const notifStr = `Уровень ${currentLevel ? currentLevel : ""} пройден\nПереливаний: ${currentAttempts}    Время: ${currentTime}`
+    if (Notification && Notification.permission !== "denied") {
+      Notification.requestPermission((status) => {
+        if (status === "granted") {
+          const n = new Notification(notifStr, {
+            tag: "finishGameNotification",
+          });
+        } else {
+          alert("Permissions for notifications are not granted");
+        }
+      });
+    } else {
+      alert("Permissions for notifications are not granted");
+    }
     return (
       <div className="finish-game">
         <div className="finish-game__img">
