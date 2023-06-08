@@ -4,9 +4,17 @@ export const assetsUrls = [
   'src/assets/.keep',
   'src/assets/icons/icon-mode-1.svg',
   'src/assets/icons/icon-mode-2.svg',
+  'src/assets/images/arrow-left-solid 1.svg',
+  'src/assets/images/artem.png',
   'src/assets/images/default-avatar.jpg',
+  'src/assets/images/dmitry.png',
   'src/assets/images/game-preview.png',
+  'src/assets/images/home.svg',
+  'src/assets/images/ilya.png',
+  'src/assets/images/kseniya.png',
+  'src/assets/images/minilending.svg',
   'src/assets/images/thumb-up.png',
+  'src/assets/images/wave.png',
   'src/client.d.ts',
   'src/components/Bottle/FillTypeColor.tsx',
   'src/components/Bottle/TypeContourBottle.tsx',
@@ -97,6 +105,7 @@ export const assetsUrls = [
   'src/pages/SignUpPage/index.tsx',
   'src/pages/StartPage.tsx',
   'src/routes/routes.tsx',
+  'src/ssr.tsx',
   'src/store/hooks.ts',
   'src/store/index.ts',
   'src/store/slices/gameSlice/index.ts',
@@ -116,5 +125,5 @@ export const assetsUrls = [
   'index.html',
   'wave.png',
   'minilending.svg',
-  'home.svg'
-];
+  'home.svg',
+]
