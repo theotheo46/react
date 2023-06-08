@@ -1,0 +1,53 @@
+@startuml
+entity "LeaderBoard" as lb {
+  *lb_id : number <<generated>>
+  --
+  userid : integer
+  usernick : text
+  level : integer
+  steps : integer
+  time : integer
+  score : integer
+}
+
+entity "Section" as scn {
+  *section_id : number <<generated>>
+  --
+  usernick : text
+  creationtime : timestamp
+  sectionname : text
+}
+
+entity "Topic" as tpc {
+  *topic_id : number <<generated>>
+  --
+  *section_id : number <<FK>>
+  usernick : text
+  creationtime : timestamp
+  topicname : text
+}
+
+entity "Message" as msg {
+  *message_id : number <<generated>>
+  --
+  *topic_id : number <<FK>>
+  *reply_id : number <<FK>>
+  usernick : text
+  creationtime : timestamp
+  updatetime : timestamp
+  messagetext : text
+}
+
+entity "Reply" as rpl {
+  *reply_id : number <<generated>>
+  --
+  *topic_id : number <<FK>>
+}
+
+scn ||--o{ tpc
+tpc ||--o{ msg
+tpc ||--o{ rpl
+rpl ||--|{ msg
+
+
+@enduml
