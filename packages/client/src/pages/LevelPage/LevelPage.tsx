@@ -223,7 +223,12 @@ const LevelPage = () => {
               <FaArrowLeft style={iconStyle} />
               Назад
             </Button>
-            <div style={{ fontSize: '40px' }}>Решите головоломку</div>
+            <Button styleType="primary" onClick={restartLevel}>
+              <FaSync style={iconStyle} />
+            </Button>
+            <Button style={{ display: 'none' }} styleType="primary">
+              <FaReply style={iconStyle} />
+            </Button>
             <Button styleType="primary" onClick={onChangeFullScreenState}>
               <FaExpand
                 style={{
@@ -241,15 +246,15 @@ const LevelPage = () => {
               />
             </Button>
           </div>
+          {currentLevel && (
+            <div className="level-page-title">Уровень: {currentLevel}</div>
+          )}
+          {!currentLevel && <div className="level-page-title">Головоломка</div>}
+          <div className="level-page-variables">
+            <div>Переливаний: {currentAttempts}</div>
+            <div>Время: {getTime()}</div>
+          </div>
           <div className="level-page-middle">
-            <div className="panel-with-buttons-middle">
-              <Button styleType="primary" onClick={restartLevel}>
-                <FaSync style={iconStyle} />
-              </Button>
-              <Button style={{ display: 'none' }} styleType="primary">
-                <FaReply style={iconStyle} />
-              </Button>
-            </div>
             <div className="panel-with-bottles-middle">
               {arraySettingsBottle.map((bottle, idx) => (
                 <Bottle
@@ -258,18 +263,10 @@ const LevelPage = () => {
                   keyHtmlElement={String(idx)}
                   bottleColors={bottle.bottleColors}
                   height={200}
-                  width={100}
+                  width={85}
                   onClickHandler={onClickHandler}
                 />
               ))}
-            </div>
-            <div className="panel-with-info-middle">
-              <div style={{ marginBottom: '10px' }}>
-                Переливаний: {currentAttempts}
-              </div>
-              <div style={{ marginBottom: '10px' }}>Время: {getTime()}</div>
-              {currentLevel && <div>Уровень: {currentLevel}</div>}
-              <div></div>
             </div>
           </div>
         </div>

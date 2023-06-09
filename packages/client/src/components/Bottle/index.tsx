@@ -16,7 +16,6 @@ interface Props
   > {
   height?: number
   width?: number
-  offsetX?: number
   offsetYForSelectBottle?: number
   onClickHandler: (
     isSelect: boolean,
@@ -31,7 +30,6 @@ interface Props
 const Bottle = ({
   height = 50,
   width = 50,
-  offsetX = 10,
   offsetYForSelectBottle = 0,
   onClickHandler,
   onSaveFinishCallback,
@@ -52,20 +50,117 @@ const Bottle = ({
 
   const { currentAttempts } = useAppSelector(state => state.game)
 
-  const drawEntireBottle = (context: CanvasRenderingContext2D | null) => {
+  const drawAnimationDeleteColorInBottle = (
+    context: CanvasRenderingContext2D | null,
+    needAnimationAdd: boolean,
+    needAnimationDelete: boolean,
+    fillTopLayer: number,
+    countColorNeedChange: number,
+    colorForAnimation = ''
+  ) => {
     if (!context) return
-    const widthCanvas = width - offsetX * 2
     const heightCanvas = height - 30
-    clearCanvas(context)
-    context.save()
-    TypeBottleArray.clipStrokeBottle(
-      context,
-      idTypeContourBottle,
-      offsetYForSelectBottle
-    )
-    drawShadedPartOfBottle(context, widthCanvas, heightCanvas)
-    TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle)
-    context.restore()
+
+    if (needAnimationDelete) {
+      drawAnimationDelete(
+        context,
+        fillTopLayer,
+        countColorNeedChange,
+        colorForAnimation
+      )
+    } else {
+      drawAnimationAdd(
+        context,
+        needAnimationAdd,
+        fillTopLayer,
+        countColorNeedChange
+      )
+    }
+
+    function drawAnimationAdd(
+      context: CanvasRenderingContext2D,
+      needAnimationAdd: boolean,
+      fillTopLayer: number,
+      countColorNeedChange: number
+    ) {
+      const heightTopLayer =
+        heightCanvas / countLayersInBottle / TypeBottleArray.getStepAnimation()
+      fillTopLayer = fillTopLayer + heightTopLayer
+      countColorNeedChange = Math.max(countColorNeedChange, 1)
+      clearCanvas(context)
+      context.save()
+      TypeBottleArray.clipStrokeBottle(
+        context,
+        idTypeContourBottle,
+        offsetYForSelectBottle
+      )
+      drawShadedPartOfBottleNew(
+        context,
+        heightCanvas,
+        needAnimationAdd,
+        false,
+        fillTopLayer,
+        countColorNeedChange,
+        ''
+      )
+      TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle)
+      context.restore()
+      if (
+        fillTopLayer <
+        (heightCanvas / countLayersInBottle) * countColorNeedChange
+      ) {
+        requestAnimationFrame(
+          drawAnimationAdd.bind(
+            null,
+            context,
+            needAnimationAdd,
+            fillTopLayer,
+            countColorNeedChange
+          )
+        )
+      }
+    }
+
+    function drawAnimationDelete(
+      context: CanvasRenderingContext2D,
+      fillTopLayer: number,
+      countColorNeedChange: number,
+      colorForAnimation: string
+    ) {
+      const diffTopLayer =
+        heightCanvas / countLayersInBottle / TypeBottleArray.getStepAnimation()
+      fillTopLayer = fillTopLayer - diffTopLayer
+      countColorNeedChange = Math.max(countColorNeedChange, 1)
+      clearCanvas(context)
+      context.save()
+      TypeBottleArray.clipStrokeBottle(
+        context,
+        idTypeContourBottle,
+        offsetYForSelectBottle
+      )
+      drawShadedPartOfBottleNew(
+        context,
+        heightCanvas,
+        false,
+        true,
+        fillTopLayer,
+        countColorNeedChange,
+        colorForAnimation
+      )
+      TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle)
+      context.restore()
+
+      if (fillTopLayer > 0)
+        requestAnimationFrame(
+          drawAnimationDelete.bind(
+            null,
+            context,
+            fillTopLayer,
+            countColorNeedChange,
+            colorForAnimation
+          )
+        )
+    }
 
     function clearCanvas(context: CanvasRenderingContext2D) {
       context.clearRect(0, 0, width, height)
@@ -77,34 +172,72 @@ const Bottle = ({
     }
   }
 
-  const drawShadedPartOfBottle = (
+  const drawShadedPartOfBottleNew = (
     context: CanvasRenderingContext2D,
-    widthCanvas: number,
-    heightCanvas: number
+    heightCanvas: number,
+    needAnimationAdd: boolean,
+    needAnimationDelete: boolean,
+    heightChangeTopLayer: number,
+    countColorNeedChange: number,
+    colorForDelete: string
   ) => {
+    if (!context) return
+
     const heightLayer = heightCanvas / countLayersInBottle
     let offsetYForShadedPartBottle: number =
       (countLayersInBottle - bottleColors.length) * heightLayer
-    drawAllPartOfBottle()
+    let internalCountColorNeedChange = 1
 
-    function drawAllPartOfBottle() {
-      if (!context) return
-      for (let i = bottleColors.length - 1; i >= 0; i--) {
-        drawAllColorLayerBottle(bottleColors[i].color)
-        offsetYForShadedPartBottle = offsetYForShadedPartBottle + heightLayer
-      }
+    if (needAnimationAdd) {
+      internalCountColorNeedChange = countColorNeedChange
+      drawPartOfBottleAdd()
+    }
+    if (needAnimationDelete) {
+      drawPartOfBottleDelete()
+    }
+    drawPartOfBottleGeneral()
+
+    function drawPartOfBottleAdd() {
+      offsetYForShadedPartBottle =
+        offsetYForShadedPartBottle + heightLayer * internalCountColorNeedChange
+      TypeBottleArray.drawFillBackgroundBottle(
+        context,
+        width,
+        -heightChangeTopLayer,
+        offsetYForShadedPartBottle + 1,
+        bottleColors[bottleColors.length - 1].color
+      )
+      internalCountColorNeedChange++
     }
 
-    function drawAllColorLayerBottle(colorShadedPart: string) {
-      context.beginPath()
-      context.fillStyle = colorShadedPart
-      context.fillRect(
-        0,
-        offsetYForShadedPartBottle,
-        widthCanvas,
-        heightLayer + 1
+    function drawPartOfBottleDelete() {
+      TypeBottleArray.drawFillBackgroundBottle(
+        context,
+        width,
+        -heightChangeTopLayer,
+        offsetYForShadedPartBottle -
+          heightLayer * internalCountColorNeedChange +
+          (heightCanvas / countLayersInBottle) * internalCountColorNeedChange +
+          1,
+        colorForDelete
       )
-      context.closePath()
+    }
+
+    function drawPartOfBottleGeneral() {
+      for (
+        let i = bottleColors.length - internalCountColorNeedChange;
+        i >= 0;
+        i--
+      ) {
+        TypeBottleArray.drawFillBackgroundBottle(
+          context,
+          width,
+          heightLayer + 1,
+          offsetYForShadedPartBottle,
+          bottleColors[i].color
+        )
+        offsetYForShadedPartBottle = offsetYForShadedPartBottle + heightLayer
+      }
     }
   }
 
@@ -113,19 +246,42 @@ const Bottle = ({
     if (!canvas || !canvas.current) return
     const newContext = canvas.current.getContext('2d')
     setContext(newContext)
-    drawEntireBottle(newContext)
+    drawAnimationDeleteColorInBottle(newContext, false, false, 0, 1, '')
     onSaveFinishCallback(bottleIsComplete)
     setSelect(false)
   }, [bottleColors])
 
-  const unSelectBottle = () => {
+  const unSelectBottle = (
+    needAnimation: boolean,
+    needAnimationDelete: boolean,
+    color: string,
+    countColorNeedChange = 1
+  ) => {
     setSelect(false)
     offsetYForSelectBottle = 0
-    drawEntireBottle(context)
+    if (needAnimationDelete) {
+      drawAnimationDeleteColorInBottle(
+        context,
+        false,
+        true,
+        ((height - 30) / countLayersInBottle) * countColorNeedChange,
+        countColorNeedChange,
+        color
+      )
+    } else {
+      drawAnimationDeleteColorInBottle(
+        context,
+        needAnimation,
+        false,
+        0,
+        countColorNeedChange
+      )
+    }
   }
 
   const addNewColorInBottle = () => {
     let countColorNeedDelete = 0
+    let needAnimation = false
     if (bottleColors.length < countLayersInBottle) {
       const currentTopColor: InstanceType<typeof FillTypeColor> =
         bottleColors.slice(-1)[0]
@@ -141,21 +297,23 @@ const Bottle = ({
         for (let i = 0; i < countColorNeedDelete; i++) {
           bottleColors.push(newColor)
         }
+        needAnimation = true
       }
     }
-    unSelectBottle()
+    unSelectBottle(needAnimation, false, '', countColorNeedDelete)
     return countColorNeedDelete
   }
 
   const removeFirstTopColor = (countColorNeedDelete: number) => {
+    let colorForDelete = ''
     if (bottleColors.length > 0) {
       for (let i = 0; i < countColorNeedDelete; i++) {
-        bottleColors.pop()
+        colorForDelete = bottleColors.pop()!.color
       }
     }
     dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
     dispatch(setSelectedKeyBottle('-1'))
-    unSelectBottle()
+    unSelectBottle(false, true, colorForDelete, countColorNeedDelete)
   }
 
   const selectColorForTransfuse = () => {
@@ -165,7 +323,7 @@ const Bottle = ({
     if (currentSelectColor !== undefined) {
       setSelect(prevState => !prevState)
       offsetYForSelectBottle = !isSelect ? -20 : 0
-      drawEntireBottle(context)
+      drawAnimationDeleteColorInBottle(context, false, false, 0, 1)
       dispatch(setSelectedKeyBottle(keyHtmlElement))
       dispatch(setSelectedColor(JSON.stringify(currentSelectColor)))
       dispatch(setCountColorNeedTransfuse(getCountColorNeedTransfuse()))
@@ -196,7 +354,7 @@ const Bottle = ({
 
   const clickEventOnBottle = () => {
     if (selectedKeyBottle === keyHtmlElement) {
-      unSelectBottle()
+      unSelectBottle(false, false, '')
       dispatch(setSelectedColor(JSON.stringify(FillTypeColor.TypeEmptyColor)))
       dispatch(setSelectedKeyBottle('-1'))
       return
