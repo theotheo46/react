@@ -6,19 +6,23 @@ import { BrowserRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import { REGEX_ERRORS } from '../../utils/validate-data'
 import React from 'react'
+import { Provider } from 'react-redux'
+import store from '../../store'
 
 const inputs: InputProps[] = VALIDATE_FIELDS.login
 const mockSave = jest.fn()
 const reactForm: React.ReactElement = (
   <BrowserRouter>
     {' '}
-    <Form
-      title="Войти в профиль"
-      className="sign-in-page"
-      inputs={inputs}
-      buttonLabel="Войти"
-      onSubmit={mockSave}
-    />
+    <Provider store={store}>
+      <Form
+        title="Войти в профиль"
+        className="sign-in-page"
+        inputs={inputs}
+        buttonLabel="Войти"
+        onSubmit={mockSave}
+      />
+    </Provider>
   </BrowserRouter>
 )
 
