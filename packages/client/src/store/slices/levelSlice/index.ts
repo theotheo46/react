@@ -79,10 +79,10 @@ const levelSlice = createSlice({
     },
     setIdTypeContourBottle(state, action: PayloadAction<number>) {
       if (action.payload <= 0) {
-        action.payload = 1
+        action.payload = MAX_TYPE_BOTTLE
       }
       if (action.payload > MAX_TYPE_BOTTLE) {
-        action.payload = MAX_TYPE_BOTTLE
+        action.payload = 1
       }
       state.idTypeContourBottle = action.payload
     },
