@@ -22,6 +22,23 @@ getTypeContourBottle().then(TypeContourBottle => {
 })
 
 export class TypeBottleArray {
+  public static getStepAnimation(): number {
+    return 25
+  }
+
+  public static drawFillBackgroundBottle(
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    offsetYForShadedPartBottle: number,
+    colorShadedPart: string
+  ) {
+    context.beginPath()
+    context.fillStyle = colorShadedPart
+    context.fillRect(0, offsetYForShadedPartBottle, width, height)
+    context.closePath()
+  }
+
   public static drawStrokeBottle(
     context: CanvasRenderingContext2D,
     idTypeBottle: number
