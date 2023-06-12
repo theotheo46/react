@@ -9,7 +9,7 @@ import artemAvatar from '../../assets/images/artem.png'
 import iliyaAvatar from '../../assets/images/ilya.png'
 import kseniyaAvatar from '../../assets/images/kseniya.png'
 import dmitryAvatar from '../../assets/images/dmitry.png'
-import minilending from '../../assets/images/minilending.svg'
+import minilending from '../../assets/images/game-preview1.png'
 
 const MiniLendingPage = () => {
   const { user } = useAppSelector(state => state.user)
