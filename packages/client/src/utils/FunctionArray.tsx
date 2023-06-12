@@ -18,7 +18,7 @@ export class FunctionArray {
     countColors: number,
     countLayersInBottle: number
   ): InstanceType<typeof FillTypeColor>[] {
-    let orderColor: InstanceType<typeof FillTypeColor>[] = []
+    const orderColor: InstanceType<typeof FillTypeColor>[] = []
     for (let i = 0; i < countColors; i++) {
       for (let j = 0; j < countLayersInBottle; j++) {
         orderColor.push(new FillTypeColor(i, colorForLevel[i]))

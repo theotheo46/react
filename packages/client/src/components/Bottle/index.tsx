@@ -40,7 +40,7 @@ const Bottle = ({
   const [isSelect, setSelect] = useState(false)
 
   const dispatch = useAppDispatch()
-  let {
+  const {
     countLayersInBottle,
     selectedColor,
     selectedKeyBottle,

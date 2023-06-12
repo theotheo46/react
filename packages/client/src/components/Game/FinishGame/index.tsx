@@ -11,6 +11,8 @@ import {
 } from '../../../store/slices/gameSlice'
 import { useNavigate } from 'react-router-dom'
 import { useNextLevel } from '../../../hooks/useNextLevel'
+import { setArraySettingsBottles } from '../../../store/slices/levelSlice'
+import { useEffect } from 'react'
 
 const FinishGame = () => {
   const { currentTime, currentLevel, currentAttempts } = useAppSelector(
@@ -36,6 +38,9 @@ const FinishGame = () => {
     dispatch(setMode(null))
     navigate('/start')
   }
+  useEffect(() => {
+    dispatch(setArraySettingsBottles([]))
+  }, [])
 
   if (gameIsLoading) {
     return <LoaderGame />
