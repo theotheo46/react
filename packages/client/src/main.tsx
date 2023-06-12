@@ -17,8 +17,8 @@ const initialState = window.__INITIAL_STATE__
 // @ts-ignore
 delete window.__INITIAL_STATE__
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <BrowserRouter>
     <Provider store={create(initialState)}>
       <ErrorBoundary>
@@ -26,7 +26,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       </ErrorBoundary>
     </Provider>
   </BrowserRouter>
-  // </React.StrictMode>
 )
 
 if (import.meta.env.PROD && typeof window !== 'undefined') {
