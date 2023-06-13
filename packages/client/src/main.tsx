@@ -9,12 +9,11 @@ import { create } from './store/index'
 
 declare global {
   interface Window {
-    __INITIAL_STATE__: object
+    __INITIAL_STATE__?: object
   }
 }
 
 const initialState = window.__INITIAL_STATE__
-// @ts-ignore
 delete window.__INITIAL_STATE__
 
 ReactDOM.hydrateRoot(
