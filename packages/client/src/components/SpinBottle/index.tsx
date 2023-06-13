@@ -36,7 +36,7 @@ const SpinBottle = ({ height, width }: Props) => {
       <div style={{ width: width - 40, height: height }}>
         <svg height={height} width={width - 40}>
           <path
-            stroke-width="3"
+            strokeWidth="3"
             transform={scaleHeight}
             d={svgPathBottle}
             fill="transparent"

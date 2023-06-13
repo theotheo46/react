@@ -83,7 +83,7 @@ async function startServer() {
         template = await vite!.transformIndexHtml(url, template)
       }
 
-      let render: ({ path }: { path: string }) => Promise<string>
+      let render: ({ path }: { path: string }) => Promise<[string, any]>
 
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
@@ -96,16 +96,17 @@ async function startServer() {
       const styles = getStyles()
       const cssAssets = isDev() ? await styles : ''
 
-      const [appHtml] = await render({ path: url })
-
-      /*
-        Помимо appHtml, из функции render можно получить еще store
-        и через .replace(`<!--ssr-state-->`, data); прокинуть данные для клиента
-      */
+      const [appHtml, store] = await render({ path: url })
+      const data =
+        '<script>' +
+        'window.__INITIAL_STATE__=' +
+        JSON.stringify(store.getState()) +
+        '</script>'
 
       const html = template
         .replace(`<!--ssr-styles-->`, cssAssets)
         .replace(`<!--ssr-outlet-->`, appHtml)
+        .replace(`<!--ssr-state-->`, data)
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
