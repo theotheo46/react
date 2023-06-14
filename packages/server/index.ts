@@ -2,6 +2,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { createServer as createViteServer } from 'vite'
 import type { ViteDevServer } from 'vite'
+import { sequelize } from './sequelize'
+import { lb } from './src/routes/leaderboards'
 
 dotenv.config()
 
@@ -54,6 +56,18 @@ async function startServer() {
 
     app.use(vite.middlewares)
   }
+  //await sequelize.sync({force: true});
+  await sequelize.sync()
+  try {
+    await sequelize.authenticate()
+    console.log('Connection to DB has been established successfully.')
+  } catch (error) {
+    console.error('Unable to connect to the DB:', error)
+  }
+
+  app.use(express.json())
+
+  app.use('/leaderboard', lb)
 
   app.get('/api', (_, res) => {
     res.json('👋 Howdy from the server :)')
