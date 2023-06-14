@@ -2,7 +2,6 @@ import { Model, Column, Table, DataType } from 'sequelize-typescript'
 
 @Table
 export class Leaderboard extends Model<Leaderboard> {
-
   @Column({ type: DataType.INTEGER })
   userId!: number
 
