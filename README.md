@@ -105,3 +105,39 @@ yarn dev --scope=client
 ```
 yarn dev --scope=server
 ```
+
+## Backend
+
+В index.ts для сервера добавилась инициализация sequelize в виде
+```
+  await sequelize.sync()
+```
+
+В этом случае на пустой базе  происходит создание схема для модели, если модель уже создана то пи наличии новых полей произойдет их добавление в таблицу с заполненим дефолтовыми значениями
+
+Если нужно создать схему заново с дропом существующих таблиц - надо использовать
+
+```
+await sequelize.sync({force: true});
+```
+
+Параметры подключения к базе лежат в файле server/.env - для докера это надо изменить и передавать через переменные окружения
+
+Для работы с BE использовать следующие ручки:
+
+Эхо-тест
+```
+curl localhost:3001/leaderboard/test
+```
+
+Добавить строчку в таблицу лидеров - параметр score должен тут быть пустым так как он будет рассчитываться на уровне сервера
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId":"12345","usernick":"theo","level":"15","steps":"49","time":"120","score":""}' localhost:3001/leaderboard/setleader
+```
+
+Получить список лидеров отсортированных по убыванию поля score и с дефолтовым значением = 10 
+
+```
+curl localhost:3001/leaderboard/gettopleaders?number=2
+curl localhost:3001/leaderboard/gettopleaders
+```

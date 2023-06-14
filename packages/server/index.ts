@@ -65,6 +65,8 @@ async function startServer() {
     console.error('Unable to connect to the DB:', error)
   }
 
+  app.use(express.json())
+
   app.use('/leaderboard', lb)
 
   app.get('/api', (_, res) => {
