@@ -4,7 +4,6 @@ import {
   setCountColors,
   setCountEmptyBottles,
   setCountLayersInBottle,
-  setIdTypeContourBottle,
   updateLayersInBottle,
 } from '../../../store/slices/levelSlice'
 import Button from '../../Button'

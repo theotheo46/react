@@ -15,7 +15,9 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   setSelectedColor,
   setStartColorsForRestart,
+  setArraySettingsBottles,
   setSelectedKeyBottle,
+  LEVEL_INIT,
 } from '../../store/slices/levelSlice'
 import { useNavigate } from 'react-router-dom'
 import { useTimer } from '../../hooks/useTimer'
@@ -26,7 +28,7 @@ import {
 } from '../../store/slices/gameSlice'
 import wave from '../../assets/images/wave.png'
 
-class InfoForRenderBottle {
+export class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
 
   constructor(bottleColors: InstanceType<typeof FillTypeColor>[]) {
@@ -39,6 +41,13 @@ const LevelPage = () => {
   const navigate = useNavigate()
   const { timerStart, timerStop, getTime, timerReset } = useTimer()
   const iconStyle = { fill: 'var(--color-white)', fontSize: '1.25rem' }
+  const {
+    countColors,
+    countEmptyBottles,
+    countLayersInBottle,
+    startColorsForRestart,
+    selectedColor,
+  } = useAppSelector(state => state.level)
   const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] =
     useState<(() => boolean)[]>([])
 
@@ -55,14 +64,6 @@ const LevelPage = () => {
   const [iconNotFullScreenDisplay, setIconNotFullScreenDisplay] =
     useState('none')
 
-  const {
-    countColors,
-    countEmptyBottles,
-    countLayersInBottle,
-    startColorsForRestart,
-    selectedColor,
-  } = useAppSelector(state => state.level)
-
   const { currentAttempts, currentLevel } = useAppSelector(state => state.game)
 
   const saveCallbackFinishBottle = (callbackFinishBottle: () => boolean) => {
@@ -73,7 +74,13 @@ const LevelPage = () => {
     const allBottleIsComplete = arrayCallbackBottleIsComplete.every(
       bottleIsComplete => bottleIsComplete()
     )
+    dispatch(
+      setArraySettingsBottles(
+        arraySettingsBottle.map(bottle => JSON.stringify(bottle))
+      )
+    )
     if (allBottleIsComplete) {
+      dispatch(setStartColorsForRestart([]))
       dispatch(setCurrentTime(getTime()))
       navigate('/finish')
     }
@@ -105,19 +112,29 @@ const LevelPage = () => {
   }
 
   function createArrayBottle(): InfoForRenderBottle[] {
-    const orderColorFromSave: string[] = []
-    const orderColor: InstanceType<typeof FillTypeColor>[] =
-      FunctionArray.getShuffledArrayByNumberColor(
-        countColors,
-        countLayersInBottle
-      )
+    const localRestartColors = localStorage.getItem(
+      LEVEL_INIT.startColorsForRestart
+    )
+    if (localRestartColors) {
+      const resultArray: InstanceType<typeof FillTypeColor>[] = (
+        JSON.parse(localRestartColors) as string[]
+      ).map(str => JSON.parse(str))
+      return createArrayBottleByArrayOrderColor(resultArray)
+    } else {
+      const orderColorFromSave: string[] = []
+      const orderColor: InstanceType<typeof FillTypeColor>[] =
+        FunctionArray.getShuffledArrayByNumberColor(
+          countColors,
+          countLayersInBottle
+        )
 
-    orderColor.forEach(color => {
-      orderColorFromSave.push(JSON.stringify(color))
-    })
-    dispatch(setStartColorsForRestart(orderColorFromSave))
+      orderColor.forEach(color => {
+        orderColorFromSave.push(JSON.stringify(color))
+      })
+      dispatch(setStartColorsForRestart(orderColorFromSave))
 
-    return createArrayBottleByArrayOrderColor(orderColor)
+      return createArrayBottleByArrayOrderColor(orderColor)
+    }
   }
 
   function repeatCreateStartArrayBottle(): InfoForRenderBottle[] {
@@ -154,6 +171,7 @@ const LevelPage = () => {
   }
 
   function restartLevel() {
+    dispatch(setArraySettingsBottles([]))
     setArraySettingsBottle(repeatCreateStartArrayBottle())
   }
 
@@ -191,6 +209,8 @@ const LevelPage = () => {
   function exitGameHandler() {
     dispatch(setCurrentTime(''))
     dispatch(setCurrentAttempts(0))
+    dispatch(setArraySettingsBottles([]))
+    dispatch(setStartColorsForRestart([]))
     dispatch(setMode(null))
     navigate('/start')
   }
@@ -200,7 +220,25 @@ const LevelPage = () => {
     document.addEventListener('webkitfullscreenchange', exitFullScreenHandler)
     document.addEventListener('mozfullscreenchange', exitFullScreenHandler)
     document.addEventListener('MSFullscreenChange', exitFullScreenHandler)
-    setArraySettingsBottle(createArrayBottle())
+    const localStorageSettingsBottles = localStorage.getItem(
+      LEVEL_INIT.arraySettingsBottles
+    )
+    if (localStorageSettingsBottles) {
+      // отрабатывает после перезагрузки страницы, вставляет данные из localStorage
+      const arraySettingsBottles: string[] = JSON.parse(
+        localStorageSettingsBottles
+      )
+      const currentLocalSettings: InfoForRenderBottle[] =
+        arraySettingsBottles.map(data => {
+          const bottle: InfoForRenderBottle = JSON.parse(data)
+          const currentColor: InstanceType<typeof FillTypeColor>[] =
+            bottle.bottleColors
+          return { ...bottle, bottleColors: currentColor }
+        })
+      setArraySettingsBottle(currentLocalSettings)
+    } else {
+      setArraySettingsBottle(createArrayBottle())
+    }
     timerStart()
     return () => {
       timerStop()

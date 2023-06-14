@@ -7,11 +7,22 @@ export interface Level {
   countEmptyBottles: number
 }
 
+export const LEVEL_INIT = {
+  startColorsForRestart: 'level-restart-colors',
+  arraySettingsBottles: 'level-array-settings-bottles',
+  countColorNeedTransfuse: 'level-count-color-need-transfuse',
+  countColors: 'level-count-colors',
+  countLayersInBottle: 'level-count-layers-in-bottle',
+  countEmptyBottles: 'level-count-empty-bottles',
+  idTypeContourBottle: 'level-id-type-contour-bottle',
+}
+
 interface LevelState {
   countColors: number
   countLayersInBottle: number
   countEmptyBottles: number
   startColorsForRestart: string[]
+  arraySettingsBottles: string[]
   selectedColor: string
   countColorNeedTransfuse: number
   selectedKeyBottle: string
@@ -36,6 +47,7 @@ const MAX_TYPE_BOTTLE = 3
 
 const initialState: LevelState = {
   startColorsForRestart: [],
+  arraySettingsBottles: [],
   selectedKeyBottle: '-1',
   countColorNeedTransfuse: 1,
   selectedColor: JSON.stringify(FillTypeColor.TypeEmptyColor),
@@ -58,6 +70,21 @@ const levelSlice = createSlice({
   reducers: {
     setStartColorsForRestart: (state, action: PayloadAction<string[]>) => {
       state.startColorsForRestart = action.payload
+      action.payload.length > 0
+        ? localStorage.setItem(
+            LEVEL_INIT.startColorsForRestart,
+            JSON.stringify(action.payload)
+          )
+        : localStorage.removeItem(LEVEL_INIT.startColorsForRestart)
+    },
+    setArraySettingsBottles: (state, action: PayloadAction<string[]>) => {
+      state.arraySettingsBottles = action.payload
+      action.payload.length > 0
+        ? localStorage.setItem(
+            LEVEL_INIT.arraySettingsBottles,
+            JSON.stringify(action.payload)
+          )
+        : localStorage.removeItem(LEVEL_INIT.arraySettingsBottles)
     },
     setSelectedColor: (state, action: PayloadAction<string>) => {
       state.selectedColor = action.payload
@@ -67,15 +94,31 @@ const levelSlice = createSlice({
     },
     setCountColorNeedTransfuse: (state, action: PayloadAction<number>) => {
       state.countColorNeedTransfuse = action.payload
+      localStorage.setItem(
+        LEVEL_INIT.countColorNeedTransfuse,
+        JSON.stringify(action.payload)
+      )
     },
     setCountColors: (state, action: PayloadAction<number>) => {
       state.countColors = action.payload
+      localStorage.setItem(
+        LEVEL_INIT.countColors,
+        JSON.stringify(action.payload)
+      )
     },
     setCountLayersInBottle: (state, action: PayloadAction<number>) => {
       state.countLayersInBottle = action.payload
+      localStorage.setItem(
+        LEVEL_INIT.countLayersInBottle,
+        JSON.stringify(action.payload)
+      )
     },
     setCountEmptyBottles: (state, action: PayloadAction<number>) => {
       state.countEmptyBottles = action.payload
+      localStorage.setItem(
+        LEVEL_INIT.countEmptyBottles,
+        JSON.stringify(action.payload)
+      )
     },
     setIdTypeContourBottle(state, action: PayloadAction<number>) {
       if (action.payload <= 0) {
@@ -85,10 +128,18 @@ const levelSlice = createSlice({
         action.payload = 1
       }
       state.idTypeContourBottle = action.payload
+      localStorage.setItem(
+        LEVEL_INIT.idTypeContourBottle,
+        JSON.stringify(action.payload)
+      )
     },
     updateLayersInBottle: state => {
       if (state.countColors !== state.countLayersInBottle) {
         state.countLayersInBottle = state.countColors
+        localStorage.setItem(
+          LEVEL_INIT.countLayersInBottle,
+          JSON.stringify(state.countColors)
+        )
       }
       // state.minCountLayersInBottle = state.countColors
     },
@@ -123,15 +174,41 @@ const levelSlice = createSlice({
       }
     },
     resetLevel: state => {
+      localStorage.removeItem(LEVEL_INIT.countColors)
+      localStorage.removeItem(LEVEL_INIT.countEmptyBottles)
+      localStorage.removeItem(LEVEL_INIT.countLayersInBottle)
       state.countColors = INIT_COUNT_COLORS
       state.countEmptyBottles = INIT_EMPTY_BOTTLES
       state.countLayersInBottle = INIT_COUNT_LAYERS
+    },
+    setLastUpdateLevelParam: state => {
+      state.startColorsForRestart = JSON.parse(
+        localStorage.getItem(LEVEL_INIT.startColorsForRestart) || '[]'
+      )
+      state.arraySettingsBottles = JSON.parse(
+        localStorage.getItem(LEVEL_INIT.arraySettingsBottles) || '[]'
+      )
+      state.countColorNeedTransfuse =
+        Number(localStorage.getItem(LEVEL_INIT.countColorNeedTransfuse)) || 1
+      state.selectedColor = JSON.stringify(FillTypeColor.TypeEmptyColor)
+      state.countColors =
+        Number(localStorage.getItem(LEVEL_INIT.countColors)) ||
+        INIT_COUNT_COLORS
+      state.countLayersInBottle =
+        Number(localStorage.getItem(LEVEL_INIT.countLayersInBottle)) ||
+        INIT_COUNT_LAYERS
+      state.countEmptyBottles =
+        Number(localStorage.getItem(LEVEL_INIT.countEmptyBottles)) ||
+        INIT_EMPTY_BOTTLES
+      state.idTypeContourBottle =
+        Number(localStorage.getItem(LEVEL_INIT.idTypeContourBottle)) || 1
     },
   },
 })
 
 export const {
   setStartColorsForRestart,
+  setArraySettingsBottles,
   setSelectedColor,
   setSelectedKeyBottle,
   setCountColorNeedTransfuse,
@@ -139,6 +216,7 @@ export const {
   setCountLayersInBottle,
   setCountEmptyBottles,
   setIdTypeContourBottle,
+  setLastUpdateLevelParam,
   updateLayersInBottle,
   createLevels,
   resetLevel,
