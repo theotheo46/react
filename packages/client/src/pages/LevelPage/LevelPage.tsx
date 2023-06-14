@@ -46,7 +46,6 @@ const LevelPage = () => {
     countEmptyBottles,
     countLayersInBottle,
     startColorsForRestart,
-    arraySettingsBottles,
     selectedColor,
   } = useAppSelector(state => state.level)
   const [arrayCallbackBottleIsComplete, setArrayCallbackBottleIsComplete] =
@@ -221,14 +220,20 @@ const LevelPage = () => {
     document.addEventListener('webkitfullscreenchange', exitFullScreenHandler)
     document.addEventListener('mozfullscreenchange', exitFullScreenHandler)
     document.addEventListener('MSFullscreenChange', exitFullScreenHandler)
-
-    if (arraySettingsBottles.length > 0) {
+    const localStorageSettingsBottles = localStorage.getItem(
+      LEVEL_INIT.arraySettingsBottles
+    )
+    if (localStorageSettingsBottles) {
+      // отрабатывает после перезагрузки страницы, вставляет данные из localStorage
+      const arraySettingsBottles: string[] = JSON.parse(
+        localStorageSettingsBottles
+      )
       const currentLocalSettings: InfoForRenderBottle[] =
-        arraySettingsBottles.map(strBottle => {
-          const bottle: InfoForRenderBottle = JSON.parse(strBottle)
-          const curColor: InstanceType<typeof FillTypeColor>[] =
+        arraySettingsBottles.map(data => {
+          const bottle: InfoForRenderBottle = JSON.parse(data)
+          const currentColor: InstanceType<typeof FillTypeColor>[] =
             bottle.bottleColors
-          return { ...bottle, bottleColors: curColor }
+          return { ...bottle, bottleColors: currentColor }
         })
       setArraySettingsBottle(currentLocalSettings)
     } else {

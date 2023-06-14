@@ -2,8 +2,12 @@ import { useEffect } from 'react'
 import './styles/App.pcss'
 import RoutesBase from './routes/routes'
 import { useAppDispatch } from './store/hooks'
-import { createLevels } from './store/slices/levelSlice'
+import {
+  createLevels,
+  setLastUpdateLevelParam,
+} from './store/slices/levelSlice'
 import AuthContext from './context/AuthContext'
+import { setLastUpdateGameParam } from './store/slices/gameSlice'
 
 function App() {
   const dispatch = useAppDispatch()
@@ -17,6 +21,8 @@ function App() {
     }
     fetchServerData()
     dispatch(createLevels())
+    dispatch(setLastUpdateGameParam())
+    dispatch(setLastUpdateLevelParam())
   }, [])
 
   return (

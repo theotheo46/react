@@ -20,13 +20,12 @@ export const GAME_INIT = {
 }
 
 const initialState: GameState = {
-  mode: (localStorage.getItem(GAME_INIT.mode) as GameMode) || null,
-  currentLevel: Number(localStorage.getItem(GAME_INIT.currentLevel)) || null,
-  currentAttempts: Number(localStorage.getItem(GAME_INIT.currentAttempts)) || 0,
-  currentTime: localStorage.getItem(GAME_INIT.currentTime) || '',
-  isSetupLevelSettings:
-    Boolean(localStorage.getItem(GAME_INIT.isSetupLevelSettings)) || false,
-  lastUpdateParam: localStorage.getItem(GAME_INIT.lastUpdateParam) || '',
+  mode: null,
+  currentLevel: null,
+  currentAttempts: 0,
+  currentTime: '',
+  isSetupLevelSettings: false,
+  lastUpdateParam: '',
 }
 
 const gameSlice = createSlice({
@@ -73,12 +72,17 @@ const gameSlice = createSlice({
         JSON.stringify(action.payload)
       )
     },
-    setLastUpdateParam(state, action: PayloadAction<string>) {
-      state.lastUpdateParam = action.payload
-      localStorage.setItem(
-        GAME_INIT.lastUpdateParam,
-        JSON.stringify(action.payload)
-      )
+    setLastUpdateGameParam: state => {
+      state.mode = (localStorage.getItem(GAME_INIT.mode) as GameMode) || null
+      state.currentLevel =
+        Number(localStorage.getItem(GAME_INIT.currentLevel)) || null
+      state.currentAttempts =
+        Number(localStorage.getItem(GAME_INIT.currentAttempts)) || 0
+      state.currentTime = localStorage.getItem(GAME_INIT.currentTime) || ''
+      state.isSetupLevelSettings =
+        Boolean(localStorage.getItem(GAME_INIT.isSetupLevelSettings)) || false
+      state.lastUpdateParam =
+        localStorage.getItem(GAME_INIT.lastUpdateParam) || ''
     },
     setCurrentAttempts(state, action: PayloadAction<number>) {
       state.currentAttempts = action.payload
@@ -95,7 +99,7 @@ export const {
   setIsSetupLevelSettings,
   setCurrentTime,
   setNextLevel,
-  setLastUpdateParam,
+  setLastUpdateGameParam,
   setCurrentAttempts,
   setCurrentLevel,
 } = gameSlice.actions
