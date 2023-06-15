@@ -4,19 +4,27 @@ import './styles/index.pcss'
 import { BrowserRouter } from 'react-router-dom'
 import ErrorBoundary from './components/ErrorBoundary'
 import { Provider } from 'react-redux'
-import store from './store'
 import 'path2d-polyfill'
+import { create } from './store/index'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  // <React.StrictMode>
+declare global {
+  interface Window {
+    __INITIAL_STATE__?: object
+  }
+}
+
+const initialState = window.__INITIAL_STATE__
+delete window.__INITIAL_STATE__
+
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <BrowserRouter>
-    <Provider store={store}>
+    <Provider store={create(initialState)}>
       <ErrorBoundary>
         <App />
       </ErrorBoundary>
     </Provider>
   </BrowserRouter>
-  // </React.StrictMode>
 )
 
 if (import.meta.env.PROD && typeof window !== 'undefined') {

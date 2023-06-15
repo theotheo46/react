@@ -12,7 +12,7 @@ const SpinBottle = ({ height, width }: Props) => {
   const [svgPathBottle, setSvgPathBottle] = useState<string>()
   const [scaleHeight, setScaleHeight] = useState<string>()
   const dispatch = useAppDispatch()
-  let { idTypeContourBottle } = useAppSelector(state => state.level)
+  const { idTypeContourBottle } = useAppSelector(state => state.level)
 
   useEffect(() => {
     setSvgPathBottle(
@@ -36,7 +36,7 @@ const SpinBottle = ({ height, width }: Props) => {
       <div style={{ width: width - 40, height: height }}>
         <svg height={height} width={width - 40}>
           <path
-            stroke-width="3"
+            strokeWidth="3"
             transform={scaleHeight}
             d={svgPathBottle}
             fill="transparent"
