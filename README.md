@@ -121,6 +121,7 @@ yarn build --scope=server
 
 ```curl localhost:3001/leaderboard/test```
 
+### Leaderboard
 
 - Добавить строчку в таблицу лидеров - параметр score должен тут быть пустым так как он будет рассчитываться на уровне сервера по формуле 
 
@@ -140,6 +141,7 @@ yarn build --scope=server
 curl localhost:3001/leaderboard/gettopleaders?number=2
 curl localhost:3001/leaderboard/gettopleaders
 ```
+### Forum
 
 - Получить все объекты Section
 ```curl localhost:3001/forum/getallsections```
