@@ -17,22 +17,20 @@ export class Message extends Model {
   topicId!: number
 
   @ForeignKey(() => Reply)
-  @Column({ 
+  @Column({
     type: DataType.INTEGER,
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   })
   replyID!: number
 
   @BelongsTo(() => Reply, 'replyID')
   reply: Reply | undefined
 
-
-  @HasOne(() => Reply,  "parentMessageID")
+  @HasOne(() => Reply, 'parentMessageID')
   parentReply: Reply | undefined
 
   @Column({ type: DataType.INTEGER })
   userId!: number
-
 
   @Column({ type: DataType.STRING(20) })
   usernick!: string

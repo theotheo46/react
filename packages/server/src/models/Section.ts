@@ -5,7 +5,7 @@ import { Topic } from './Topic'
 export class Section extends Model {
   @Column({ type: DataType.INTEGER })
   userId!: number
-  
+
   @Column({ type: DataType.STRING(20) })
   usernick!: string
 

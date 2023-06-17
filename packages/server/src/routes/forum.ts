@@ -107,20 +107,20 @@ forum.post('/addmessage', async (req, res) => {
 
 forum.post('/updatemessage', async (req, res) => {
   //BODY is {"userId" : "111", "messagetext" : "blablabla", "id" : "1"}
-  const {userId, messagetext, id} = req.body
+  const { userId, messagetext, id } = req.body
   Message.findByPk(id)
-  .then(message => {
-    if (message?.userId !== +userId) {
-      throw (`userId ${userId} в параметре запроса не равен userId ${message?.userId} объекта Message`)
-    }
-    message?.update({ messagetext: messagetext })
-  })
-  .then(message => {
-    return res.status(201).json(message)
-  })
-  .catch(err => {
-    return res.status(400).json({ err })
-  })
+    .then(message => {
+      if (message?.userId !== +userId) {
+        throw `userId ${userId} в параметре запроса не равен userId ${message?.userId} объекта Message`
+      }
+      message?.update({ messagetext: messagetext })
+    })
+    .then(message => {
+      return res.status(201).json(message)
+    })
+    .catch(err => {
+      return res.status(400).json({ err })
+    })
 })
 
 forum.get('/getallsections', async (_req, res) => {
@@ -200,7 +200,7 @@ forum.post('/addreply', async (req, res) => {
       let replyID
       if (parentReply === null) {
         //у данного сообщения нет реплая - надо создать новый реплай и связать его с существующим сообщением, после этого сохраним id этого реплая
-        const reply = await Reply.create({"parentMessageID" : messageId})
+        const reply = await Reply.create({ parentMessageID: messageId })
         replyID = reply.id
       } else {
         // у данного сообщения есть реплай - возьмем  id этого реплая
@@ -214,6 +214,3 @@ forum.post('/addreply', async (req, res) => {
     }
   }
 })
-
-
-
