@@ -218,33 +218,61 @@ curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.to
         "userId": 111,
         "usernick": "theo",
         "messagetext": "blablabla",
-        "createdAt": "2023-06-17T21:46:24.252Z",
-        "updatedAt": "2023-06-17T21:46:24.252Z",
+        "createdAt": "2023-06-18T07:05:46.082Z",
+        "updatedAt": "2023-06-18T07:05:46.082Z",
         "parentReply": {
             "id": 1,
             "parentMessageID": 1,
-            "createdAt": "2023-06-17T21:46:40.758Z",
-            "updatedAt": "2023-06-17T21:46:40.758Z",
+            "createdAt": "2023-06-18T07:06:05.004Z",
+            "updatedAt": "2023-06-18T07:06:05.004Z",
             "messages": [
-                {
-                    "id": 2,
-                    "topicId": null,
-                    "replyID": 1,
-                    "userId": 111,
-                    "usernick": "theo",
-                    "messagetext": "blablablaReply1",
-                    "createdAt": "2023-06-17T21:46:40.806Z",
-                    "updatedAt": "2023-06-17T21:46:40.806Z"
-                },
                 {
                     "id": 3,
                     "topicId": null,
                     "replyID": 1,
                     "userId": 111,
                     "usernick": "theo",
+                    "messagetext": "blablablaReply1",
+                    "createdAt": "2023-06-18T07:06:05.048Z",
+                    "updatedAt": "2023-06-18T07:06:05.048Z"
+                },
+                {
+                    "id": 4,
+                    "topicId": null,
+                    "replyID": 1,
+                    "userId": 111,
+                    "usernick": "theo",
                     "messagetext": "blablablaReply2",
-                    "createdAt": "2023-06-17T21:46:47.115Z",
-                    "updatedAt": "2023-06-17T21:46:47.115Z"
+                    "createdAt": "2023-06-18T07:06:10.364Z",
+                    "updatedAt": "2023-06-18T07:06:10.364Z"
+                }
+            ]
+        }
+    },
+    {
+        "id": 2,
+        "topicId": 1,
+        "replyID": null,
+        "userId": 111,
+        "usernick": "theo",
+        "messagetext": "blablabla1",
+        "createdAt": "2023-06-18T07:05:52.380Z",
+        "updatedAt": "2023-06-18T07:05:52.380Z",
+        "parentReply": {
+            "id": 2,
+            "parentMessageID": 2,
+            "createdAt": "2023-06-18T07:06:26.297Z",
+            "updatedAt": "2023-06-18T07:06:26.297Z",
+            "messages": [
+                {
+                    "id": 5,
+                    "topicId": null,
+                    "replyID": 2,
+                    "userId": 111,
+                    "usernick": "theo",
+                    "messagetext": "blablablaReply2",
+                    "createdAt": "2023-06-18T07:06:26.346Z",
+                    "updatedAt": "2023-06-18T07:06:26.346Z"
                 }
             ]
         }
