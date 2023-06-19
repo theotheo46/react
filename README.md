@@ -163,7 +163,7 @@ yarn build --scope=server
 
 В BODY передается объект Leaderboard с пустым score
 
-Возвращается объект Leaderboard - включая назначенные базой поля Primary Key, CreatedAt, UpdatedAt
+Возвращается объект Leaderboard c заполненным score - включая назначенные базой поля Primary Key, CreatedAt, UpdatedAt
 
 
 ```curl -X POST -H 'Content-Type: application/json' -d '{"userId":"12345","usernick":"theo","level":"15","steps":"49","time":"120","score":""}' localhost:3001/leaderboard/setleader```
