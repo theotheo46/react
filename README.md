@@ -351,7 +351,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
-curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
+curl localhost:3001/forum/getallsections | python3 -m json.tool
 ```
 
 **Выход**
