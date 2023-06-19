@@ -129,7 +129,7 @@ forum.get('/getallsections', async (_req, res) => {
   Section.findAll({
     include: [
       {
-        model: Topic
+        model: Topic,
       },
     ],
     order: [['id', 'ASC']],
@@ -155,7 +155,7 @@ forum.get('/getalltopicsbysectionid', async (req, res) => {
       },
       include: [
         {
-          model: Message
+          model: Message,
         },
       ],
       order: [['id', 'ASC']],
@@ -188,7 +188,16 @@ forum.get('/getallmessagesbytopicid', async (req, res) => {
         },
       ],
       order: [['id', 'ASC']],
-    }).then(messages => messages.map(message => {message.messagetext = message.messagetext.substring(0,MESSAGE_CUT_LENGTH); return message}))
+    })
+      .then(messages =>
+        messages.map(message => {
+          message.messagetext = message.messagetext.substring(
+            0,
+            MESSAGE_CUT_LENGTH
+          )
+          return message
+        })
+      )
       .then(messages => {
         return res.status(201).json(messages)
       })
