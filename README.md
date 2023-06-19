@@ -144,11 +144,11 @@ yarn build --scope=server
 
 Параметры подключения к базе лежат в файле server/.env - для докера это надо изменить и передавать через переменные окружения
 
-#### Схема DB
+#### **Схема DB**
 
 ![Схема DB](/diagramms/er.png)
 
-#### Ручки
+#### **Ручки**
 
 **Эхо-тест**
 
@@ -160,7 +160,8 @@ yarn build --scope=server
 
 `Math.round((level / (time + steps * 5)) * 100000)`
 
-Передается в BODY объект Leaderboard из Client - поля указаеы в примере
+Передается в BODY объект Leaderboard из Client
+
 Возвращается объект Leaderboard из server/src/model - включая назначенные базой поля Primary Key, CreatedAt, UpdatedAt
 
 
@@ -220,7 +221,7 @@ curl localhost:3001/leaderboard/gettopleaders
 - Удалить Message по данному id
 ```curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage```
 
-#### Интеграционные тесты
+#### **Интеграционные тесты**
 
 Перед запуском каждого теста необходимо полностью очищать базу - делать это либо через DROP ALL TABLES в Querу browser либо запуском команды
 ```await sequelize.sync({force: true});```
@@ -514,11 +515,9 @@ curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.to
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection
 ```
-
 Убедиться что все созданные объекты удалены из базы
 
-
-#### Useful SQL queries
+#### **Useful SQL queries**
 
 - How to get pg table columns
 ```SELECT * FROM information_schema.columns where table_name = 'Section'```
