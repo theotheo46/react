@@ -52,10 +52,6 @@
 В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
 Если очень-очень нужно пропустить проверки, используйте `--no-verify` (но не злоупотребляйте :)
 
-## Ой, ничего не работает :(
-
-Откройте issue, я приду :)
-
 ## Автодеплой статики на vercel
 Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
 Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
@@ -88,56 +84,412 @@ yarn build --scope=server
 После сборки на выходе будет: в клиентском пакете две папки dist и dist-ssr, в серверном пакете одна папка dist
 Для запуска продакшен версии можно запустить: 
 
-```
-yarn preview --scope=server
-```
+
+```yarn preview --scope=server```
 
 Запуск проекта для разработки:
 Клиент с сервером:
-```
-yarn dev
-```
+```yarn dev```
+
 Только клиент:
-```
-yarn dev --scope=client
-```
+```yarn dev --scope=client```
+
 Только сервер (SSR): 
-```
-yarn dev --scope=server
-```
+```yarn dev --scope=server```
 
 ## Backend
 
 В index.ts для сервера добавилась инициализация sequelize в виде
-```
-  await sequelize.sync()
-```
+```await sequelize.sync()```
+
 
 В этом случае на пустой базе  происходит создание схема для модели, если модель уже создана то при наличии новых полей произойдет их добавление в таблицу с заполненным дефолтовыми значениями
 
 Если нужно создать схему заново с дропом существующих таблиц - надо использовать
 
-```
-await sequelize.sync({force: true});
-```
+```await sequelize.sync({force: true});```
+
 
 Параметры подключения к базе лежат в файле server/.env - для докера это надо изменить и передавать через переменные окружения
 
-Для работы с BE использовать следующие ручки:
+### Схема DB
 
-Эхо-тест
-```
-curl localhost:3001/leaderboard/test
-```
+![Схема DB](/diagramms/er.png)
 
-Добавить строчку в таблицу лидеров - параметр score должен тут быть пустым так как он будет рассчитываться на уровне сервера
-```
-curl -X POST -H 'Content-Type: application/json' -d '{"userId":"12345","usernick":"theo","level":"15","steps":"49","time":"120","score":""}' localhost:3001/leaderboard/setleader
-```
+### Ручки
+- Эхо-тест
 
-Получить список лидеров отсортированных по убыванию поля score и с дефолтовым значением = 10 
+```curl localhost:3001/leaderboard/test```
+
+### Leaderboard
+
+- Добавить строчку в таблицу лидеров - параметр score должен тут быть пустым так как он будет рассчитываться на уровне сервера по формуле 
+
+**Math.round((level / (time + steps * 5)) * 100000)**
+Передается в BODY объект Leaderboard из Client - поля указаеы в примере
+Возвращается объект Leaderboard из server/src/model - включая назначенные базой поля Primary Key, CreatedAt, UpdatedAt
+
+
+```curl -X POST -H 'Content-Type: application/json' -d '{"userId":"12345","usernick":"theo","level":"15","steps":"49","time":"120","score":""}' localhost:3001/leaderboard/setleader```
+
+
+- Получить список лидеров отсортированных по убыванию поля score - лиюо в параметра number передается число элементов либо если он не указан то с дефолтовым значением = 10 
+
+Возвращается List объектов Leaderboard из server/src/model 
 
 ```
 curl localhost:3001/leaderboard/gettopleaders?number=2
 curl localhost:3001/leaderboard/gettopleaders
 ```
+### Forum
+
+- Получить все объекты Section
+```curl localhost:3001/forum/getallsections```
+
+
+- Получить объекты Topic по данному sectionId (обязательный параметр)
+```curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1```
+
+
+- Получить объекты Message по данному topicId (обязательный параметр)
+```curl localhost:3001/forum/getallmessagesbytopicid?topicId=1```
+
+
+- Добавить Section с данными именем и usernick
+```curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111", "usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection```
+
+
+- Добавить Topic с данными именем, usernick и FK sectionId
+```curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111", "usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic```
+
+
+- Добавить Message с данными текстом, usernick и FK topicId
+```curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111", "usernick" : "theo", "messagetext" : "blablabla", "topicId" : "1"}' localhost:3001/forum/addmessage```
+
+
+- Oбновить Message по данному ID - проверяется равенство параметра запроса userId и userId для редактируемого сообщения. Если они не равны то Reject
+```curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111",  "messagetext" : "qweqweqweqwqew", "id" : "1"}' localhost:3001/forum/updatemessage```
+
+
+- Добавить Reply к данному Message 
+```curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111", "usernick" : "theo", "messagetext" : "blablablaReply1 ", "messageId" : "1"}' localhost:3001/forum/addreply```
+
+
+- Удалить каскадно Section по данному id 
+```curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection```
+
+
+- Удалить каскадно Topic по данному id
+```curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletetopic```
+
+
+- Удалить Message по данному id
+```curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage```
+
+### Интеграционные тесты
+
+Перед запуском каждого теста необходимо полностью очищать базу - делать это либо через DROP ALL TABLES в Queru browser либо запуском команды
+```await sequelize.sync({force: true});```
+
+- Аdd Message and Reply test
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablabla", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablabla1", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablablaReply1", "messageId" : "1"}' localhost:3001/forum/addreply
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablablaReply2", "messageId" : "1"}' localhost:3001/forum/addreply
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111", "usernick" : "theo", "messagetext" : "blablablaReply2", "messageId" : "2"}' localhost:3001/forum/addreply
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+```
+
+Выход
+```
+[
+    {
+        "id": 1,
+        "topicId": 1,
+        "replyID": null,
+        "userId": 111,
+        "usernick": "theo",
+        "messagetext": "blablabla",
+        "createdAt": "2023-06-18T07:05:46.082Z",
+        "updatedAt": "2023-06-18T07:05:46.082Z",
+        "parentReply": {
+            "id": 1,
+            "parentMessageID": 1,
+            "createdAt": "2023-06-18T07:06:05.004Z",
+            "updatedAt": "2023-06-18T07:06:05.004Z",
+            "messages": [
+                {
+                    "id": 3,
+                    "topicId": null,
+                    "replyID": 1,
+                    "userId": 111,
+                    "usernick": "theo",
+                    "messagetext": "blablablaReply1",
+                    "createdAt": "2023-06-18T07:06:05.048Z",
+                    "updatedAt": "2023-06-18T07:06:05.048Z"
+                },
+                {
+                    "id": 4,
+                    "topicId": null,
+                    "replyID": 1,
+                    "userId": 111,
+                    "usernick": "theo",
+                    "messagetext": "blablablaReply2",
+                    "createdAt": "2023-06-18T07:06:10.364Z",
+                    "updatedAt": "2023-06-18T07:06:10.364Z"
+                }
+            ]
+        }
+    },
+    {
+        "id": 2,
+        "topicId": 1,
+        "replyID": null,
+        "userId": 111,
+        "usernick": "theo",
+        "messagetext": "blablabla1",
+        "createdAt": "2023-06-18T07:05:52.380Z",
+        "updatedAt": "2023-06-18T07:05:52.380Z",
+        "parentReply": {
+            "id": 2,
+            "parentMessageID": 2,
+            "createdAt": "2023-06-18T07:06:26.297Z",
+            "updatedAt": "2023-06-18T07:06:26.297Z",
+            "messages": [
+                {
+                    "id": 5,
+                    "topicId": null,
+                    "replyID": 2,
+                    "userId": 111,
+                    "usernick": "theo",
+                    "messagetext": "blablablaReply2",
+                    "createdAt": "2023-06-18T07:06:26.346Z",
+                    "updatedAt": "2023-06-18T07:06:26.346Z"
+                }
+            ]
+        }
+    }
+]
+```
+
+- Add delete Section test
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
+curl localhost:3001/forum/getallsections | python3 -m json.tool
+```
+Выход
+```
+[
+    {
+        "id": 1,
+        "userId": 111,
+        "usernick": "theo",
+        "sectionname": "Section1",
+        "createdAt": "2023-06-17T21:49:08.241Z",
+        "updatedAt": "2023-06-17T21:49:08.241Z"
+    }
+]
+```
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection
+```
+
+Выход
+
+Нет объектов Section
+
+- Add delete Topic test
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
+curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
+```
+
+Выход
+```
+ [
+    {
+        "id": 1,
+        "sectionId": 1,
+        "userId": 111,
+        "usernick": "theo",
+        "topicname": "Topic1",
+        "createdAt": "2023-06-17T22:00:30.050Z",
+        "updatedAt": "2023-06-17T22:00:30.050Z"
+    }
+]
+```
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletetopic
+curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
+```
+
+Выход
+
+Нет объектов Topic
+
+- Add delete Section and Topic test
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
+curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
+curl localhost:3001/forum/getallsections | python3 -m json.tool
+```
+
+Выход
+```
+[
+    {
+        "id": 1,
+        "sectionId": 1,
+        "userId": 111,
+        "usernick": "theo",
+        "topicname": "Topic1",
+        "createdAt": "2023-06-17T22:04:32.260Z",
+        "updatedAt": "2023-06-17T22:04:32.260Z"
+    }
+]
+
+[
+    {
+        "id": 1,
+        "userId": 111,
+        "usernick": "theo",
+        "sectionname": "Section1",
+        "createdAt": "2023-06-17T22:04:27.880Z",
+        "updatedAt": "2023-06-17T22:04:27.880Z"
+    }
+]
+```
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection
+```
+Выход
+
+Нет объектов Section и Topic
+
+- Delete message
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablabla", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+```
+
+Выход
+```
+[
+    {
+        "id": 1,
+        "topicId": 1,
+        "replyID": null,
+        "userId": 111,
+        "usernick": "theo",
+        "messagetext": "blablabla",
+        "createdAt": "2023-06-17T22:07:49.592Z",
+        "updatedAt": "2023-06-17T22:07:49.592Z",
+        "parentReply": null
+    }
+]
+```
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage
+```
+
+Выход
+
+Нет объектов Message
+
+- Update message
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablabla", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+```
+
+Выход
+```
+[
+    {
+        "id": 1,
+        "topicId": 1,
+        "replyID": null,
+        "userId": 111,
+        "usernick": "theo",
+        "messagetext": "blablabla",
+        "createdAt": "2023-06-17T22:10:09.854Z",
+        "updatedAt": "2023-06-17T22:10:09.854Z",
+        "parentReply": null
+    }
+]
+```
+
+Вход
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111",  "messagetext" : "qweqweqweqwqew", "id" : "1"}' localhost:3001/forum/updatemessage
+curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
+```
+
+Выход
+```
+[
+    {
+        "id": 1,
+        "topicId": 1,
+        "replyID": null,
+        "userId": 111,
+        "usernick": "theo",
+        "messagetext": "qweqweqweqwqew",
+        "createdAt": "2023-06-17T22:10:09.854Z",
+        "updatedAt": "2023-06-17T22:10:53.563Z",
+        "parentReply": null
+    }
+]
+```
+
+- Каскадное удаление всех объектов Section, Topic, Reply, Message
+
+Выполнить тест **Аdd Message and Reply test**, потом выполнить 
+```
+curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection
+```
+
+Убедиться что все созданные объекты удалены из базы
+
+
+### Useful SQL queries
+
+- How to get pg table columns
+```SELECT * FROM information_schema.columns where table_name = 'Section'```
+
+
+- How to get topic for specific sectionid
+```SELECT * FROM "public"."Topic" t WHERE t.sectionid= 1```
+
