@@ -177,15 +177,15 @@ curl localhost:3001/leaderboard/gettopleaders
 ```
 **Forum**
 
-- Получить все объекты Section
+- Получить все объекты Section - включая дочерние  объекты topic для каждого section
 ```curl localhost:3001/forum/getallsections```
 
 
-- Получить объекты Topic по данному sectionId (обязательный параметр)
+- Получить объекты Topic по данному sectionId (обязательный параметр) - дочерние объекты Message для каждого Topic ПОКА не передаются 
 ```curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1```
 
 
-- Получить объекты Message по данному topicId (обязательный параметр) - параметр messagetext обрезается до MESSAGE_CUT_LENGTH(20) символов - константа определена в файле **packages/server/src/routes/forum.ts**
+- Получить объекты Message по данному topicId (обязательный параметр) - включая дочерние объекты Reply
 ```curl localhost:3001/forum/getallmessagesbytopicid?topicId=1```
 
 
@@ -395,7 +395,9 @@ curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
-curl localhost:3001/forum/getallsections | python3 -m json.tool
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablablasadfsajfdhgsadjfghsakjfdhgadsfdsafsdaf", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablabla1sdafsadlfkhsadkfjhdslkfhjdslfhsdlafksadjhflkdsjhf", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
 ```
 
 **Выход**

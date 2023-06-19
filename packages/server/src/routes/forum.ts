@@ -4,8 +4,6 @@ import { Topic } from '../models/Topic'
 import { Message } from '../models/Message'
 import { Reply } from '../models/Reply'
 
-const MESSAGE_CUT_LENGTH = 20
-
 export const forum = Router()
 
 forum.post('/addsection', async (req, res) => {
@@ -153,15 +151,10 @@ forum.get('/getalltopicsbysectionid', async (req, res) => {
       where: {
         sectionId: +sectionId,
       },
-      include: [
-        {
-          model: Message,
-        },
-      ],
       order: [['id', 'ASC']],
     })
-      .then(topic => {
-        return res.status(201).json(topic)
+      .then(topics => {
+        return res.status(201).json(topics)
       })
       .catch(err => {
         return res.status(400).json({ err })
@@ -189,15 +182,6 @@ forum.get('/getallmessagesbytopicid', async (req, res) => {
       ],
       order: [['id', 'ASC']],
     })
-      .then(messages =>
-        messages.map(message => {
-          message.messagetext = message.messagetext.substring(
-            0,
-            MESSAGE_CUT_LENGTH
-          )
-          return message
-        })
-      )
       .then(messages => {
         return res.status(201).json(messages)
       })
