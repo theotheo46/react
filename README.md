@@ -177,15 +177,15 @@ curl localhost:3001/leaderboard/gettopleaders
 ```
 **Forum**
 
-- Получить все объекты Section
+- Получить все объекты Section - включая дочерние  объекты topic для каждого section
 ```curl localhost:3001/forum/getallsections```
 
 
-- Получить объекты Topic по данному sectionId (обязательный параметр)
+- Получить объекты Topic по данному sectionId (обязательный параметр) - дочерние объекты Message для каждого Topic ПОКА не передаются 
 ```curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1```
 
 
-- Получить объекты Message по данному topicId (обязательный параметр)
+- Получить объекты Message по данному topicId (обязательный параметр) - включая дочерние объекты Reply
 ```curl localhost:3001/forum/getallmessagesbytopicid?topicId=1```
 
 
@@ -329,8 +329,9 @@ curl localhost:3001/forum/getallsections | python3 -m json.tool
         "userId": 111,
         "usernick": "theo",
         "sectionname": "Section1",
-        "createdAt": "2023-06-17T21:49:08.241Z",
-        "updatedAt": "2023-06-17T21:49:08.241Z"
+        "createdAt": "2023-06-19T19:38:28.870Z",
+        "updatedAt": "2023-06-19T19:38:28.870Z",
+        "topics": []
     }
 ]
 ```
@@ -350,20 +351,30 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
-curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
+curl localhost:3001/forum/getallsections | python3 -m json.tool
 ```
 
 **Выход**
 ```
- [
+[
     {
         "id": 1,
-        "sectionId": 1,
         "userId": 111,
         "usernick": "theo",
-        "topicname": "Topic1",
-        "createdAt": "2023-06-17T22:00:30.050Z",
-        "updatedAt": "2023-06-17T22:00:30.050Z"
+        "sectionname": "Section1",
+        "createdAt": "2023-06-19T19:40:21.289Z",
+        "updatedAt": "2023-06-19T19:40:21.289Z",
+        "topics": [
+            {
+                "id": 1,
+                "sectionId": 1,
+                "userId": 111,
+                "usernick": "theo",
+                "topicname": "Topic1",
+                "createdAt": "2023-06-19T19:40:28.147Z",
+                "updatedAt": "2023-06-19T19:40:28.147Z"
+            }
+        ]
     }
 ]
 ```
@@ -384,8 +395,9 @@ curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablablasadfsajfdhgsadjfghsakjfdhgadsfdsafsdaf", "topicId" : "1"}' localhost:3001/forum/addmessage
+curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "messagetext" : "blablabla1sdafsadlfkhsadkfjhdslkfhjdslfhsdlafksadjhflkdsjhf", "topicId" : "1"}' localhost:3001/forum/addmessage
 curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
-curl localhost:3001/forum/getallsections | python3 -m json.tool
 ```
 
 **Выход**
@@ -393,23 +405,22 @@ curl localhost:3001/forum/getallsections | python3 -m json.tool
 [
     {
         "id": 1,
-        "sectionId": 1,
-        "userId": 111,
-        "usernick": "theo",
-        "topicname": "Topic1",
-        "createdAt": "2023-06-17T22:04:32.260Z",
-        "updatedAt": "2023-06-17T22:04:32.260Z"
-    }
-]
-
-[
-    {
-        "id": 1,
         "userId": 111,
         "usernick": "theo",
         "sectionname": "Section1",
-        "createdAt": "2023-06-17T22:04:27.880Z",
-        "updatedAt": "2023-06-17T22:04:27.880Z"
+        "createdAt": "2023-06-19T19:41:42.394Z",
+        "updatedAt": "2023-06-19T19:41:42.394Z",
+        "topics": [
+            {
+                "id": 1,
+                "sectionId": 1,
+                "userId": 111,
+                "usernick": "theo",
+                "topicname": "Topic1",
+                "createdAt": "2023-06-19T19:41:47.512Z",
+                "updatedAt": "2023-06-19T19:41:47.512Z"
+            }
+        ]
     }
 ]
 ```

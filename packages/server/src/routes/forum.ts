@@ -125,6 +125,11 @@ forum.post('/updatemessage', async (req, res) => {
 
 forum.get('/getallsections', async (_req, res) => {
   Section.findAll({
+    include: [
+      {
+        model: Topic,
+      },
+    ],
     order: [['id', 'ASC']],
   })
     .then(section => {
@@ -148,8 +153,8 @@ forum.get('/getalltopicsbysectionid', async (req, res) => {
       },
       order: [['id', 'ASC']],
     })
-      .then(topic => {
-        return res.status(201).json(topic)
+      .then(topics => {
+        return res.status(201).json(topics)
       })
       .catch(err => {
         return res.status(400).json({ err })
@@ -177,8 +182,8 @@ forum.get('/getallmessagesbytopicid', async (req, res) => {
       ],
       order: [['id', 'ASC']],
     })
-      .then(message => {
-        return res.status(201).json(message)
+      .then(messages => {
+        return res.status(201).json(messages)
       })
       .catch(err => {
         return res.status(400).json({ err })
