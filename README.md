@@ -5,6 +5,31 @@
 ![Документ с описанием механики игры](/diagramms/wp.pdf)
 
 
+## Содержание
+
+- [Технологии](#технологии)
+- [Как запускать](#как-запускать)
+- [Как добавить зависимости](#как-добавить-зависимости)
+- [Тесты](#тесты)
+- [Линтинг](#линтинг)
+- [Форматирование prettier](#форматирование-prettier)
+- [Production build](#production-build)
+- [Хуки](#хуки)
+- [Автодеплой статики на vercel](#автодеплой-статики-на-vercel)
+- [Production окружение в докере](#production-окружение-в-докере)
+- [Backend](#backend)
+    - [Схема DB](#схема-db)
+    - [Ручки](#ручки)
+    - [Интеграционные тесты](#интеграционные-тесты)
+    - [Useful SQL queries](#useful-sql-queries)
+
+### Технологии
+
+- [Vite](https://vitejs.dev/)
+- [React](https://react.dev/)
+- [Sequlize](https://sequelize.org/)
+- [Lerna](https://lerna.js.org/)
+
 ### Как запускать?
 
 1. Убедитесь что у вас установлен `node` и `docker`
@@ -55,18 +80,18 @@
 `yarn preview --scope client`
 `yarn preview --scope server`
 
-## Хуки
+### Хуки
 В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
 Если очень-очень нужно пропустить проверки, используйте `--no-verify` (но не злоупотребляйте :)
 
-## Автодеплой статики на vercel
+### Автодеплой статики на vercel
 Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
 Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
 В качестве `root directory` укажите `packages/client`
 
 Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
 
-## Production окружение в докере
+### Production окружение в докере
 Перед первым запуском выполните `node init.js`
 
 
@@ -78,11 +103,11 @@
 Если вам понадобится только один сервис, просто уточните какой в команде
 `docker compose up {sevice_name}`, например `docker compose up server`
 
-## Первоначальная настройка SSR:
+### Настройка SSR
 1. На клиенте: добавил конфиг для билда серверной части приложения ssr.config.ts, обновил скрипты для сборки в package.json, сделал правки в файле main.tsx и добавил файл ssr.tsx для рендера на сервере.
 2. На сервере: добавил реализацию ssr в файле index.ts, поправил скрипты в package.json.
 
-## Для сборки клиентского и серверного пакетов:
+Для сборки клиентского и серверного пакетов:
 ```
 yarn build --scope=client
 yarn build --scope=server
@@ -104,7 +129,7 @@ yarn build --scope=server
 Только сервер (SSR): 
 ```yarn dev --scope=server```
 
-## Backend
+### Backend
 
 В index.ts для сервера добавилась инициализация sequelize в виде
 ```await sequelize.sync()```
@@ -119,20 +144,22 @@ yarn build --scope=server
 
 Параметры подключения к базе лежат в файле server/.env - для докера это надо изменить и передавать через переменные окружения
 
-### Схема DB
+#### Схема DB
 
 ![Схема DB](/diagramms/er.png)
 
-### Ручки
-- Эхо-тест
+#### Ручки
+
+**Эхо-тест**
 
 ```curl localhost:3001/leaderboard/test```
 
-### Leaderboard
+**Leaderboard**
 
 - Добавить строчку в таблицу лидеров - параметр score должен тут быть пустым так как он будет рассчитываться на уровне сервера по формуле 
 
-**Math.round((level / (time + steps * 5)) * 100000)**
+`Math.round((level / (time + steps * 5)) * 100000)`
+
 Передается в BODY объект Leaderboard из Client - поля указаеы в примере
 Возвращается объект Leaderboard из server/src/model - включая назначенные базой поля Primary Key, CreatedAt, UpdatedAt
 
@@ -148,7 +175,7 @@ yarn build --scope=server
 curl localhost:3001/leaderboard/gettopleaders?number=2
 curl localhost:3001/leaderboard/gettopleaders
 ```
-### Forum
+**Forum**
 
 - Получить все объекты Section
 ```curl localhost:3001/forum/getallsections```
@@ -193,14 +220,14 @@ curl localhost:3001/leaderboard/gettopleaders
 - Удалить Message по данному id
 ```curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage```
 
-### Интеграционные тесты
+#### Интеграционные тесты
 
-Перед запуском каждого теста необходимо полностью очищать базу - делать это либо через DROP ALL TABLES в Queru browser либо запуском команды
+Перед запуском каждого теста необходимо полностью очищать базу - делать это либо через DROP ALL TABLES в Querу browser либо запуском команды
 ```await sequelize.sync({force: true});```
 
 - Аdd Message and Reply test
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
@@ -215,7 +242,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111", "usernic
 curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 ```
 [
     {
@@ -289,12 +316,12 @@ curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.to
 
 - Add delete Section test
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl localhost:3001/forum/getallsections | python3 -m json.tool
 ```
-Выход
+**Выход**
 ```
 [
     {
@@ -308,25 +335,25 @@ curl localhost:3001/forum/getallsections | python3 -m json.tool
 ]
 ```
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection
 ```
 
-Выход
+**Выход**
 
 Нет объектов Section
 
 - Add delete Topic test
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
 curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 ```
  [
     {
@@ -341,19 +368,19 @@ curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.
 ]
 ```
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletetopic
 curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 
 Нет объектов Topic
 
 - Add delete Section and Topic test
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
@@ -361,7 +388,7 @@ curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.
 curl localhost:3001/forum/getallsections | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 ```
 [
     {
@@ -387,17 +414,17 @@ curl localhost:3001/forum/getallsections | python3 -m json.tool
 ]
 ```
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletesection
 ```
-Выход
+**Выход**
 
 Нет объектов Section и Topic
 
 - Delete message
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
@@ -405,7 +432,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick
 curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 ```
 [
     {
@@ -422,18 +449,18 @@ curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.to
 ]
 ```
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage
 ```
 
-Выход
+**Выход**
 
 Нет объектов Message
 
 - Update message
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "sectionname" : "Section1"}' localhost:3001/forum/addsection
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick" : "theo", "topicname" : "Topic1", "sectionId" : "1"}' localhost:3001/forum/addtopic
@@ -441,7 +468,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111","usernick
 curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 ```
 [
     {
@@ -458,13 +485,13 @@ curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.to
 ]
 ```
 
-Вход
+**Вход**
 ```
 curl -X POST -H 'Content-Type: application/json' -d '{"userId" : "111",  "messagetext" : "qweqweqweqwqew", "id" : "1"}' localhost:3001/forum/updatemessage
 curl localhost:3001/forum/getallmessagesbytopicid?topicId=1 | python3 -m json.tool
 ```
 
-Выход
+**Выход**
 ```
 [
     {
@@ -491,7 +518,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 Убедиться что все созданные объекты удалены из базы
 
 
-### Useful SQL queries
+#### Useful SQL queries
 
 - How to get pg table columns
 ```SELECT * FROM information_schema.columns where table_name = 'Section'```
