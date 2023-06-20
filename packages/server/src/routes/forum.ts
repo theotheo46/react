@@ -3,8 +3,11 @@ import { Section } from '../models/Section'
 import { Topic } from '../models/Topic'
 import { Message } from '../models/Message'
 import { Reply } from '../models/Reply'
+import { sequelize } from '../../sequelize'
 
 export const forum = Router()
+
+const MESSAGETEXT_CUT_LENGTH = 20
 
 forum.post('/addsection', async (req, res) => {
   //BODY is {"usernick" : "theo", "sectionname" : "Section1"}
@@ -151,6 +154,14 @@ forum.get('/getalltopicsbysectionid', async (req, res) => {
       where: {
         sectionId: +sectionId,
       },
+      include: [
+        {
+          model: Message,
+          attributes: [
+            [sequelize.fn('LEFT', sequelize.col('messagetext'), MESSAGETEXT_CUT_LENGTH), 'messagetextcut']
+          ]
+        },
+      ],
       order: [['id', 'ASC']],
     })
       .then(topics => {

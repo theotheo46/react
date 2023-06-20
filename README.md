@@ -181,7 +181,7 @@ curl localhost:3001/leaderboard/gettopleaders
 ```curl localhost:3001/forum/getallsections```
 
 
-- Получить объекты Topic по данному sectionId (обязательный параметр) - дочерние объекты Message для каждого Topic ПОКА не передаются 
+- Получить объекты Topic по данному sectionId (обязательный параметр) - дочерние объекты Message выводятся только с аттрибутом messagetext, обрезанным до **MESSAGETEXT_CUT_LENGTH** = 20 символов - константа определена в файле **packages/server/src/routes/forum.ts**
 ```curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1```
 
 
@@ -405,20 +405,18 @@ curl localhost:3001/forum/getalltopicsbysectionid?sectionId=1 | python3 -m json.
 [
     {
         "id": 1,
+        "sectionId": 1,
         "userId": 111,
         "usernick": "theo",
-        "sectionname": "Section1",
-        "createdAt": "2023-06-19T19:41:42.394Z",
-        "updatedAt": "2023-06-19T19:41:42.394Z",
-        "topics": [
+        "topicname": "Topic1",
+        "createdAt": "2023-06-20T08:51:02.238Z",
+        "updatedAt": "2023-06-20T08:51:02.238Z",
+        "messages": [
             {
-                "id": 1,
-                "sectionId": 1,
-                "userId": 111,
-                "usernick": "theo",
-                "topicname": "Topic1",
-                "createdAt": "2023-06-19T19:41:47.512Z",
-                "updatedAt": "2023-06-19T19:41:47.512Z"
+                "messagetextcut": "blablablasadfsajfdhg"
+            },
+            {
+                "messagetextcut": "blablabla1sdafsadlfk"
             }
         ]
     }
