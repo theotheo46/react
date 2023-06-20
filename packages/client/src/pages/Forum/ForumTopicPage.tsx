@@ -2,7 +2,7 @@ import Button from '../../components/Button'
 import { useNavigate } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa'
 import './ForumTopicPage.pcss'
-import wave from '../../assets/images/wave.png'
+import wave from '../../assets/images/wave_v.svg'
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
@@ -45,7 +45,7 @@ const ForumTopicPage = ({ title, className, name, user, timestamp }: Props) => {
         <p className="message-title">Новое сообщение</p>
         <div className="lower-pane"></div>
       </div>
-      <img className={`${className}-wave`} src={wave} alt="wave" />
+      <img className={`${className}-wave wave-bg`} src={wave} alt="wave" />
     </div>
   )
 }

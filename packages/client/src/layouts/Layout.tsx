@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
-import Navigation from '../components/Navigation/Navigation'
+import ThemeSelector from '../components/ThemeSelector'
 
 const Layout = () => {
   return (
     <>
-      {/* <Navigation /> */}
       <Outlet />
+      <ThemeSelector />
     </>
   )
 }

@@ -1,16 +1,20 @@
 import { useEffect } from 'react'
 import './styles/App.pcss'
 import RoutesBase from './routes/routes'
-import { useAppDispatch } from './store/hooks'
+import { useAppDispatch, useAppSelector } from './store/hooks'
 import {
   createLevels,
   setLastUpdateLevelParam,
 } from './store/slices/levelSlice'
 import AuthContext from './context/AuthContext'
 import { setLastUpdateGameParam } from './store/slices/gameSlice'
+import { useTheme } from './hooks/useTheme'
 
 function App() {
   const dispatch = useAppDispatch()
+
+  const { user, theme } = useAppSelector(state => state.user)
+  const { getUserTheme } = useTheme()
 
   useEffect(() => {
     const fetchServerData = async () => {
@@ -24,6 +28,14 @@ function App() {
     dispatch(setLastUpdateGameParam())
     dispatch(setLastUpdateLevelParam())
   }, [])
+
+  useEffect(() => {
+    getUserTheme(user?.id)
+  }, [user])
+
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme)
+  }, [theme])
 
   return (
     <AuthContext>
