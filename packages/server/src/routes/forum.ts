@@ -158,8 +158,15 @@ forum.get('/getalltopicsbysectionid', async (req, res) => {
         {
           model: Message,
           attributes: [
-            [sequelize.fn('LEFT', sequelize.col('messagetext'), MESSAGETEXT_CUT_LENGTH), 'messagetextcut']
-          ]
+            [
+              sequelize.fn(
+                'LEFT',
+                sequelize.col('messagetext'),
+                MESSAGETEXT_CUT_LENGTH
+              ),
+              'messagetextcut',
+            ],
+          ],
         },
       ],
       order: [['id', 'ASC']],
