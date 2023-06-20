@@ -4,7 +4,7 @@ import DevFooter, { DevFooterElement } from '../../components/DevFooter'
 import Memo from '../../components/Memo'
 import './MiniLendingPage.pcss'
 import { useAppSelector } from '../../store/hooks'
-import wave from '../../assets/images/wave.png'
+import wave from '../../assets/images/wave_v.svg'
 import artemAvatar from '../../assets/images/artem.png'
 import iliyaAvatar from '../../assets/images/ilya.png'
 import kseniyaAvatar from '../../assets/images/kseniya.png'
@@ -84,7 +84,7 @@ const MiniLendingPage = () => {
           devFooterElementArray={devFooterElementArray}
         />
       </div>
-      <img className="mini-lending-page-wave" src={wave} alt="wave" />
+      <img className="mini-lending-page-wave wave-bg" src={wave} alt="wave" />
     </div>
   )
 }

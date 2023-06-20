@@ -55,7 +55,7 @@
   }
 
   .card {
-    background-color: var(--color-white);
+    background-color: var(--color-bg-card);
     border-radius: var(--border-radius-card);
     position: relative;
     &__header {
@@ -86,5 +86,17 @@
     bottom: 0;
     left: 0;
     width: 100%;
+  }
+}
+
+body[data-theme='dark'] {
+  .wave-bg {
+    filter: none;
+  }
+}
+
+body[data-theme='light'] {
+  .wave-bg {
+    filter: brightness(225%) hue-rotate(340deg);
   }
 }

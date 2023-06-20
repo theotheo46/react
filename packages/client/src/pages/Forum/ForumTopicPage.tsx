@@ -47,7 +47,6 @@ const ForumTopicPage = ({ title, className, name, user, timestamp }: Props) => {
           <div className="topic-container">
             <ForumChatBlock messages={mockMessages} />
           </div>
-          {/* <img className={`${className}-wave`} src={wave} alt="wave" /> */}
         </div>
       </div>
     </div>

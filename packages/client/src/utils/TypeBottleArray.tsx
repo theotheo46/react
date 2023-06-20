@@ -44,6 +44,7 @@ export class TypeBottleArray {
     idTypeBottle: number
   ) {
     context.lineWidth = 3
+    // context.strokeStyle = '#ccc'
     context.stroke(this.getPathContourBottleById(idTypeBottle))
     context.closePath()
   }
