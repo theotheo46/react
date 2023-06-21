@@ -4,6 +4,7 @@ import { createServer as createViteServer } from 'vite'
 import type { ViteDevServer } from 'vite'
 import { sequelize } from './sequelize'
 import { lb } from './src/routes/leaderboards'
+import { forum } from './src/routes/forum'
 import { themeRouter } from './src/routes/themeRoutes'
 import ssrMiddleware from './src/middleware/ssr.middleware'
 import themeController from './src/controllers/themeController'
@@ -60,6 +61,8 @@ async function startServer() {
   app.use(express.json())
 
   app.use('/leaderboard', lb)
+  app.use('/forum', forum)
+
   app.use('/api/theme', themeRouter)
   app.get('/api', (_, res) => {
     res.json('👋 Howdy from the server :)')
