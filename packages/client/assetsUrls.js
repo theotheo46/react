@@ -15,6 +15,8 @@ export const assetsUrls = [
   'src/assets/images/home.svg',
   'src/assets/images/ilya.png',
   'src/assets/images/kseniya.png',
+  'src/assets/images/landing_dark.png',
+  'src/assets/images/landing_light.png',
   'src/assets/images/minilending.svg',
   'src/assets/images/thumb-up.png',
   'src/assets/images/wave.png',

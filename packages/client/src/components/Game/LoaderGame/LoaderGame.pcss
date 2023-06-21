@@ -1,3 +1,11 @@
+body[data-theme='dark'] {
+  --color-border-spinner: rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme='light'] {
+  --color-border-spinner: rgba(0, 0, 0, 0.1);
+}
+
 .loader-game {
   position: fixed;
   display: flex;
@@ -11,7 +19,7 @@
     display: inline-block;
     width: 70px;
     height: 70px;
-    border: 6px solid rgba(0, 0, 0, 0.1);
+    border: 6px solid var(--color-border-spinner);
     border-radius: 9999px;
     border-top-color: var(--color-orange);
     animation: spinner 1s infinite;
