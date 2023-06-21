@@ -24,29 +24,11 @@ themeRouter.post(
     res: Response
   ) => {
     try {
-      console.log('Req body', req.body)
       const { userId, theme } = req.body
       const result = await themeController.setTheme({ userId, theme })
       res.send(result)
     } catch (error) {
       res.status(400).json({ error: (error as Error).message })
-    }
-  }
-)
-
-themeRouter.put(
-  '/',
-  async (
-    req: Request<unknown, unknown, SetOrUpdateDataParam>,
-    res: Response
-  ) => {
-    try {
-      const { userId, theme } = req.body
-      const result = await themeController.setTheme({ userId, theme })
-
-      res.send(result)
-    } catch (error) {
-      res.status(400).json({ error })
     }
   }
 )
