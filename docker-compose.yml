@@ -20,8 +20,8 @@ services:
     networks:
       - network_bridge
 
-  server:
-    container_name: server
+  ssrapp:
+    container_name: ssrapp
     build:
       context: .
       dockerfile: Dockerfile.server
