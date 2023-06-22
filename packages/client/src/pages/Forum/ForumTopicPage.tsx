@@ -2,7 +2,8 @@ import Button from '../../components/Button'
 import { useNavigate } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa'
 import './ForumTopicPage.pcss'
-import wave from '../../assets/images/wave.png'
+import ForumChatBlock from '../../components/ForumChatBlock'
+import mockData from './mockData'
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
@@ -20,32 +21,35 @@ interface Props
 
 const ForumTopicPage = ({ title, className, name, user, timestamp }: Props) => {
   const navigate = useNavigate()
+  const { mockMessages } = mockData
   return (
     <div className={className}>
-      <div className={`${className}-header`}>
-        <div className="header-left">{name}</div>
-        <div className="header-right">
-          <span>{`Автор: ${user}`}</span>
-          <span>{timestamp}</span>
+      <div className={`${className}-wrapper`}>
+        <div className={`${className}-container`}>
+          <div className={`${className}-header`}>
+            <div className="header-left">{name}</div>
+            <div className="header-right">
+              <span>{`Автор: ${user}`}</span>
+              <span>{timestamp}</span>
+            </div>
+          </div>
+          <div className="header-button-container">
+            <div className="button-container">
+              <Button onClick={() => navigate(-1)} styleType="tertiary">
+                <FaArrowLeft style={iconBackStyle} />
+                Назад
+              </Button>
+              <Button styleType="primary">Переименовать тему</Button>
+              <Button styleType="error">Удалить тему</Button>
+            </div>
+            <div className="header">{title}</div>
+          </div>
+          <div className="topic-container">
+            <ForumChatBlock messages={mockMessages} />
+          </div>
+          {/* <img className={`${className}-wave`} src={wave} alt="wave" /> */}
         </div>
       </div>
-      <div className="header-button-container">
-        <div className="header">{title}</div>
-        <div className="button-container">
-          <Button onClick={() => navigate(-1)} styleType="tertiary">
-            <FaArrowLeft style={iconBackStyle} />
-            Назад
-          </Button>
-          <Button styleType="primary">Переименовать тему</Button>
-          <Button styleType="primary">Удалить тему</Button>
-        </div>
-      </div>
-      <div className="topic-container">
-        <div className="upper-pane"></div>
-        <p className="message-title">Новое сообщение</p>
-        <div className="lower-pane"></div>
-      </div>
-      <img className={`${className}-wave`} src={wave} alt="wave" />
     </div>
   )
 }
