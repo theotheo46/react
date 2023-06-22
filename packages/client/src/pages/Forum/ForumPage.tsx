@@ -184,7 +184,6 @@ const ForumPage = ({ title, className }: Props) => {
           )}
         </div>
       </div>
-      {/* <img className={`${className}-wave`} src={wave} alt="wave" /> */}
     </div>
   )
 }

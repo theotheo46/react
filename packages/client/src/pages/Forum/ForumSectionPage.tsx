@@ -207,7 +207,6 @@ const ForumSectionPage = ({
             </Modal>
           )}
         </div>
-        {/* <img className={`${className}-wave`} src={wave} alt="wave" /> */}
       </div>
     </div>
   )

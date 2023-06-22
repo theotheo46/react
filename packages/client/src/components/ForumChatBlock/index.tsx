@@ -1,11 +1,10 @@
 import Input from '../Input'
 import Button from '../Button'
-import { FaLevelUpAlt, FaPaperPlane, FaRegGrinWink } from 'react-icons/fa'
+import { FaPaperPlane, FaRegGrinWink } from 'react-icons/fa'
 import './ForumChatBlock.pcss'
 import ForumSection from '../ForumSection'
 
 export interface IForumMessages {
-  //TODO rewrite
   id: number
   topicId: number | null
   replyID: number | null
@@ -47,7 +46,6 @@ const ForumChatBlock = ({ messages }: Props) => {
     return
   }
   return (
-    // <div className="chat-block">
     <>
       <div className="messages-panel">
         {messages &&
@@ -128,7 +126,6 @@ const ForumChatBlock = ({ messages }: Props) => {
           <FaPaperPlane style={iconSubmitStyle} />
         </Button>
       </div>
-      {/* </div> */}
     </>
   )
 }

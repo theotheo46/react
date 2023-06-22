@@ -34,10 +34,6 @@ const ForumSection = ({
   const { user: player } = useAppSelector(state => state.user)
   const sectionBody = childrenElements.join(' / ')
   const date = new Date(timestamp).toLocaleString()
-  // const newdate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getDate()}/${
-  //   date.getMonth() + 1
-  // }/${date.getFullYear()}`
-  //12:05:47 22/04/2023
   return (
     <div
       className={className}
@@ -52,7 +48,7 @@ const ForumSection = ({
         </div>
       </div>
       <div className={`${className}-body`}>{sectionBody}</div>
-      {userId === '2' && ( // TODO Number(userId) Проверка на то, что текущий пользователь - автор
+      {userId === '2' && ( // TODO userId === player.id Проверка на то, что текущий пользователь - автор
         <div className={`${className}-buttons-block`}>
           <Button styleType="error" height="32px" onClick={onDelete}>
             Удалить
