@@ -1,6 +1,7 @@
 /* eslint-disable prefer-const */
 // import TypeContourBottle from '../components/Bottle/TypeContourBottle'
 import getTypeContourBottle from '../components/Bottle/TypeContourBottle'
+import { UserThemes } from '../store/slices/userSlice/types'
 
 let typeContourBottleForLevel: any[]
 
@@ -41,9 +42,11 @@ export class TypeBottleArray {
 
   public static drawStrokeBottle(
     context: CanvasRenderingContext2D,
-    idTypeBottle: number
+    idTypeBottle: number,
+    appTheme: UserThemes = 'light'
   ) {
     context.lineWidth = 3
+    context.strokeStyle = appTheme === 'light' ? '#000' : '#e8e8f2'
     context.stroke(this.getPathContourBottleById(idTypeBottle))
     context.closePath()
   }

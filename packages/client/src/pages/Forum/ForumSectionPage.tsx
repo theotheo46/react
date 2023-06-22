@@ -3,7 +3,7 @@ import ForumSection from '../../components/ForumSection'
 import { useNavigate } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa'
 import './ForumPage.pcss'
-import wave from '../../assets/images/wave.png'
+import wave from '../../assets/images/wave_v.svg'
 
 const messages: string[] = [
   'Сообщение',
@@ -168,7 +168,7 @@ const ForumSectionPage = ({
           childrenElements={messages1}
         />
       </div>
-      <img className={`${className}-wave`} src={wave} alt="wave" />
+      <img className={`${className}-wave wave-bg`} src={wave} alt="wave" />
     </div>
   )
 }

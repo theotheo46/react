@@ -30,3 +30,5 @@ export interface RequestUpdatePasswordData {
   oldPassword: string
   newPassword: string
 }
+
+export type UserThemes = 'light' | 'dark'

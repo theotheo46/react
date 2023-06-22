@@ -220,6 +220,14 @@ curl localhost:3001/leaderboard/gettopleaders
 - Удалить Message по данному id
 ```curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage```
 
+**Switch theme**
+- Получить тему для авторизованного пользователя\
+GET method ```localhost:3001/api/theme/<user_id>```
+
+- Переключить тему для авторизованного пользователя\
+POST method ```localhost:3001/api/theme```\
+body: {userId: number, theme: string}
+
 #### **Интеграционные тесты**
 
 Перед запуском каждого теста необходимо полностью очищать базу - делать это либо через DROP ALL TABLES в Querу browser либо запуском команды
