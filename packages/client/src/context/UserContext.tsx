@@ -65,7 +65,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsPending(true)
       setError('')
-      const res = await baseApi.get<User>('/auth/user')
+      const res = await baseApi().get<User>('/auth/user')
       setUser(res.data)
     } catch (error) {
       const { message } = error as Error
@@ -80,7 +80,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsPending(true)
       setError('')
-      await baseApi.post('/auth/signup', data)
+      await baseApi().post('/auth/signup', data)
       await getUser()
       navigate('/start')
     } catch (error) {
@@ -96,7 +96,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsPending(true)
       setError('')
-      await baseApi.post('/auth/signin', data)
+      await baseApi().post('/auth/signin', data)
       await getUser()
       navigate('/start')
     } catch (error) {
@@ -112,7 +112,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsPending(true)
       setError('')
-      await baseApi.post('/auth/logout')
+      await baseApi().post('/auth/logout')
       setUser(null)
       navigate('/signin')
     } catch (error) {
@@ -127,7 +127,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   async function updateUser(data: RequestUpdateUserData) {
     try {
       setIsPending(true)
-      const res = await baseApi.put<User>('/user/profile', data)
+      const res = await baseApi().put<User>('/user/profile', data)
 
       setUser(prev => {
         if (prev) {
@@ -146,7 +146,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   async function updateAvatar(data: FormData) {
     try {
       setIsPending(true)
-      const res = await baseApi.put<User>('/user/profile/avatar', data)
+      const res = await baseApi().put<User>('/user/profile/avatar', data)
       setUser(prev => ({ ...prev, ...res.data }))
     } catch (error) {
       const { message } = error as Error
@@ -159,7 +159,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   async function updatePassword(data: RequestUpdatePasswordData) {
     try {
       setIsPending(true)
-      const res = await baseApi.put('/user/password', data)
+      const res = await baseApi().put('/user/password', data)
     } catch (error) {
       const { message } = error as Error
       console.error(message)

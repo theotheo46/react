@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit'
-import { User } from './types'
+import { User, UserThemes } from './types'
 import {
   OAuth,
   createUser,
@@ -10,16 +10,20 @@ import {
   updateAvatar,
   updatePassword,
   updateUser,
+  getTheme,
+  setTheme,
 } from './userAsyncThunks'
 
 interface UserState {
   user: User | null
+  theme: UserThemes
   error: string
   isPending: boolean
 }
 
 const initialState: UserState = {
   user: null,
+  theme: 'light',
   error: '',
   isPending: false,
 }
@@ -27,7 +31,19 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    getThemeFromLS: state => {
+      const theme = localStorage.getItem('theme') as UserThemes
+      if (theme) {
+        state.theme = theme
+      }
+    },
+    setThemeToLS: (state, action: PayloadAction<UserThemes>) => {
+      const theme = action.payload
+      localStorage.setItem('theme', theme)
+      state.theme = theme
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getUser.fulfilled, (state, action) => {
@@ -70,6 +86,16 @@ const userSlice = createSlice({
         state.isPending = false
         state.error = ''
       })
+      .addCase(getTheme.fulfilled, (state, action) => {
+        state.isPending = false
+        state.theme = action.payload
+        state.error = ''
+      })
+      .addCase(setTheme.fulfilled, (state, action) => {
+        state.isPending = false
+        state.theme = action.payload
+        state.error = ''
+      })
       .addMatcher(isError, (state, action: PayloadAction<string>) => {
         state.error = action.payload
         state.isPending = false
@@ -80,6 +106,8 @@ const userSlice = createSlice({
       })
   },
 })
+
+export const { getThemeFromLS, setThemeToLS } = userSlice.actions
 
 export default userSlice.reducer
 

@@ -4,7 +4,7 @@ import ErrorInformer, {
   ErrorInformerProps,
 } from '../../components/ErrorInformer'
 import './ErrorPage.pcss'
-import wave from '../../assets/images/wave.png'
+import wave from '../../assets/images/wave_v.svg'
 
 const ErrorPage: React.FC<ErrorInformerProps> = ({
   errorCode,
@@ -28,7 +28,7 @@ const ErrorPage: React.FC<ErrorInformerProps> = ({
         height="48px">
         На главную
       </Button>
-      <img className="error-page-wave" src={wave} alt="wave" />
+      <img className="error-page-wave wave-bg" src={wave} alt="wave" />
     </div>
   )
 }

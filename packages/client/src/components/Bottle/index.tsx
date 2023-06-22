@@ -49,6 +49,7 @@ const Bottle = ({
   } = useAppSelector(state => state.level)
 
   const { currentAttempts } = useAppSelector(state => state.game)
+  const { theme } = useAppSelector(state => state.user)
 
   const drawAnimationDeleteColorInBottle = (
     context: CanvasRenderingContext2D | null,
@@ -103,7 +104,7 @@ const Bottle = ({
         countColorNeedChange,
         ''
       )
-      TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle)
+      TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle, theme)
       context.restore()
       if (
         fillTopLayer <
@@ -147,7 +148,7 @@ const Bottle = ({
         countColorNeedChange,
         colorForAnimation
       )
-      TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle)
+      TypeBottleArray.drawStrokeBottle(context, idTypeContourBottle, theme)
       context.restore()
 
       if (fillTopLayer > 0)
@@ -249,7 +250,7 @@ const Bottle = ({
     drawAnimationDeleteColorInBottle(newContext, false, false, 0, 1, '')
     onSaveFinishCallback(bottleIsComplete)
     setSelect(false)
-  }, [bottleColors])
+  }, [bottleColors, theme])
 
   const unSelectBottle = (
     needAnimation: boolean,

@@ -1,0 +1,22 @@
+.theme-selector {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  :last-child {
+    margin-left: 0.25rem;
+  }
+
+  &__btn {
+    background: none;
+    cursor: pointer;
+    border: none;
+    opacity: 0.5;
+    &:hover {
+      opacity: 1;
+    }
+    &_active {
+      opacity: 0.8;
+    }
+  }
+}
