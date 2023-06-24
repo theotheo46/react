@@ -10,7 +10,7 @@ interface Props
   > {
   className?: string
   name: string
-  userId: string | number
+  userId: number
   user: string
   timestamp: string
   onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
@@ -32,8 +32,12 @@ const ForumSection = ({
   ...props
 }: Props) => {
   const { user: player } = useAppSelector(state => state.user)
-  const sectionBody = childrenElements.join(' / ')
-  const date = new Date(timestamp).toLocaleString()
+  let sectionBody
+  if (childrenElements) {
+    sectionBody = childrenElements.join(' / ')
+  }
+  const validDate = new Date(timestamp).toLocaleString()
+
   return (
     <div
       className={className}
@@ -44,11 +48,11 @@ const ForumSection = ({
         <div className="header-left">{name}</div>
         <div className="header-right">
           <span>{`Автор: ${user}`}</span>
-          <span>{date}</span>
+          <span>{validDate}</span>
         </div>
       </div>
       <div className={`${className}-body`}>{sectionBody}</div>
-      {userId === '2' && ( // TODO userId === player.id Проверка на то, что текущий пользователь - автор
+      {userId === player?.id && (
         <div className={`${className}-buttons-block`}>
           <Button styleType="error" height="32px" onClick={onDelete}>
             Удалить

@@ -3,50 +3,47 @@ import ForumSection from '../../components/ForumSection'
 import { useNavigate } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa'
 import './ForumPage.pcss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ForumModal from '../../components/ForumModal'
 import Modal from '../../components/Modal'
 import ErrorInformer from '../../components/ErrorInformer'
-import { useAppSelector } from '../../store/hooks'
-import mockData from './mockData'
-import { baseApi } from '../../api/baseApi'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import {
+  addSection,
+  deleteSection,
+  getAllSections,
+} from '../../store/slices/forumSlice/forumAsyncThunks'
+import { setSelectSectionToLS } from '../../store/slices/forumSlice'
 
 export type ModalTypes = 'create' | 'delete' | 'rename' | null
 export interface ModalProps {
   isOpen: boolean
   type: ModalTypes
 }
-interface Props
-  extends React.DetailedHTMLProps<
-    React.HTMLProps<HTMLDivElement>,
-    HTMLDivElement
-  > {
-  className?: string
-  title: string
-}
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
-const ForumPage = ({ title, className }: Props) => {
+const ForumPage = () => {
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { mockSections } = mockData
   const { user } = useAppSelector(state => state.user)
+  const { sections } = useAppSelector(state => state.forum)
   const [modal, setModal] = useState<ModalProps>({ isOpen: false, type: null })
-  const [sectionId, setSectionId] = useState('')
-  const [error, setError] = useState('')
+  const [sectionId, setSectionId] = useState(-1)
+  const [error, setError] = useState<Error | null>(null)
 
   const handleNavigateToSection = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    id: string
+    id: number
   ) => {
     e.preventDefault()
-    console.log(`/forumsection/${id}`)
-    navigate(`/forumsection`) // Нужно добавить переход по id /forumsection/${id}
+    dispatch(setSelectSectionToLS(id))
+    navigate(`/forumsection/${id}`)
   }
   const handleOpenModal = (
     e: React.MouseEvent<Element, MouseEvent>,
     modalType: ModalTypes,
-    id?: string
+    id?: number
   ) => {
     e.stopPropagation()
     if (id) setSectionId(id)
@@ -54,7 +51,7 @@ const ForumPage = ({ title, className }: Props) => {
   }
 
   const handleModalClose = () => {
-    setSectionId('')
+    setSectionId(-1)
     setModal({ isOpen: false, type: null })
   }
 
@@ -82,45 +79,47 @@ const ForumPage = ({ title, className }: Props) => {
       sectionname: title,
     }
     try {
-      const res = await baseApi('local').post('/addsection', data)
-      console.log('data', res.data)
+      const res = await dispatch(addSection(data))
+      console.log(`section ${res.payload} was added`)
+      fetchSections()
     } catch (err) {
-      setError(`${err}`)
+      setError(err as Error)
     }
-    console.log('data', title)
   }
 
-  const handleRenameSection = async (id: string, title: string) => {
-    const data = {
-      userId: user!.id,
-      id: id,
-      sectionname: title,
-    }
-    try {
-      const res = await baseApi('local').post('/updatesection', data)
-      console.log('data', res.data)
-    } catch (err) {
-      setError(`Ручка /updatesection ещё не добавлена, ${err}`)
-    } // Это ручка ещё не добавлена из бэка
-    console.log('data', data)
+  const handleRenameSection = async (id: number, title: string) => {
+    console.log('Ручка /renamesection ещё не добавлена')
   }
 
-  const handleDeleteSection = async (id: string) => {
+  const handleDeleteSection = async (id: number) => {
     const data = {
       id: id,
     }
     try {
-      const res = await baseApi('local').post('/deletesection', data)
-      console.log('data', res.data)
+      const res = await dispatch(deleteSection(data))
+      console.log(`section ${res.payload} deleted`)
+      fetchSections()
     } catch (err) {
-      setError(`${err}`)
+      setError(err as Error)
     }
-    console.log('data', title)
   }
+
+  const fetchSections = async () => {
+    try {
+      await dispatch(getAllSections())
+      console.log('fetching sections success!')
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+
+  useEffect(() => {
+    fetchSections()
+  }, [])
 
   return (
-    <div className={`${className}-wrapper`}>
-      <div className={`${className}-container`}>
+    <div className="forum-page-wrapper">
+      <div className="forum-page-container">
         <div className="header-button-container">
           <div className="button-container">
             <Button onClick={() => navigate(-1)} styleType="tertiary">
@@ -133,25 +132,27 @@ const ForumPage = ({ title, className }: Props) => {
               Создать новый раздел
             </Button>
           </div>
-          <div className="header forum-page-title">{title}</div>
+          <div className="header forum-page-title">Форум игры</div>
         </div>
         <div className="section-container">
-          {mockSections &&
-            mockSections.map(section => (
+          {sections ? (
+            sections.map(section => (
               <ForumSection
                 onClick={e => handleNavigateToSection(e, section.id)}
                 onDelete={e => handleOpenModal(e, 'delete', section.id)}
                 onRename={e => handleOpenModal(e, 'rename', section.id)}
                 key={section.id}
-                id={section.id}
                 className="forum-section"
-                name={section.name}
-                user={section.user}
+                name={section.sectionname}
+                user={section.usernick}
                 userId={section.userId}
-                timestamp={section.timestamp}
-                childrenElements={section.topics}
+                timestamp={section.createdAt}
+                childrenElements={section.topics?.map(topic => topic.topicname)}
               />
-            ))}
+            ))
+          ) : (
+            <h3>Создайте первую секцию!</h3>
+          )}
 
           {modal.isOpen && (
             <ForumModal
@@ -171,14 +172,14 @@ const ForumPage = ({ title, className }: Props) => {
           )}
           {error && (
             <Modal
-              title="Не удалось создать раздел"
+              title="Ошибка при работе с разделом"
               onClose={() => {
-                setError('')
+                setError(null)
               }}>
               <ErrorInformer
-                errorCode=""
-                errorText={error}
-                errorStatus="Попробуйте создать раздел позже."
+                errorCode={error.name}
+                errorText={error.message}
+                errorStatus={error.stack || 'Попробуйте позже.'}
               />
             </Modal>
           )}

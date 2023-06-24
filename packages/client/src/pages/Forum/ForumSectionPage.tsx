@@ -1,59 +1,56 @@
 import Button from '../../components/Button'
 import ForumSection from '../../components/ForumSection'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa'
 import './ForumPage.pcss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ForumModal from '../../components/ForumModal'
 import Modal from '../../components/Modal'
 import ErrorInformer from '../../components/ErrorInformer'
-import mockData from './mockData'
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ModalProps, ModalTypes } from './ForumPage'
-import { baseApi } from '../../api/baseApi'
+import {
+  addTopic,
+  deleteSection,
+  deleteTopic,
+  getAllSections,
+  getAllTopics,
+} from '../../store/slices/forumSlice/forumAsyncThunks'
+import {
+  setSelectSectionToLS,
+  setSelectTopicToLS,
+} from '../../store/slices/forumSlice'
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
-interface Props
-  extends React.DetailedHTMLProps<
-    React.HTMLProps<HTMLDivElement>,
-    HTMLDivElement
-  > {
-  className?: string
-  title: string
-  name: string
-  user: string
-  timestamp: string
-}
-
-const ForumSectionPage = ({
-  title,
-  className,
-  name,
-  user,
-  timestamp,
-}: Props) => {
+const ForumSectionPage = () => {
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const { mockTopics } = mockData
-  const { user: player } = useAppSelector(state => state.user)
+  const param = useParams<'id'>()
+  const sectionParam = {
+    sectionId: Number(param.id),
+  }
+  const { user } = useAppSelector(state => state.user)
+  const { selectSection, topics } = useAppSelector(state => state.forum)
   const [modal, setModal] = useState<ModalProps>({ isOpen: false, type: null })
-  const [topicId, setTopicId] = useState('')
+  const [topicId, setTopicId] = useState(-1)
   const [topicTitle, setTopicTitle] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState<Error | null>(null)
+  const [createdAt, setCreatedAt] = useState('')
 
   const handleNavigateToTopic = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    id: string
+    id: number
   ) => {
     e.preventDefault()
-    console.log(`/forumtopic/${id}`)
-    navigate(`/forumtopic`) // Нужно добавить переход по id /forumtopic/${id}
+    dispatch(setSelectTopicToLS(id))
+    navigate(`/forumtopic/${id}`)
   }
 
   const handleOpenModal = (
     e: React.MouseEvent<Element, MouseEvent>,
     modalType: ModalTypes,
-    id?: string,
+    id?: number,
     title?: string
   ) => {
     e.stopPropagation()
@@ -63,7 +60,7 @@ const ForumSectionPage = ({
   }
 
   const handleModalClose = () => {
-    setTopicId('')
+    setTopicId(-1)
     setTopicTitle('')
     setModal({ isOpen: false, type: null })
   }
@@ -85,58 +82,80 @@ const ForumSectionPage = ({
     }
   }
 
+  const handleDeleteSection = async (
+    e: React.MouseEvent<Element, MouseEvent>
+  ) => {
+    e.preventDefault()
+    const data = {
+      id: selectSection!.id,
+    }
+    try {
+      const res = await dispatch(deleteSection(data))
+      console.log(`section ${res.payload} deleted`)
+      await dispatch(getAllSections())
+      navigate('/forum')
+    } catch (error) {
+      setError(error as Error)
+    }
+  }
+
   const handleCreateTopic = async (title: string) => {
     const data = {
-      userId: player!.id,
-      usernick: player?.display_name || player!.login,
+      userId: user!.id,
+      usernick: user?.display_name || user!.login,
       topicname: title,
-      sectionId: '1',
+      sectionId: sectionParam.sectionId,
     }
     try {
-      const res = await baseApi('local').post('/addtopic', data)
-      console.log('data', res.data)
+      const res = await dispatch(addTopic(data))
+      console.log(`topic ${res.payload} was added`)
+      fetchTopics()
     } catch (err) {
-      setError(`${err}`)
+      setError(err as Error)
     }
     console.log('data', title)
   }
 
-  const handleRenameTopic = async (id: string, title: string) => {
-    const data = {
-      userId: player!.id,
-      id: id,
-      topicname: title,
-    }
-    try {
-      const res = await baseApi('local').post('/updatetopic', data)
-      console.log('data', res.data)
-    } catch (err) {
-      setError(`Ручка /updatetopic ещё не добавлена, ${err}`)
-    } // Это ручка ещё не добавлена из бэка
-    console.log('data', data)
+  const handleRenameTopic = async (id: number, title: string) => {
+    console.log('Ручка /renametopic ещё не добавлена')
   }
 
-  const handleDeleteTopic = async (id: string) => {
+  const handleDeleteTopic = async (id: number) => {
     const data = {
       id: id,
     }
     try {
-      const res = await baseApi('local').post('/deletetopic', data)
-      console.log('data', res.data)
+      const res = await dispatch(deleteTopic(data))
+      console.log(`topic ${res.payload} deleted`)
+      fetchTopics()
     } catch (err) {
-      setError(`${err}`)
+      setError(err as Error)
     }
-    console.log('data', title)
   }
+
+  const fetchTopics = async () => {
+    try {
+      await dispatch(getAllTopics(sectionParam))
+      console.log('fetching topics success!')
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+
+  useEffect(() => {
+    dispatch(setSelectSectionToLS(sectionParam.sectionId))
+    fetchTopics()
+    setCreatedAt(new Date(selectSection!.createdAt).toLocaleString())
+  }, [])
 
   return (
-    <div className={`${className}-wrapper`}>
-      <div className={`${className}-container`}>
-        <div className={`${className}-header`}>
-          <div className="header-left">{name}</div>
+    <div className="forum-page-wrapper">
+      <div className="forum-page-container">
+        <div className="forum-page-header">
+          <div className="header-left">{selectSection?.sectionname}</div>
           <div className="header-right">
-            <span>{`Автор: ${user}`}</span>
-            <span>{timestamp}</span>
+            <span>{`Автор: ${selectSection?.usernick}`}</span>
+            <span>{createdAt}</span>
           </div>
         </div>
         <div className="header-button-container">
@@ -150,31 +169,35 @@ const ForumSectionPage = ({
               onClick={e => handleOpenModal(e, 'create')}>
               Создать новую тему
             </Button>
-            <Button styleType="primary">Переименовать раздел</Button>
-            {/* Необходимо передавать id текущей секции, чтобы её изменить или удалить*/}
-            <Button styleType="error">Удалить раздел</Button>
+            <Button styleType="primary" disabled>
+              Переименовать раздел
+            </Button>
+            <Button styleType="error" onClick={e => handleDeleteSection(e)}>
+              Удалить раздел
+            </Button>
           </div>
-          <div className="header">{title}</div>
+          <div className="header">Темы</div>
         </div>
         <div className="section-container">
-          {mockTopics &&
-            mockTopics.map(topic => (
+          {topics &&
+            topics.map(topic => (
               <ForumSection
                 onClick={e => handleNavigateToTopic(e, topic.id)}
                 onDelete={e =>
-                  handleOpenModal(e, 'delete', topic.id, topic.name)
+                  handleOpenModal(e, 'delete', topic.id, topic.topicname)
                 }
                 onRename={e =>
-                  handleOpenModal(e, 'rename', topic.id, topic.name)
+                  handleOpenModal(e, 'rename', topic.id, topic.topicname)
                 }
                 key={topic.id}
-                id={topic.id}
                 className="forum-section"
-                name={topic.name}
-                user={topic.user}
+                name={topic.topicname}
+                user={topic.usernick}
                 userId={topic.userId}
-                timestamp={topic.timestamp}
-                childrenElements={topic.messages}
+                timestamp={topic.createdAt}
+                childrenElements={topic.messages?.map(
+                  message => message.messagetextcut
+                )}
               />
             ))}
           {modal.isOpen && (
@@ -197,12 +220,12 @@ const ForumSectionPage = ({
             <Modal
               title="Не удалось создать тему"
               onClose={() => {
-                setError('')
+                setError(null)
               }}>
               <ErrorInformer
-                errorCode=""
-                errorText={error}
-                errorStatus="Попробуйте создать тему позже."
+                errorCode={error.name}
+                errorText={error.message}
+                errorStatus={error.stack || 'Попробуйте позже.'}
               />
             </Modal>
           )}
