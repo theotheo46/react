@@ -4,20 +4,19 @@ import { Topic } from '../models/Topic'
 import { Message } from '../models/Message'
 import { Reply } from '../models/Reply'
 import { sequelize } from '../../sequelize'
+import forumController from '../controllers/forumController'
 
 export const forum = Router()
 
 const MESSAGETEXT_CUT_LENGTH = 20
 
 forum.post('/addsection', async (req, res) => {
-  //BODY is {"usernick" : "theo", "sectionname" : "Section1"}
-  Section.create(req.body)
-    .then(section => {
-      return res.status(201).json(section)
-    })
-    .catch(err => {
-      return res.status(400).json({ err })
-    })
+  try {
+    const sections = await forumController.addSection(req.body)
+    return res.send(sections)
+  } catch (error) {
+    return res.status(400).json({ error: (error as Error).message })
+  }
 })
 
 forum.post('/deletesection', async (req, res) => {
@@ -127,20 +126,12 @@ forum.post('/updatemessage', async (req, res) => {
 })
 
 forum.get('/getallsections', async (_req, res) => {
-  Section.findAll({
-    include: [
-      {
-        model: Topic,
-      },
-    ],
-    order: [['id', 'ASC']],
-  })
-    .then(section => {
-      return res.status(201).json(section)
-    })
-    .catch(err => {
-      return res.status(400).json({ err })
-    })
+  try {
+    const sections = await forumController.getAllSections()
+    return res.send(sections)
+  } catch (error) {
+    return res.status(400).json({ error: (error as Error).message })
+  }
 })
 
 forum.get('/getalltopicsbysectionid', async (req, res) => {

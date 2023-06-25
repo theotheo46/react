@@ -1,174 +1,268 @@
 import Button from '../../components/Button'
 import ForumSection from '../../components/ForumSection'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaArrowLeft } from 'react-icons/fa'
 import './ForumPage.pcss'
-import wave from '../../assets/images/wave_v.svg'
-
-const messages: string[] = [
-  'Сообщение',
-  'Сообщение2',
-  'Сообщение3',
-  'Сообщение4',
-  'Сообщение5',
-  'Сообщение6',
-  'Сообщение7',
-  'Сообщение8',
-  'Сообщение9',
-  'Сообщение0',
-  'Сообщение1',
-  'Сообщение2',
-  'Сообщение3',
-  'Сообщение4',
-  'Сообщение5',
-  'Сообщение6',
-  'Сообщение7',
-  'Сообщение8',
-  'Сообщение9',
-  'Сообщение20',
-  'Сообщение21',
-  'Сообщение22',
-  'Сообщение23',
-  'Сообщение24',
-  'Сообщение25',
-  'Сообщение26',
-  'Сообщение27',
-  'Сообщение28',
-  'Сообщение29',
-  'Сообщение30',
-  'Сообщение31',
-  'Сообщение32',
-  'Сообщение33',
-  'Сообщение34',
-  'Сообщение35',
-  'Сообщение36',
-  'Сообщение37',
-  'Сообщение38',
-  'Сообщение39',
-  'Сообщение40',
-  'Сообщение41',
-  'Сообщение42',
-  'Сообщение43',
-  'Сообщение44',
-  'Сообщение45',
-  'Сообщение46',
-  'Сообщение47',
-  'Сообщение48',
-  'Сообщение49',
-  'Сообщение50',
-  'Сообщение51',
-  'Сообщение52',
-  'Сообщение53',
-  'Сообщение54',
-]
-
-const messages1: string[] = [
-  'Сообщение',
-  'Сообщение2',
-  'Сообщение3',
-  'Сообщение4',
-  'Сообщение5',
-  'Сообщение6',
-  'Сообщение7',
-  'Сообщение8',
-]
+import { useEffect, useState } from 'react'
+import ForumModal from '../../components/ForumModal'
+import Modal from '../../components/Modal'
+import ErrorInformer from '../../components/ErrorInformer'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { ModalProps, ModalTypes } from './ForumPage'
+import {
+  addTopic,
+  deleteSection,
+  deleteTopic,
+  getAllSections,
+  getAllTopics,
+} from '../../store/slices/forumSlice/forumAsyncThunks'
+import {
+  FORUM_INIT,
+  getSelectSectionFromLS,
+  setSelectSectionToLS,
+  setSelectTopicToLS,
+} from '../../store/slices/forumSlice'
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
-interface Props
-  extends React.DetailedHTMLProps<
-    React.HTMLProps<HTMLDivElement>,
-    HTMLDivElement
-  > {
-  className?: string
-  title: string
-  name: string
-  user: string
-  timestamp: string
-}
-
-const ForumSectionPage = ({
-  title,
-  className,
-  name,
-  user,
-  timestamp,
-}: Props) => {
+const ForumSectionPage = () => {
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  return (
-    <div className={className}>
-      <div className={`${className}-header`}>
-        <div className="header-left">{name}</div>
-        <div className="header-right">
-          <span>{`Автор: ${user}`}</span>
-          <span>{timestamp}</span>
-        </div>
-      </div>
-      <div className="header-button-container">
-        <div className="header">{title}</div>
-        <div className="button-container">
-          <Button onClick={() => navigate(-1)} styleType="tertiary">
-            <FaArrowLeft style={iconBackStyle} />
-            Назад
-          </Button>
-          <Button styleType="primary">Создать тему</Button>
-          <Button styleType="primary">Переименовать раздел</Button>
-          <Button styleType="primary">Удалить раздел</Button>
-        </div>
-      </div>
-      <div className="section-container">
-        <ForumSection
-          className="forum-section"
-          name="Тема1"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages}
-        />
-        <ForumSection
-          className="forum-section"
-          name="Тема2"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages1}
-        />
-        <ForumSection
-          className="forum-section"
-          name="Тема3"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages1}
-        />
-        <ForumSection
-          className="forum-section"
-          name="Тема2"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages1}
-        />
-        <ForumSection
-          className="forum-section"
-          name="Тема3"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages1}
-        />
+  const param = useParams<'id'>()
+  const sectionParam = {
+    sectionId: Number(param.id),
+  }
+  const { user } = useAppSelector(state => state.user)
+  const { selectSection, sections, topics } = useAppSelector(
+    state => state.forum
+  )
+  const [modal, setModal] = useState<ModalProps>({ isOpen: false, type: null })
+  const [topicId, setTopicId] = useState(-1)
+  const [topicTitle, setTopicTitle] = useState('')
+  const [error, setError] = useState<Error | null>(null)
+  const [createdAt, setCreatedAt] = useState('')
 
-        <ForumSection
-          className="forum-section"
-          name="Тема2"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages1}
-        />
-        <ForumSection
-          className="forum-section"
-          name="Тема3"
-          user="Дмитрий Козицкий"
-          timestamp="12:05:47 22/04/2023"
-          childrenElements={messages1}
-        />
+  const handleNavigateToTopic = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id: number
+  ) => {
+    e.preventDefault()
+    dispatch(setSelectTopicToLS(id))
+    navigate(`/forumtopic/${id}`)
+  }
+
+  const handleOpenModal = (
+    e: React.MouseEvent<Element, MouseEvent>,
+    modalType: ModalTypes,
+    id?: number,
+    title?: string
+  ) => {
+    e.stopPropagation()
+    if (id) setTopicId(id)
+    if (title) setTopicTitle(title)
+    setModal({ isOpen: true, type: modalType })
+  }
+
+  const handleModalClose = () => {
+    setTopicId(-1)
+    setTopicTitle('')
+    setModal({ isOpen: false, type: null })
+  }
+
+  const handleModalSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    title: string
+  ) => {
+    e.preventDefault()
+
+    switch (modal.type) {
+      case 'create':
+        await handleCreateTopic(title)
+        break
+      case 'delete':
+        await handleDeleteTopic(topicId)
+        break
+      case 'rename':
+        await handleRenameTopic(topicId, title)
+        break
+    }
+  }
+
+  const handleDeleteSection = async (
+    e: React.MouseEvent<Element, MouseEvent>
+  ) => {
+    e.preventDefault()
+    const data = {
+      id: selectSection!.id,
+    }
+    try {
+      await dispatch(deleteSection(data))
+      await dispatch(getAllSections())
+      navigate('/forum')
+    } catch (error) {
+      setError(error as Error)
+    }
+  }
+
+  const handleCreateTopic = async (title: string) => {
+    const data = {
+      userId: user!.id,
+      usernick: user?.display_name || user!.login,
+      topicname: title,
+      sectionId: sectionParam.sectionId,
+    }
+    try {
+      await dispatch(addTopic(data))
+      await fetchTopics()
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+
+  const handleRenameTopic = async (id: number, title: string) => {
+    setError({
+      message: 'Ручка /renametopic ещё не добавлена',
+      name: 'Скоро поправим!',
+    })
+  }
+
+  const handleDeleteTopic = async (id: number) => {
+    const data = {
+      id: id,
+    }
+    try {
+      await dispatch(deleteTopic(data))
+      await fetchTopics()
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+
+  const fetchTopics = async () => {
+    try {
+      await dispatch(getAllTopics(sectionParam))
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+  const fetchSections = async () => {
+    try {
+      await dispatch(getAllSections())
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+  const setSelectSection = async () => {
+    try {
+      await dispatch(setSelectSectionToLS(sectionParam.sectionId))
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+
+  useEffect(() => {
+    if (selectSection) {
+      setSelectSection()
+      setCreatedAt(new Date(selectSection?.createdAt || '').toLocaleString())
+    } else if (localStorage.getItem(FORUM_INIT.selectSection)) {
+      getSelectSectionFromLS()
+      fetchSections()
+    } else {
+      fetchSections()
+      setSelectSection()
+    }
+    fetchTopics()
+  }, [])
+  useEffect(() => {
+    setSelectSection()
+  }, [sections])
+  useEffect(() => {
+    setCreatedAt(new Date(selectSection?.createdAt || '').toLocaleString())
+  }, [selectSection])
+
+  return (
+    <div className="forum-page-wrapper">
+      <div className="forum-page-container">
+        <div className="forum-page-header">
+          <div className="header-left">{selectSection?.sectionname}</div>
+          <div className="header-right">
+            <span>{`Автор: ${selectSection?.usernick}`}</span>
+            <span>{createdAt}</span>
+          </div>
+        </div>
+        <div className="header-button-container">
+          <div className="button-container">
+            <Button onClick={() => navigate(-1)} styleType="tertiary">
+              <FaArrowLeft style={iconBackStyle} />
+              Назад
+            </Button>
+            <Button
+              styleType="primary"
+              onClick={e => handleOpenModal(e, 'create')}>
+              Создать новую тему
+            </Button>
+            <Button styleType="primary" disabled>
+              Переименовать раздел
+            </Button>
+            <Button styleType="error" onClick={e => handleDeleteSection(e)}>
+              Удалить раздел
+            </Button>
+          </div>
+          <div className="header">Темы</div>
+        </div>
+        <div className="section-container">
+          {topics &&
+            topics.map(topic => (
+              <ForumSection
+                onClick={e => handleNavigateToTopic(e, topic.id)}
+                onDelete={e =>
+                  handleOpenModal(e, 'delete', topic.id, topic.topicname)
+                }
+                onRename={e =>
+                  handleOpenModal(e, 'rename', topic.id, topic.topicname)
+                }
+                key={topic.id}
+                className="forum-section"
+                name={topic.topicname}
+                user={topic.usernick}
+                userId={topic.userId}
+                timestamp={topic.createdAt}
+                childrenElements={topic.messages?.map(
+                  message => message.messagetextcut
+                )}
+              />
+            ))}
+          {modal.isOpen && (
+            <ForumModal
+              title={
+                modal.type === 'create'
+                  ? `Создать тему для ${name}`
+                  : modal.type === 'delete'
+                  ? `Вы уверены, что хотите удалить тему "${topicTitle}"?`
+                  : modal.type === 'rename'
+                  ? `Введите новое название для темы "${topicTitle}"?`
+                  : ''
+              }
+              type={modal.type}
+              onClose={() => handleModalClose()}
+              onSubmit={async (e, title) => await handleModalSubmit(e, title)}
+            />
+          )}
+          {error && (
+            <Modal
+              title="Не удалось создать тему"
+              onClose={() => {
+                setError(null)
+              }}>
+              <ErrorInformer
+                errorCode={error.name}
+                errorText={error.message}
+                errorStatus={error.stack || 'Попробуйте позже.'}
+              />
+            </Modal>
+          )}
+        </div>
       </div>
-      <img className={`${className}-wave wave-bg`} src={wave} alt="wave" />
     </div>
   )
 }

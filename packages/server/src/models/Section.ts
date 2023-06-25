@@ -9,7 +9,7 @@ export class Section extends Model {
   @Column({ type: DataType.STRING(20) })
   usernick!: string
 
-  @Column({ type: DataType.STRING(20) })
+  @Column({ type: DataType.STRING(40) })
   sectionname!: string
 
   @HasMany(() => Topic)

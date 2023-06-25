@@ -49,20 +49,6 @@ const StartGameNav = ({ onSetupSettings }: Props) => {
         <Button
           width="100%"
           disabled={!isAuth}
-          onClick={() => navigate('/forumsection')}
-          styleType="primary">
-          Раздел форума
-        </Button>
-        <Button
-          width="100%"
-          disabled={!isAuth}
-          onClick={() => navigate('/forumtopic')}
-          styleType="primary">
-          Тема форума
-        </Button>
-        <Button
-          width="100%"
-          disabled={!isAuth}
           onClick={() => navigate('/profile')}
           styleType="primary">
           Профиль

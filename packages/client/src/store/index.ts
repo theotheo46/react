@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
 import gameReducer from './slices/gameSlice'
 import levelReducer from './slices/levelSlice'
+import forumReducer from './slices/forumSlice'
 
 const store = create()
 
@@ -11,6 +12,7 @@ export function create(initialState?: any) {
       user: userReducer,
       game: gameReducer,
       level: levelReducer,
+      forum: forumReducer,
     },
     preloadedState: initialState,
   })

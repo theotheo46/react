@@ -43,11 +43,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isPending, setIsPending] = useState(false)
   const firstRender = useRef(true)
   const navigate = useNavigate()
-  // Тестовый юзер, пока нет формы авторизации
-  const testUser: RequestLoginData = {
-    login: 'Bret123',
-    password: 'KJkjhjs890hjhgd',
-  }
 
   useEffect(() => {
     if (firstRender.current) {
@@ -92,7 +87,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  async function loginUser(data = testUser) {
+  async function loginUser(data: RequestLoginData) {
     try {
       setIsPending(true)
       setError('')

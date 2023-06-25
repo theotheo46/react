@@ -62,7 +62,6 @@ async function startServer() {
 
   app.use('/leaderboard', lb)
   app.use('/forum', forum)
-
   app.use('/api/theme', themeRouter)
   app.get('/api', (_, res) => {
     res.json('👋 Howdy from the server :)')

@@ -19,34 +19,9 @@ const RoutesBase = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<MiniLendingPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route
-          path="/forum"
-          element={<ForumPage className="forum-page" title="Форум игры" />}
-        />
-        <Route
-          path="/forumsection"
-          element={
-            <ForumSectionPage
-              className="forum-page"
-              title="Темы"
-              name="Раздел1"
-              user="Дмитрий Козицкий"
-              timestamp="12:05:47 22/04/2023"
-            />
-          }
-        />
-        <Route
-          path="/forumtopic"
-          element={
-            <ForumTopicPage
-              className="forum-topic-page"
-              title="Сообщения"
-              name="Тема1"
-              user="Дмитрий Козицкий"
-              timestamp="12:05:47 22/04/2023"
-            />
-          }
-        />
+        <Route path="/forum" element={<ForumPage />} />
+        <Route path="/forumsection/:id" element={<ForumSectionPage />} />
+        <Route path="/forumtopic/:id" element={<ForumTopicPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/leaderbord" element={<LeaderbordPage />} />

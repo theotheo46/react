@@ -62,7 +62,7 @@ const SignUpPage = () => {
         inputs={inputs}
         buttonLabel="Зарегистрироваться"
         onSubmit={async (data, e) => {
-          handleCreateUser(data, e)
+          await handleCreateUser(data, e)
         }}
       />
       {error && (

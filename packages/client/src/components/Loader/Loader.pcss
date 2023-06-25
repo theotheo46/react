@@ -1,0 +1,26 @@
+.loader-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-bg-overlay);
+  inset: 0;
+  gap: 1rem;
+  z-index: 30;
+  .loader-spinner {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border: 6px solid var(--color-border-spinner);
+    border-radius: 9999px;
+    border-top-color: var(--color-orange);
+    animation: spinner 1s infinite;
+  }
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
