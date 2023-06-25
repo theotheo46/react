@@ -17,6 +17,8 @@ import {
   getAllTopics,
 } from '../../store/slices/forumSlice/forumAsyncThunks'
 import {
+  FORUM_INIT,
+  getSelectSectionFromLS,
   setSelectSectionToLS,
   setSelectTopicToLS,
 } from '../../store/slices/forumSlice'
@@ -31,7 +33,9 @@ const ForumSectionPage = () => {
     sectionId: Number(param.id),
   }
   const { user } = useAppSelector(state => state.user)
-  const { selectSection, topics } = useAppSelector(state => state.forum)
+  const { selectSection, sections, topics } = useAppSelector(
+    state => state.forum
+  )
   const [modal, setModal] = useState<ModalProps>({ isOpen: false, type: null })
   const [topicId, setTopicId] = useState(-1)
   const [topicTitle, setTopicTitle] = useState('')
@@ -70,15 +74,17 @@ const ForumSectionPage = () => {
     title: string
   ) => {
     e.preventDefault()
-    if (modal.type === 'create') {
-      await handleCreateTopic(title)
-    }
 
-    if (modal.type === 'delete') {
-      await handleDeleteTopic(topicId)
-    }
-    if (modal.type === 'rename') {
-      await handleRenameTopic(topicId, title)
+    switch (modal.type) {
+      case 'create':
+        await handleCreateTopic(title)
+        break
+      case 'delete':
+        await handleDeleteTopic(topicId)
+        break
+      case 'rename':
+        await handleRenameTopic(topicId, title)
+        break
     }
   }
 
@@ -90,8 +96,7 @@ const ForumSectionPage = () => {
       id: selectSection!.id,
     }
     try {
-      const res = await dispatch(deleteSection(data))
-      console.log(`section ${res.payload} deleted`)
+      await dispatch(deleteSection(data))
       await dispatch(getAllSections())
       navigate('/forum')
     } catch (error) {
@@ -107,17 +112,18 @@ const ForumSectionPage = () => {
       sectionId: sectionParam.sectionId,
     }
     try {
-      const res = await dispatch(addTopic(data))
-      console.log(`topic ${res.payload} was added`)
-      fetchTopics()
+      await dispatch(addTopic(data))
+      await fetchTopics()
     } catch (err) {
       setError(err as Error)
     }
-    console.log('data', title)
   }
 
   const handleRenameTopic = async (id: number, title: string) => {
-    console.log('Ручка /renametopic ещё не добавлена')
+    setError({
+      message: 'Ручка /renametopic ещё не добавлена',
+      name: 'Скоро поправим!',
+    })
   }
 
   const handleDeleteTopic = async (id: number) => {
@@ -125,9 +131,8 @@ const ForumSectionPage = () => {
       id: id,
     }
     try {
-      const res = await dispatch(deleteTopic(data))
-      console.log(`topic ${res.payload} deleted`)
-      fetchTopics()
+      await dispatch(deleteTopic(data))
+      await fetchTopics()
     } catch (err) {
       setError(err as Error)
     }
@@ -136,17 +141,44 @@ const ForumSectionPage = () => {
   const fetchTopics = async () => {
     try {
       await dispatch(getAllTopics(sectionParam))
-      console.log('fetching topics success!')
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+  const fetchSections = async () => {
+    try {
+      await dispatch(getAllSections())
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+  const setSelectSection = async () => {
+    try {
+      await dispatch(setSelectSectionToLS(sectionParam.sectionId))
     } catch (err) {
       setError(err as Error)
     }
   }
 
   useEffect(() => {
-    dispatch(setSelectSectionToLS(sectionParam.sectionId))
+    if (selectSection) {
+      setSelectSection()
+      setCreatedAt(new Date(selectSection?.createdAt || '').toLocaleString())
+    } else if (localStorage.getItem(FORUM_INIT.selectSection)) {
+      getSelectSectionFromLS()
+      fetchSections()
+    } else {
+      fetchSections()
+      setSelectSection()
+    }
     fetchTopics()
-    setCreatedAt(new Date(selectSection!.createdAt).toLocaleString())
   }, [])
+  useEffect(() => {
+    setSelectSection()
+  }, [sections])
+  useEffect(() => {
+    setCreatedAt(new Date(selectSection?.createdAt || '').toLocaleString())
+  }, [selectSection])
 
   return (
     <div className="forum-page-wrapper">

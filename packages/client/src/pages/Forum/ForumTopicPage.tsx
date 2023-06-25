@@ -7,10 +7,14 @@ import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import Modal from '../../components/Modal'
 import ErrorInformer from '../../components/ErrorInformer'
-import { setSelectTopicToLS } from '../../store/slices/forumSlice'
+import {
+  getSelectTopicFromLS,
+  setSelectTopicToLS,
+} from '../../store/slices/forumSlice'
 import {
   deleteTopic,
   getAllMessages,
+  getAllSections,
 } from '../../store/slices/forumSlice/forumAsyncThunks'
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
@@ -24,7 +28,7 @@ const ForumTopicPage = () => {
   }
   const [error, setError] = useState<Error | null>(null)
   const [createdAt, setCreatedAt] = useState('')
-  const { selectTopic } = useAppSelector(state => state.forum)
+  const { selectTopic, topics, sections } = useAppSelector(state => state.forum)
 
   const handleDeleteTopic = async (
     e: React.MouseEvent<Element, MouseEvent>
@@ -35,8 +39,7 @@ const ForumTopicPage = () => {
     }
     const sectionId = selectTopic!.sectionId
     try {
-      const res = await dispatch(deleteTopic(data))
-      console.log(`section ${res.payload} deleted`)
+      await dispatch(deleteTopic(data))
       navigate(`/forumsection/${sectionId}`)
     } catch (error) {
       setError(error as Error)
@@ -46,17 +49,37 @@ const ForumTopicPage = () => {
   const fetchMessages = async () => {
     try {
       await dispatch(getAllMessages(topicParam))
-      console.log('fetching sections success!')
     } catch (error) {
       setError(error as Error)
     }
   }
 
+  const setSelectTopic = async () => {
+    try {
+      await dispatch(setSelectTopicToLS(topicParam.topicId))
+    } catch (err) {
+      setError(err as Error)
+    }
+  }
+
   useEffect(() => {
-    dispatch(setSelectTopicToLS(topicParam.topicId))
+    if (!selectTopic) {
+      dispatch(getSelectTopicFromLS())
+      dispatch(getAllSections())
+    }
     fetchMessages()
-    setCreatedAt(new Date(selectTopic!.createdAt).toLocaleString())
+    setSelectTopic()
+    setCreatedAt(new Date(selectTopic?.createdAt || '').toLocaleString())
   }, [])
+  useEffect(() => {
+    setSelectTopic()
+  }, [sections])
+  useEffect(() => {
+    setSelectTopic()
+  }, [topics])
+  useEffect(() => {
+    setCreatedAt(new Date(selectTopic?.createdAt || '').toLocaleString())
+  }, [selectTopic])
 
   return (
     <div className="forum-topic-page">

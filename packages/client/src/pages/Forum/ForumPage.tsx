@@ -60,15 +60,16 @@ const ForumPage = () => {
     title: string
   ) => {
     e.preventDefault()
-    if (modal.type === 'create') {
-      await handleCreateSection(title)
-    }
-
-    if (modal.type === 'delete') {
-      await handleDeleteSection(sectionId)
-    }
-    if (modal.type === 'rename') {
-      await handleRenameSection(sectionId, title)
+    switch (modal.type) {
+      case 'create':
+        await handleCreateSection(title)
+        break
+      case 'delete':
+        await handleDeleteSection(sectionId)
+        break
+      case 'rename':
+        await handleRenameSection(sectionId, title)
+        break
     }
   }
 
@@ -79,8 +80,7 @@ const ForumPage = () => {
       sectionname: title,
     }
     try {
-      const res = await dispatch(addSection(data))
-      console.log(`section ${res.payload} was added`)
+      await dispatch(addSection(data))
       fetchSections()
     } catch (err) {
       setError(err as Error)
@@ -88,7 +88,10 @@ const ForumPage = () => {
   }
 
   const handleRenameSection = async (id: number, title: string) => {
-    console.log('Ручка /renamesection ещё не добавлена')
+    setError({
+      message: 'Ручка /renamesection ещё не добавлена',
+      name: 'Скоро поправим!',
+    })
   }
 
   const handleDeleteSection = async (id: number) => {
@@ -96,8 +99,7 @@ const ForumPage = () => {
       id: id,
     }
     try {
-      const res = await dispatch(deleteSection(data))
-      console.log(`section ${res.payload} deleted`)
+      await dispatch(deleteSection(data))
       fetchSections()
     } catch (err) {
       setError(err as Error)
@@ -107,7 +109,6 @@ const ForumPage = () => {
   const fetchSections = async () => {
     try {
       await dispatch(getAllSections())
-      console.log('fetching sections success!')
     } catch (err) {
       setError(err as Error)
     }

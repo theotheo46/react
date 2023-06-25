@@ -32,10 +32,6 @@ const ForumSection = ({
   ...props
 }: Props) => {
   const { user: player } = useAppSelector(state => state.user)
-  let sectionBody
-  if (childrenElements) {
-    sectionBody = childrenElements.join(' / ')
-  }
   const validDate = new Date(timestamp).toLocaleString()
 
   return (
@@ -51,7 +47,7 @@ const ForumSection = ({
           <span>{validDate}</span>
         </div>
       </div>
-      <div className={`${className}-body`}>{sectionBody}</div>
+      <div className={`${className}-body`}>{childrenElements?.join(' / ')}</div>
       {userId === player?.id && (
         <div className={`${className}-buttons-block`}>
           <Button styleType="error" height="32px" onClick={onDelete}>

@@ -32,13 +32,17 @@ const initialState: ForumState = {
   error: '',
   isPending: false,
 }
+export const FORUM_INIT = {
+  selectSection: 'select-section',
+  selectTopic: 'select-topic',
+}
 
 const forumSlice = createSlice({
   name: 'forum',
   initialState,
   reducers: {
     getSelectSectionFromLS: state => {
-      const section = localStorage.getItem('select-section')
+      const section = localStorage.getItem(FORUM_INIT.selectSection)
       if (section) {
         state.selectSection = JSON.parse(section)
       }
@@ -48,11 +52,11 @@ const forumSlice = createSlice({
         section => section.id == action.payload
       )
       if (!section) return
-      localStorage.setItem('select-selection', JSON.stringify(section))
+      localStorage.setItem(FORUM_INIT.selectSection, JSON.stringify(section))
       state.selectSection = section
     },
     getSelectTopicFromLS: state => {
-      const topic = localStorage.getItem('select-topic')
+      const topic = localStorage.getItem(FORUM_INIT.selectTopic)
       if (topic) {
         state.selectTopic = JSON.parse(topic)
       }
@@ -60,7 +64,7 @@ const forumSlice = createSlice({
     setSelectTopicToLS: (state, action: PayloadAction<number>) => {
       const topic = state.topics.find(topic => topic.id == action.payload)
       if (!topic) return
-      localStorage.setItem('select-topic', JSON.stringify(topic))
+      localStorage.setItem(FORUM_INIT.selectTopic, JSON.stringify(topic))
       state.selectTopic = topic
     },
   },
