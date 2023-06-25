@@ -8,7 +8,15 @@ export type SetOrUpdateDataParam = {
 
 class ThemeController {
   async getUserTheme(id: number) {
-    const userTheme = await UserTheme.findOne({ where: { ownerId: id } })
+    const userTheme = await UserTheme.findOne({
+      where: { ownerId: id },
+    })
+    /*
+      По какой-то причине не сработало объединение таблиц, хотя @ForeignKey в таблице UserTheme прописан
+      Поэтому использую второй запрос await AppTheme.findOne, чтобы получить строковое значение
+      Причем проверил sql запрос в самой базе, запрос работает - 
+      SELECT * FROM "public"."user_theme" JOIN "public"."app_theme" ON "public"."app_theme"."theme_id" = "public"."user_theme"."theme_id" WHERE "owner_id" = <some id>
+    */
     const theme = await AppTheme.findOne({
       where: { themeId: userTheme?.themeId },
     })
