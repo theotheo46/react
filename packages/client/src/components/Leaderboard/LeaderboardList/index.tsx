@@ -33,13 +33,15 @@ const LeaderboardList = () => {
     <div className="leaderboard-list">
       <div className="leaderboard-list__header list-header">
         <div className="list-header__player ">Игрок</div>
-        <div className="list-header__level">Уровень</div>
+        <div className="list-header__data">Дата</div>
+        <div className="list-header__level">Счёт</div>
       </div>
       {!users.length && !isLoading && (
         <div className="leaderboard-list__empty-state">Список лидеров пуст</div>
       )}
       {users.map((user, index) => (
         <LeaderboardItem
+          data={user.createdAt}
           position={index + 1}
           display_name={user.usernick}
           level={user.score}
