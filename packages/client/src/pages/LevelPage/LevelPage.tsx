@@ -27,6 +27,7 @@ import {
   setMode,
 } from '../../store/slices/gameSlice'
 import wave from '../../assets/images/wave_v.svg'
+import { useLeaderboard } from '../../hooks/useLeaderboard'
 
 export class InfoForRenderBottle {
   bottleColors: InstanceType<typeof FillTypeColor>[]
@@ -40,6 +41,7 @@ const LevelPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const { timerStart, timerStop, getTime, timerReset } = useTimer()
+  const { setValueToLeaderboard } = useLeaderboard()
   const iconStyle = { fill: 'var(--color-white)', fontSize: '1.25rem' }
   const {
     countColors,
@@ -82,6 +84,7 @@ const LevelPage = () => {
     if (allBottleIsComplete) {
       dispatch(setStartColorsForRestart([]))
       dispatch(setCurrentTime(getTime()))
+      setValueToLeaderboard(getTime())
       navigate('/finish')
     }
   }

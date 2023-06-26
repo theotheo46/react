@@ -167,7 +167,7 @@ yarn build --scope=server
 ```curl -X POST -H 'Content-Type: application/json' -d '{"userId":"12345","usernick":"theo","level":"15","steps":"49","time":"120","score":""}' localhost:3001/leaderboard/setleader```
 
 
-- Получить список лидеров отсортированных по убыванию поля score - лиюо в параметра number передается число элементов либо если он не указан то с дефолтовым значением = 10 
+- Получить список лидеров отсортированных по убыванию поля score - либо в параметра number передается число элементов либо если он не указан то с дефолтовым значением = 10 
 
 Возвращается List объектов Leaderboard из server/src/model 
 
