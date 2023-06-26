@@ -1,49 +1,33 @@
 import LeaderboardItem from '../LeaderboardItem'
-import defaultAvatar from '../../../assets/images/default-avatar.jpg'
 import './LeaderboardList.pcss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useLeaderboard } from '../../../hooks/useLeaderboard'
 
-const mockUsers = [
-  {
-    id: 1,
-    display_name: 'Bret',
-    level: 1023,
-    avatar: defaultAvatar,
-  },
-  {
-    id: 2,
-    display_name: 'Antonette',
-    level: 238,
-    avatar: defaultAvatar,
-  },
-  {
-    id: 3,
-    display_name: 'Samantha',
-    level: 18,
-    avatar: defaultAvatar,
-  },
-  {
-    id: 4,
-    display_name: 'Karianne',
-    level: 10,
-    avatar: defaultAvatar,
-  },
-  {
-    id: 5,
-    display_name: 'Kamren',
-    level: 1,
-    avatar: defaultAvatar,
-  },
-  {
-    id: 6,
-    display_name: 'Leopoldo_Corkery',
-    level: 0,
-    avatar: defaultAvatar,
-  },
-]
+type UserLeaderboard = {
+  createdAt: string
+  id: number
+  level: number
+  score: number
+  steps: number
+  time: number
+  updatedAt: string
+  userId: number
+  usernick: string
+}
 
 const LeaderboardList = () => {
-  const [users] = useState(mockUsers)
+  const { getLeaders } = useLeaderboard()
+  const [users, setUsers] = useState<UserLeaderboard[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const limitLeaders = 10
+
+  useEffect(() => {
+    setIsLoading(true)
+    getLeaders(limitLeaders).then(users => {
+      setUsers(users.data)
+      setIsLoading(false)
+    })
+  }, [])
 
   return (
     <div className="leaderboard-list">
@@ -51,12 +35,14 @@ const LeaderboardList = () => {
         <div className="list-header__player ">Игрок</div>
         <div className="list-header__level">Уровень</div>
       </div>
+      {!users.length && !isLoading && (
+        <div className="leaderboard-list__empty-state">Список лидеров пуст</div>
+      )}
       {users.map((user, index) => (
         <LeaderboardItem
-          avatar={user.avatar}
           position={index + 1}
-          display_name={user.display_name}
-          level={user.level}
+          display_name={user.usernick}
+          level={user.score}
           key={user.id}
         />
       ))}
