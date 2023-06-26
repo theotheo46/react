@@ -16,7 +16,7 @@ export const useLeaderboard = () => {
   }
 
   const setValueToLeaderboard = (time: string) => {
-    if (user?.id) {
+    if (user?.id && currentLevel) {
       baseApi('local')
         .post('/leaderboard/setleader', {
           userId: user?.id,
