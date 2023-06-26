@@ -14,7 +14,11 @@
   }
 
   &_lightblue {
-    background-color: var(--color-bg-lightblue);
+    background-image: var(--image-bg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: background 0.8s ease;
   }
 
   h1,
@@ -46,8 +50,10 @@
 
   .container {
     position: relative;
-    width: 100%;
-    min-height: 100%;
+    width: 60%;
+    min-height: 80%;
+    background-color: var(--color-bg-overlay);
+    border-radius: var(--border-radius-card);
     height: auto;
     margin-right: auto;
     margin-left: auto;
@@ -55,6 +61,8 @@
   }
 
   .card {
+    width: 100%;
+    height: 100%;
     background-color: var(--color-bg-card);
     border-radius: var(--border-radius-card);
     position: relative;
@@ -70,13 +78,11 @@
     }
     &_full {
       width: 100%;
-      max-width: 800px;
       padding: 3rem;
       height: auto;
     }
     &_height-full {
       width: 100%;
-      max-width: 800px;
       padding: 3rem;
       height: 100%;
     }

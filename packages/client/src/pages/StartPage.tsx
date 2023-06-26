@@ -1,5 +1,4 @@
 import StartGame from '../components/Game/StartGame'
-import wave from '../assets/images/wave_v.svg'
 
 const StartPage = () => {
   return (
@@ -7,7 +6,6 @@ const StartPage = () => {
       <main className="container">
         <StartGame />
       </main>
-      <img className="page-wrap__wave wave-bg" src={wave} alt="wave" />
     </div>
   )
 }

@@ -3,7 +3,6 @@ import Button from '../../components/Button'
 import type { DevFooterElement } from '../../components/DevFooter'
 import './MiniLendingPage.pcss'
 import { useAppSelector } from '../../store/hooks'
-import wave from '../../assets/images/wave_v.svg'
 import artemAvatar from '../../assets/images/artem.png'
 import iliyaAvatar from '../../assets/images/ilya.png'
 import kseniyaAvatar from '../../assets/images/kseniya.png'
@@ -132,7 +131,7 @@ const MiniLendingPage = () => {
           </div>
         </div>
       </div>
-      <img className="page-wrap__wave wave-bg" src={wave} alt="wave" />
+      {/* <img className="page-wrap__wave wave-bg" src={wave} alt="wave" /> */}
     </main>
   )
 }
