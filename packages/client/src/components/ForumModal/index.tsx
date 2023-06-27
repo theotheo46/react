@@ -3,19 +3,32 @@ import Button from '../Button'
 import Input from '../Input'
 import Modal from '../Modal'
 import { ModalTypes } from '../../pages/Forum/ForumPage'
+import { useForm } from 'react-hook-form'
+import {
+  REGEX_ERRORS,
+  REGULAR_EXPRESSON,
+  VALIDATE_FIELDS,
+} from '../../utils/validate-data'
 
 interface Props {
   title: string
   type?: ModalTypes
-  onSubmit: (e: React.FormEvent<HTMLFormElement>, title: string) => void
+  onSubmit: (title: string) => void
   onClose: () => void
 }
 
 const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
   const [name, setName] = useState('')
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onBlur',
+  })
+  const Submit = async () => {
     try {
-      await onSubmit(e, name)
+      await onSubmit(name)
       setName('')
       onClose()
     } catch (err) {
@@ -24,15 +37,28 @@ const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
   }
   return (
     <Modal title={title} onClose={() => onClose()}>
-      <form onSubmit={e => handleSubmit(e)}>
+      <form onSubmit={handleSubmit(Submit)}>
         {type !== 'delete' && (
           <Input
-            label="Заголовок"
-            name="title"
-            value={name}
-            onChange={e => setName(e.target.value)}></Input>
+            {...VALIDATE_FIELDS.forum[0]}
+            onChange={e => setName(e.target.value)}
+            hasError={!!errors['title']}
+            refs={register('title', {
+              required: {
+                value: true,
+                message: 'Это поле обязательно для заполнения',
+              },
+              pattern: {
+                value: REGULAR_EXPRESSON.TITLE,
+                message: REGEX_ERRORS.TITLE,
+              },
+            })}></Input>
         )}
-        <Button type="submit" styleType="primary" margin="42px 0px 0px">
+        <Button
+          type="submit"
+          styleType="primary"
+          disabled={!isValid}
+          margin="42px 0px 0px">
           {type === 'create'
             ? 'Создать'
             : type === 'rename'
