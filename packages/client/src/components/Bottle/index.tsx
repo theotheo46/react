@@ -371,6 +371,11 @@ const Bottle = ({
       ref={canvas}
       height={height}
       width={width}
+      style={
+        theme === 'dark'
+          ? { filter: 'brightness(90%)' }
+          : { filter: 'brightness(100%)' }
+      }
     />
   )
 }

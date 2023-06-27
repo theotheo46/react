@@ -1,13 +1,13 @@
 import StartGame from '../components/Game/StartGame'
-import wave from '../assets/images/wave_v.svg'
+import { useAppSelector } from '../store/hooks'
 
 const StartPage = () => {
+  const { isSetupLevelSettings } = useAppSelector(state => state.game)
   return (
     <div className="page-wrap page-wrap_lightblue">
-      <main className="container">
+      <main className={`container ${isSetupLevelSettings && 'no-background'}`}>
         <StartGame />
       </main>
-      <img className="page-wrap__wave wave-bg" src={wave} alt="wave" />
     </div>
   )
 }

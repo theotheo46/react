@@ -3,7 +3,6 @@ import Profile from '../components/Profile'
 import { useEffect } from 'react'
 import { FaArrowLeft } from 'react-icons/fa'
 import Button from '../components/Button'
-import wave from '../assets/images/wave_v.svg'
 
 const ProfilePage = () => {
   const navigate = useNavigate()
@@ -25,7 +24,6 @@ const ProfilePage = () => {
 
         <Profile />
       </main>
-      <img className="page-wrap__wave wave-bg" src={wave} alt="wave" />
     </div>
   )
 }

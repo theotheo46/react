@@ -55,11 +55,7 @@ const ForumPage = () => {
     setModal({ isOpen: false, type: null })
   }
 
-  const handleModalSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
-    title: string
-  ) => {
-    e.preventDefault()
+  const handleModalSubmit = async (title: string) => {
     switch (modal.type) {
       case 'create':
         await handleCreateSection(title)
@@ -168,7 +164,7 @@ const ForumPage = () => {
               }
               type={modal.type}
               onClose={() => handleModalClose()}
-              onSubmit={async (e, title) => await handleModalSubmit(e, title)}
+              onSubmit={async title => await handleModalSubmit(title)}
             />
           )}
           {error && (
