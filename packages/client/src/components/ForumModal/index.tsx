@@ -19,13 +19,11 @@ interface Props {
 
 const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
   const [name, setName] = useState('')
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
+  const [isDirty, setIsDirty] = useState(false)
+  const { register, handleSubmit } = useForm({
     mode: 'onBlur',
   })
+
   const Submit = async () => {
     try {
       await onSubmit(name)
@@ -35,19 +33,23 @@ const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
       throw new Error(`${err}`)
     }
   }
+
+  const handleChange = (value: string) => {
+    if (!isDirty) {
+      setIsDirty(true)
+    }
+    setName(value)
+  }
+
   return (
     <Modal title={title} onClose={() => onClose()}>
       <form onSubmit={handleSubmit(Submit)}>
         {type !== 'delete' && (
           <Input
             {...VALIDATE_FIELDS.forum[0]}
-            onChange={e => setName(e.target.value)}
-            hasError={!!errors['title']}
+            onChange={e => handleChange(e.target.value)}
+            hasError={isDirty && (name.length <= 0 || name.length > 40)}
             refs={register('title', {
-              required: {
-                value: true,
-                message: 'Это поле обязательно для заполнения',
-              },
               pattern: {
                 value: REGULAR_EXPRESSON.TITLE,
                 message: REGEX_ERRORS.TITLE,
@@ -57,7 +59,7 @@ const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
         <Button
           type="submit"
           styleType="primary"
-          disabled={!isValid}
+          disabled={name.length <= 0 || name.length > 40}
           margin="42px 0px 0px">
           {type === 'create'
             ? 'Создать'
