@@ -1,47 +1,46 @@
-.emoji-container{
-    position: absolute;
-    bottom: 60px;
+.emoji-container {
+  position: absolute;
+  bottom: 60px;
+  right: 0px;
+  padding: 0.5rem;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-gray);
+  border-radius: var(--border-radius);
+  .emoji-block {
+    position: relative;
+    list-style: none;
+    top: 0px;
     right: 0px;
-    padding: 0.5rem;
-    padding-top: 1rem;
+    padding: 1.2rem;
     display: flex;
-    flex-direction: column;
-    background-color: var(--color-bg-gray);
-    border-radius: var(--border-radius);
-    .emoji-block{
-        position: relative;
-        list-style: none;
-        top: 0px;
-        right: 0px;
-        padding: 1.2rem;
+    flex-flow: wrap;
+    flex-direction: row;
+    overflow-y: scroll;
+    max-height: 320px;
+    max-width: 400px;
+    .emoji-category {
+      padding: 0.5rem 0;
+      gap: 0.5rem;
+      display: flex;
+      flex-flow: wrap;
+      flex-direction: column;
+      .emoji-list {
+        gap: 0.5rem;
         display: flex;
         flex-flow: wrap;
         flex-direction: row;
-        overflow-y: scroll;
-        max-height: 320px;
-        max-width: 400px;
-        .emoji-category{
-            padding: 0.5rem 0;
-            gap: 0.5rem;
-            display: flex;
-            flex-flow: wrap;
-            flex-direction: column;
-            .emoji-list{
-                gap: 0.5rem;
-                display: flex;
-                flex-flow: wrap;
-                flex-direction: row;
-                .emoji-item{
-                    cursor: pointer;
-                    display: flex;
-                    height: 20px;
-                    width: 20px;
-                }
-                .display-none{
-                    display: none;
-                }
-
-            }
+        .emoji-item {
+          cursor: pointer;
+          display: flex;
+          height: 20px;
+          width: 20px;
         }
+        .display-none {
+          display: none;
+        }
+      }
     }
+  }
 }
