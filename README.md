@@ -210,6 +210,11 @@ curl localhost:3001/leaderboard/gettopleaders
 - Удалить Message по данному id
   `curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:3001/forum/deletemessage`
 
+**Emoji**
+
+- Получить все объекты Emoji с внешнего сервиса https://emoji-api.com/
+  GET method `localhost:3001/emoji`
+
 **Switch theme**
 
 - Получить тему для авторизованного пользователя\

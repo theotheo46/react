@@ -5,9 +5,11 @@ import type { ViteDevServer } from 'vite'
 import { sequelize } from './sequelize'
 import { lb } from './src/routes/leaderboards'
 import { forum } from './src/routes/forum'
+import { emoji } from './src/routes/emoji'
 import { themeRouter } from './src/routes/themeRoutes'
 import ssrMiddleware from './src/middleware/ssr.middleware'
 import themeController from './src/controllers/themeController'
+import emojiController from './src/controllers/emojiController'
 
 dotenv.config()
 
@@ -46,6 +48,7 @@ async function startServer() {
   if (isDev()) {
     await sequelize.sync({ force: true })
     await themeController.initThemes()
+    await emojiController.initEmoji()
     // await sequelize.sync()
   } else {
     await sequelize.sync()
@@ -61,6 +64,7 @@ async function startServer() {
   app.use(express.json())
 
   app.use('/leaderboard', lb)
+  app.use('/emoji', emoji)
   app.use('/forum', forum)
   app.use('/api/theme', themeRouter)
   app.get('/api', (_, res) => {
