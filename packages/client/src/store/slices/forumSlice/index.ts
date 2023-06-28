@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, AnyAction } from '@reduxjs/toolkit'
-import { IForumMessage, IForumSection, IForumTopic } from './types'
+import { IEmoji, IForumMessage, IForumSection, IForumTopic } from './types'
 import {
   addMessage,
   addSection,
@@ -10,6 +10,7 @@ import {
   getAllMessages,
   getAllSections,
   getAllTopics,
+  getEmojies,
   updateMessage,
 } from './forumAsyncThunks'
 
@@ -19,6 +20,7 @@ interface ForumState {
   topics: IForumTopic[]
   selectTopic: IForumTopic | null
   messages: IForumMessage[]
+  emoji: IEmoji[]
   error: string
   isPending: boolean
 }
@@ -29,6 +31,7 @@ const initialState: ForumState = {
   topics: [],
   selectTopic: null,
   messages: [],
+  emoji: [],
   error: '',
   isPending: false,
 }
@@ -135,6 +138,11 @@ const forumSlice = createSlice({
           message => message.id === action.payload.id
         )
         state.messages[messageWithIdIndex] = action.payload
+        state.isPending = false
+        state.error = ''
+      })
+      .addCase(getEmojies.fulfilled, (state, action) => {
+        state.emoji = action.payload
         state.isPending = false
         state.error = ''
       })

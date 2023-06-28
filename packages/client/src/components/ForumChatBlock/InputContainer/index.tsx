@@ -1,6 +1,8 @@
 import { FaPaperPlane, FaRegGrinWink } from 'react-icons/fa'
 import Button from '../../Button'
 import Input from '../../Input'
+import { useState } from 'react'
+import EmojiContainer from '../EmojiContainer'
 
 interface Props {
   message: string
@@ -24,6 +26,14 @@ const InputContainer = ({
   setMessage,
   sendMessage,
 }: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const handleOpenEmoji = () => {
+    setIsOpen(!isOpen)
+  }
+  const handleAddEmoji = (emoji: string) => {
+    setMessage(message => `${message}${emoji}`)
+  }
+
   return (
     <form onSubmit={e => sendMessage(e)} className="input-conainer">
       <div className="input-controllers">
@@ -43,9 +53,14 @@ const InputContainer = ({
           styleType="tertiary"
           width="40px"
           height="40px"
-          padding="0">
+          padding="0"
+          onClick={handleOpenEmoji}>
           <FaRegGrinWink style={iconAttachStyle} />
         </Button>
+        <EmojiContainer
+          isActive={isOpen}
+          addEmoji={emoji => handleAddEmoji(emoji)}
+        />
       </div>
       <Button
         className="send-button"

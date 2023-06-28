@@ -81,3 +81,13 @@ export type RequestDeleteItem = {
 }
 
 export type WritingMode = 'new' | 'update' | 'reply'
+
+export interface IEmoji {
+  emojiId: number
+  slug: string
+  character: string
+  unicodeName: string
+  codePoint: string
+  group: string
+  subGroup: string
+}
