@@ -311,7 +311,6 @@ const LevelPage = () => {
             </div>
           </div>
         </div>
-        <img className="page-wrap__wave wave-bg" src={wave} alt="wave" />
       </main>
     </div>
   )

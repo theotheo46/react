@@ -1,12 +1,13 @@
 enum ROUTES_NAMES {
   login = 'login',
+  forum = 'forum',
   registration = 'registration',
   profile = 'profile',
   changeProfile = 'changeProfile',
   changePassword = 'changePassword',
 }
 
-const { login, profile, registration, changePassword, changeProfile } =
+const { login, forum, profile, registration, changePassword, changeProfile } =
   ROUTES_NAMES
 
 export const REGULAR_EXPRESSON = {
@@ -18,6 +19,7 @@ export const REGULAR_EXPRESSON = {
   PASSWORD:
     /^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*\d)[A-Za-zА-Яа-я\d@$!%*?&_-]{6,}$/,
   MESSAGE: /^[\w\W]{1,}$/,
+  TITLE: /^[\w\W]{1,40}$/,
 }
 
 export const REGEX_ERRORS = {
@@ -29,6 +31,8 @@ export const REGEX_ERRORS = {
   PASSWORD:
     'Минимум 6 символов. Введите хотя бы одну заглавную букву, одну строчную букву и цифру',
   MESSAGE: 'Это поле не должно быть пустым...',
+  TITLE:
+    'Это поле обязательно для заполнения и должно быть не больше 40 символов',
 }
 
 const EMAIL = {
@@ -39,6 +43,15 @@ const EMAIL = {
   name: 'email',
   regex: REGULAR_EXPRESSON.EMAIL,
   errorText: REGEX_ERRORS.EMAIL,
+}
+const TITLE = {
+  id: 'title',
+  label: 'Заголовок',
+  type: 'text',
+  required: true,
+  name: 'title',
+  regex: REGULAR_EXPRESSON.TITLE,
+  errorText: REGEX_ERRORS.TITLE,
 }
 
 const LOGIN = {
@@ -133,6 +146,7 @@ const REPEAT_PASSWORD = {
 
 export const VALIDATE_FIELDS = {
   [login]: [LOGIN, PASSWORD],
+  [forum]: [TITLE],
   [registration]: [
     FIRST_NAME,
     SECOND_NAME,
