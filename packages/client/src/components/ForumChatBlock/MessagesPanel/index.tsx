@@ -27,7 +27,6 @@ const MessagesPanel = ({
 }: Props) => {
   return (
     <div className="messages-panel">
-      {/* {isPending && <Loader />} */}
       {messages?.map((message, idx) => (
         <div key={idx}>
           <div className="message">

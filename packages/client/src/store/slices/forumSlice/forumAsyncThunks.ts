@@ -10,6 +10,7 @@ import {
   RequestAddTopic,
   RequestAddReply,
   IReply,
+  IEmoji,
 } from './types'
 
 import { baseApi } from '../../../api/baseApi'
@@ -155,6 +156,19 @@ export const updateMessage = createAsyncThunk<
 >('forum/updateMessage', async (data, { rejectWithValue }) => {
   try {
     const response = await baseApi('local').post('/forum/updatemessage', data)
+    return response.data
+  } catch (error) {
+    return rejectWithValue((error as Error).message)
+  }
+})
+
+export const getEmojies = createAsyncThunk<
+  IEmoji[],
+  undefined,
+  { rejectValue: string }
+>('emoji/getEmojies', async (_, { rejectWithValue }) => {
+  try {
+    const response = await baseApi('local').get(`/emoji`)
     return response.data
   } catch (error) {
     return rejectWithValue((error as Error).message)
