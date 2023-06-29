@@ -17,7 +17,7 @@ function readFilesRecursive(directory) {
   return files
 }
 
-const files = readFilesRecursive('src') // TODO Изменить на dist
+const files = readFilesRecursive('dist')
 const publicUrls = ['index.html', 'wave.png', 'minilending.svg', 'home.svg']
 const assetsUrls = files.concat(publicUrls).map(file => `'${file}'`)
 const fileContent = `export const assetsUrls = [\n  ${assetsUrls.join(

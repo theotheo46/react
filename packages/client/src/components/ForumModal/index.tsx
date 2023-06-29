@@ -34,6 +34,12 @@ const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
     }
   }
 
+  const isDisable = () => {
+    if (type === 'delete') return false
+    if (name.length <= 0 || name.length > 40) return true
+    return false
+  }
+
   const handleChange = (value: string) => {
     if (!isDirty) {
       setIsDirty(true)
@@ -59,7 +65,7 @@ const ForumModal = ({ title, type, onSubmit, onClose }: Props) => {
         <Button
           type="submit"
           styleType="primary"
-          disabled={name.length <= 0 || name.length > 40}
+          disabled={isDisable()}
           margin="42px 0px 0px">
           {type === 'create'
             ? 'Создать'

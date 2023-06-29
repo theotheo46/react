@@ -38,8 +38,7 @@ const AuthContext = ({ children }: Props) => {
     const res = await dispatch(OAuth(data))
 
     if (OAuth.fulfilled.match(res)) {
-      await dispatch(getUser())
-      navigate('/start')
+      document.location = `http://localhost:${__SERVER_PORT__}/start`
     } else {
       setError(res.payload || res.error.message || 'Error')
     }
