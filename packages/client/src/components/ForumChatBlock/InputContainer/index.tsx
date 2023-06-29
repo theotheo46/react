@@ -68,6 +68,7 @@ const InputContainer = ({
         styleType="primary"
         width="48px"
         height="48px"
+        disabled={message.length === 0}
         padding="0">
         <FaPaperPlane style={iconSubmitStyle} />
       </Button>

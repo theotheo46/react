@@ -196,12 +196,16 @@ const ForumSectionPage = () => {
               onClick={e => handleOpenModal(e, 'create')}>
               Создать новую тему
             </Button>
-            <Button styleType="primary" disabled>
-              Переименовать раздел
-            </Button>
-            <Button styleType="error" onClick={e => handleDeleteSection(e)}>
-              Удалить раздел
-            </Button>
+            {user?.id === selectSection?.userId && (
+              <>
+                <Button styleType="primary" disabled>
+                  Переименовать раздел
+                </Button>
+                <Button styleType="error" onClick={e => handleDeleteSection(e)}>
+                  Удалить раздел
+                </Button>
+              </>
+            )}
           </div>
           <div className="header">Темы</div>
         </div>

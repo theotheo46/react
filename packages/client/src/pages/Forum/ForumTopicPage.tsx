@@ -29,6 +29,7 @@ const ForumTopicPage = () => {
   const [error, setError] = useState<Error | null>(null)
   const [createdAt, setCreatedAt] = useState('')
   const { selectTopic, topics, sections } = useAppSelector(state => state.forum)
+  const { user } = useAppSelector(state => state.user)
 
   const handleDeleteTopic = async (
     e: React.MouseEvent<Element, MouseEvent>
@@ -98,12 +99,16 @@ const ForumTopicPage = () => {
                 <FaArrowLeft style={iconBackStyle} />
                 Назад
               </Button>
-              <Button styleType="primary" disabled>
-                Переименовать тему
-              </Button>
-              <Button styleType="error" onClick={e => handleDeleteTopic(e)}>
-                Удалить тему
-              </Button>
+              {user?.id === selectTopic?.userId && (
+                <>
+                  <Button styleType="primary" disabled>
+                    Переименовать тему
+                  </Button>
+                  <Button styleType="error" onClick={e => handleDeleteTopic(e)}>
+                    Удалить тему
+                  </Button>
+                </>
+              )}
             </div>
             <div className="header">Сообщения</div>
           </div>

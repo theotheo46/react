@@ -1,4 +1,5 @@
 node_modules/
+postgresdata/
 **.env
 .idea
 .vscode
