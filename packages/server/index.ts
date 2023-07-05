@@ -48,11 +48,12 @@ async function startServer() {
   if (isDev()) {
     await sequelize.sync({ force: true })
     await themeController.initThemes()
-    await emojiController.initEmoji()
+    // await emojiController.initEmoji()
     // await sequelize.sync()
   } else {
     await sequelize.sync()
   }
+  await emojiController.initEmoji()
 
   try {
     await sequelize.authenticate()
@@ -72,7 +73,7 @@ async function startServer() {
   })
 
   if (!isDev()) {
-    app.use('/assets', express.static(path.resolve(distPath, 'assets')))
+    app.use(express.static(path.resolve(distPath)))
   }
 
   app.use('*', ssrMiddleware({ vite, srcPath, distPath, ssrClientPath }))

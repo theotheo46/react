@@ -30,6 +30,10 @@ class ThemeController {
     })
     const theme = await AppTheme.findOne({ where: { theme: data.theme } })
 
+    if (!theme) {
+      await this.initThemes()
+    }
+
     if (userTheme) {
       theme?.themeId
         ? (userTheme.themeId = theme.themeId)
