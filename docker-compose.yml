@@ -1,18 +1,21 @@
 version: "3.9"
 
 services:
-  client:
-    build:
-      context: .
-      dockerfile: Dockerfile.client
-      args:
-        CLIENT_PORT: ${CLIENT_PORT}
-    restart: always
+
+  nginx:
+    container_name: proxy_nginx
+    depends_on:
+      - app
+      - postgres
+      - pgadmin
+    image: nginx:latest
     ports:
-      - "${CLIENT_PORT}:80"
-    environment:
-      - CLIENT_PORT=${CLIENT_PORT}
-      - SERVER_PORT=${SERVER_PORT}
+      - '80:80'
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    networks:
+      - networkApp
 
   app:
     build:
@@ -29,7 +32,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_HOST: ${POSTGRES_HOST}
-      NODE_ENV: production
     networks:
       - networkApp
     depends_on:

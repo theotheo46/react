@@ -26,6 +26,7 @@ RUN yarn install --production=true
 RUN yarn add vite
 
 COPY --from=builder /app/packages/client /app/node_modules/client
+ENV NODE_ENV=production
 
 EXPOSE $SERVER_PORT
 CMD [ "node", "/app/index.js" ]
