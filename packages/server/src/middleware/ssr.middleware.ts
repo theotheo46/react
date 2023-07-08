@@ -30,6 +30,7 @@ const getStyles = async (distPath: string) => {
 const ssrMiddleware = ({ vite, srcPath, distPath, ssrClientPath }: Params) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.originalUrl
+    console.log('cookie: ', req.headers['cookie'])
 
     try {
       let template: string

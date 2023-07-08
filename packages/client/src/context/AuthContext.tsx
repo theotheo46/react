@@ -18,7 +18,7 @@ const AuthContext = ({ children }: Props) => {
   const protectedRoutes = [
     '/profile',
     '/forum',
-    '/leaderbord',
+    '/leaderboard',
     '/forumsection',
     '/forumtopic',
   ]

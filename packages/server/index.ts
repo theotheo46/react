@@ -15,6 +15,7 @@ dotenv.config()
 
 import express from 'express'
 import * as path from 'path'
+// import { auth } from './src/routes/auth'
 
 export const isDev = () => process.env.NODE_ENV === 'development'
 
@@ -61,6 +62,9 @@ async function startServer() {
   } catch (error) {
     console.error('Unable to connect to the DB:', error)
   }
+  // app.use('/auth', auth)
+
+  // app.use('*', cookieParser(), await authMiddleware())
 
   app.use(express.json())
 

@@ -17,18 +17,15 @@ class EmojiController {
   }
 
   async initEmoji() {
-    const foundEmoji = await Emoji.findAll()
-    if (!Object.keys(foundEmoji).length) {
-      const apiKey = '1b1e8f2e44dd30ba1f8c91a975d21c0b11429f38'
-      let emojiData: EmojiDataParam[] = []
-      await fetch(`https://emoji-api.com/emojis?access_key=${apiKey}`)
-        .then(res => res.json())
-        .then(data => {
-          emojiData = data as EmojiDataParam[]
-        }) // Получение массива эмоджи
-      if (emojiData) {
-        await Emoji.bulkCreate([...emojiData]) // TODO добавить массив с эмоджи
-      }
+    const apiKey = '1b1e8f2e44dd30ba1f8c91a975d21c0b11429f38'
+    let emojiData: EmojiDataParam[] = []
+    await fetch(`https://emoji-api.com/emojis?access_key=${apiKey}`)
+      .then(res => res.json())
+      .then(data => {
+        emojiData = data as EmojiDataParam[]
+      }) // Получение массива эмоджи
+    if (emojiData) {
+      await Emoji.bulkCreate([...emojiData])
     }
   }
 }

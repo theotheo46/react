@@ -4,7 +4,7 @@ import ProfilePage from '../pages/ProfilePage'
 import ForumPage from '../pages/Forum/ForumPage'
 import SignInPage from '../pages/SignInPage'
 import SignUpPage from '../pages/SignUpPage'
-import LeaderbordPage from '../pages/LeaderbordPage'
+import LeaderboardPage from '../pages/LeaderboardPage'
 import ErrorPage from '../pages/ErrorPage/ErrorPage'
 import MiniLendingPage from '../pages/MiniLendingPage/MiniLendingPage'
 import StartPage from '../pages/StartPage'
@@ -24,7 +24,7 @@ const RoutesBase = () => {
         <Route path="/forumtopic/:id" element={<ForumTopicPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/leaderbord" element={<LeaderbordPage />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/level" element={<LevelPage />} />
         <Route path="/start" element={<StartPage />} />
         <Route path="/finish" element={<FinishPage />} />
