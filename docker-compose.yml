@@ -16,6 +16,8 @@ services:
     restart: always
     networks:
       - networkApp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   app:
     build:
