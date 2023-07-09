@@ -12,11 +12,27 @@ import LevelPage from '../pages/LevelPage/LevelPage'
 import ForumSectionPage from '../pages/Forum/ForumSectionPage'
 import ForumTopicPage from '../pages/Forum/ForumTopicPage'
 import FinishPage from '../pages/FinishPage'
+import { AppDispatch } from '../store'
+import { getUser } from '../store/slices/userSlice/userAsyncThunks'
 
+export const mainRoute = [
+  {
+    path: '/',
+    element: Layout,
+    loader: (dispatch: AppDispatch) => {
+      return dispatch(getUser())
+    },
+  },
+]
 const RoutesBase = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route
+        path="/"
+        element={<Layout />}
+        loader={() => (dispatch: AppDispatch) => {
+          return dispatch(getUser())
+        }}>
         <Route index element={<MiniLendingPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/forum" element={<ForumPage />} />

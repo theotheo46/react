@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from 'express'
 import * as path from 'path'
 import { promises as fs } from 'fs'
 import { isDev } from '../../index'
+import { YandexAPIRepository } from '../api/YandexAPIRepository'
 
 interface Params {
   vite: ViteDevServer | undefined
@@ -30,7 +31,6 @@ const getStyles = async (distPath: string) => {
 const ssrMiddleware = ({ vite, srcPath, distPath, ssrClientPath }: Params) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const url = req.originalUrl
-    console.log('cookie: ', req.headers['cookie'])
 
     try {
       let template: string
@@ -51,7 +51,13 @@ const ssrMiddleware = ({ vite, srcPath, distPath, ssrClientPath }: Params) => {
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let render: ({ path }: { path: string }) => Promise<[string, any]>
+      let render: ({
+        path,
+        repository,
+      }: {
+        path: string
+        repository: YandexAPIRepository
+      }) => Promise<[string, any]>
 
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
@@ -64,8 +70,11 @@ const ssrMiddleware = ({ vite, srcPath, distPath, ssrClientPath }: Params) => {
 
       const styles = getStyles(distPath)
       const cssAssets = isDev() ? await styles : ''
-
-      const [appHtml, store] = await render({ path: url })
+      const yandexApiRepo = new YandexAPIRepository(req.headers['cookie'])
+      const [appHtml, store] = await render({
+        path: url,
+        repository: yandexApiRepo,
+      })
 
       const data =
         '<script>' +

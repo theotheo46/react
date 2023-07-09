@@ -21,11 +21,7 @@ const ProfileAvatar = ({ avatar }: Props) => {
       <div className="profile-avatar">
         <div onClick={modalHandler} className="profile-avatar__block">
           <img
-            src={
-              avatar
-                ? `https://ya-praktikum.tech/api/v2/resources${avatar}`
-                : defaultAvatar
-            }
+            src={avatar ? `/api/v2/resources${avatar}` : defaultAvatar}
             className="profile-avatar__image"
           />
           <div className="profile-avatar__overlay">Изменить</div>

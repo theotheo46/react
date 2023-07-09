@@ -9,17 +9,19 @@ import {
   UserThemes,
 } from './types'
 import { baseApi } from '../../../api/baseApi'
+import { UserService } from '../../../api/UserService'
 
 export const getUser = createAsyncThunk<
   User,
   undefined,
   { rejectValue: string }
->('user/getUser', async (_, { rejectWithValue }) => {
+>('user/getUser', async (_, thunkApi) => {
   try {
-    const response = await baseApi().get('/auth/user')
-    return response.data
+    const service: UserService = thunkApi.extra as UserService
+    const data = await service.getCurrentUser()
+    return data
   } catch (error) {
-    return rejectWithValue((error as Error).message)
+    return thunkApi.rejectWithValue((error as Error).message)
   }
 })
 

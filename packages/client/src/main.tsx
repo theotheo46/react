@@ -6,6 +6,8 @@ import ErrorBoundary from './components/ErrorBoundary'
 import { Provider } from 'react-redux'
 import 'path2d-polyfill'
 import { create } from './store/index'
+import { UserService } from './api/UserService'
+import { YandexAPIRepository } from './repository/YandexAPIRepository'
 
 declare global {
   interface Window {
@@ -19,7 +21,8 @@ delete window.__INITIAL_STATE__
 ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <BrowserRouter>
-    <Provider store={create(initialState)}>
+    <Provider
+      store={create(new UserService(new YandexAPIRepository()), initialState)}>
       <ErrorBoundary>
         <App />
       </ErrorBoundary>

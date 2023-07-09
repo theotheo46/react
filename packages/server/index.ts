@@ -14,14 +14,17 @@ import emojiController from './src/controllers/emojiController'
 dotenv.config()
 
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import * as path from 'path'
-// import { auth } from './src/routes/auth'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 
 export const isDev = () => process.env.NODE_ENV === 'development'
 
 async function startServer() {
   const app = express()
   app.use(cors())
+  // @ts-ignore
+  app.use(cookieParser())
 
   const port = Number(process.env.SERVER_PORT) || 3001
 
@@ -46,11 +49,20 @@ async function startServer() {
     app.use(vite.middlewares)
   }
 
+  app.use(
+    '/api/v2',
+    createProxyMiddleware({
+      changeOrigin: true,
+      cookieDomainRewrite: {
+        '*': '',
+      },
+      target: 'https://ya-praktikum.tech',
+    })
+  )
+
   if (isDev()) {
     await sequelize.sync({ force: true })
     await themeController.initThemes()
-    // await emojiController.initEmoji()
-    // await sequelize.sync()
   } else {
     await sequelize.sync()
   }
@@ -62,9 +74,6 @@ async function startServer() {
   } catch (error) {
     console.error('Unable to connect to the DB:', error)
   }
-  // app.use('/auth', auth)
-
-  // app.use('*', cookieParser(), await authMiddleware())
 
   app.use(express.json())
 
@@ -79,7 +88,6 @@ async function startServer() {
   if (!isDev()) {
     app.use(express.static(path.resolve(distPath)))
   }
-
   app.use('*', ssrMiddleware({ vite, srcPath, distPath, ssrClientPath }))
 
   app.listen(port, () => {
