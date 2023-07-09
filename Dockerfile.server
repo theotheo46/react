@@ -1,17 +1,32 @@
-FROM node:19
+ARG NODE_VERSION=18
+ARG SERVER_PORT=3001
 
-WORKDIR /app/
+FROM node:$NODE_VERSION-buster as base
 
-COPY /.env.sample .
-COPY /package.json .
-COPY /lerna.json .
-COPY /packages/client/ ./packages/client
-COPY /packages/server/ ./packages/server
+WORKDIR /app
 
-RUN yarn install
+FROM base as builder
 
-EXPOSE ${SERVER_PORT}
+COPY package*.json ./
+COPY yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-RUN yarn build --scope=server
+COPY . .
 
-CMD yarn dev --scope=server
+RUN yarn lerna bootstrap
+RUN yarn build
+
+FROM node:$NODE_VERSION-buster-slim as production
+WORKDIR /app
+
+COPY --from=builder /app/packages/server/dist/ /app/
+COPY --from=builder /app/packages/server/package.json /app/package.json
+
+RUN yarn install --production=true
+RUN yarn add vite
+
+COPY --from=builder /app/packages/client /app/node_modules/client
+ENV NODE_ENV=production
+
+EXPOSE $SERVER_PORT
+CMD [ "node", "/app/index.js" ]

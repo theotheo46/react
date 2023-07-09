@@ -1,59 +1,82 @@
-version: "3.3"
+version: "3.9"
 
 services:
-  client:
-    container_name: client
-    build:
-      context: .
-      dockerfile: Dockerfile.client
-      args:
-        CLIENT_PORT: ${CLIENT_PORT}
-    restart: always
-    depends_on:
-      - postgres
-    ports:
-      - "80:${CLIENT_PORT}"
-    environment:
-      CLIENT_PORT: 3000
-    env_file:
-      ./.env.sample
-    networks:
-      - network_bridge
 
-  ssrapp:
-    container_name: ssrapp
+  nginx:
+    container_name: proxy_nginx
+    depends_on:
+      - app
+      - postgres
+      - pgadmin
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    networks:
+      - networkApp
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  app:
     build:
       context: .
       dockerfile: Dockerfile.server
       args:
         SERVER_PORT: ${SERVER_PORT}
-    depends_on:
-      - postgres
     restart: always
     ports:
-      - "80:${SERVER_PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
-      - SERVER_PORT=3001
-    env_file:
-      ./.env.sample
+      SERVER_PORT: ${SERVER_PORT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
     networks:
-      - network_bridge
+      - networkApp
+    depends_on:
+      - postgres
 
   postgres:
-    image: postgres:14
+    image: postgres:14-alpine
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-    volumes:
-      - ./postgresdata:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
-    env_file:
-      ./.env.sample
+      POSTGRES_HOST_AUTH_METHOD: trust
+    hostname: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
     networks:
-      - network_bridge
+      - networkApp
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      POSTGRES_HOST_AUTH_METHOD: trust
+    expose:
+      - "80"
+    ports:
+      - "8080:80"
+    restart: always
+    volumes:
+      - pg-admin-data:/var/lib/pgadmin
+    networks:
+      - networkApp
 
 networks:
-  network_bridge:
+  networkApp:
     driver: bridge
+
+volumes:
+  pgdata:
+  pg-admin-data:
