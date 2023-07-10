@@ -23,7 +23,6 @@ export const render = async ({ path, repository }: Props) => {
       await loader(store.dispatch)
     }
   }
-  const initialState = store
   const resultRender = renderToString(
     <Provider store={store}>
       <StaticRouter location={path}>
@@ -34,5 +33,5 @@ export const render = async ({ path, repository }: Props) => {
   /*
     Функция помимо html, возвразает еще store, чтобы в сервере можно было прокинуть состояние в разметку для инициализации стора на клиенте
   */
-  return [resultRender, initialState]
+  return [resultRender, store]
 }
