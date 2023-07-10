@@ -56,7 +56,7 @@ const StartGameNav = ({ onSetupSettings }: Props) => {
         <Button
           width="100%"
           disabled={!isAuth}
-          onClick={() => navigate('/leaderbord')}
+          onClick={() => navigate('/leaderboard')}
           styleType="primary">
           Лидеры
         </Button>

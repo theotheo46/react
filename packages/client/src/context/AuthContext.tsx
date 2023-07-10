@@ -1,5 +1,5 @@
-import { ReactNode, useEffect, useState } from 'react'
-import { useAppDispatch } from '../store/hooks'
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { OAuth, getUser } from '../store/slices/userSlice/userAsyncThunks'
 import { RequestOAuthData } from '../store/slices/userSlice/types'
@@ -14,27 +14,25 @@ const AuthContext = ({ children }: Props) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAppSelector(state => state.user)
   const [error, setError] = useState('')
+  const firstRender = useRef(true)
   const protectedRoutes = [
     '/profile',
     '/forum',
-    '/leaderbord',
+    '/leaderboard',
     '/forumsection',
     '/forumtopic',
   ]
   const regRoutes = ['/signin', '/signup']
 
   const checkQueryCode = async () => {
-    if (!location.search.includes('code')) return loadUser()
-    // query параметр ?code приходит после OAuth редиректа с сайта Яндекса, поэтому здесь мы ловим этот переход
     const query = new URLSearchParams(location.search)
-    const code = query.get('code')
-
+    const code = query.get('code') // query параметр ?code приходит после OAuth редиректа с сайта Яндекса, поэтому здесь мы ловим этот переход
     const data: RequestOAuthData = {
       code: code || '',
       redirect_uri: 'http://localhost:3000', // TODO Редирект будет с сайта Яндекса, поэтому нужен полный путь. Изменить в продакшене на необходимый урл.
     }
-
     const res = await dispatch(OAuth(data))
 
     if (OAuth.fulfilled.match(res)) {
@@ -60,8 +58,21 @@ const AuthContext = ({ children }: Props) => {
   }
 
   useEffect(() => {
-    checkQueryCode()
-  }, [location])
+    if (location.search.includes('code')) {
+      checkQueryCode()
+    }
+    if (firstRender.current) {
+      loadUser()
+    } else {
+      if (!user && protectedRoutes.some(path => path === location.pathname)) {
+        navigate('/signin')
+      } else if (user && regRoutes.some(path => path === location.pathname)) {
+        navigate('/start')
+      }
+    }
+
+    firstRender.current = false
+  }, [user, error])
 
   return (
     <>

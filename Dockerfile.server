@@ -24,6 +24,7 @@ COPY --from=builder /app/packages/server/package.json /app/package.json
 
 RUN yarn install --production=true
 RUN yarn add vite
+RUN yarn add axios
 
 COPY --from=builder /app/packages/client /app/node_modules/client
 ENV NODE_ENV=production
