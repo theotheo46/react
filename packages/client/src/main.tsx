@@ -31,7 +31,7 @@ ReactDOM.hydrateRoot(
 )
 
 if (import.meta.env.PROD && typeof window !== 'undefined') {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', async () => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/sw.js', {
