@@ -25,8 +25,6 @@ const EmojiContainer = ({ isActive, addEmoji }: Props) => {
 
   useEffect(() => {
     if (emoji.length === 0) {
-      console.log('запрос эмодзей из базы')
-
       dispatch(getEmojies()).catch(err => setError(err as Error))
     }
     return

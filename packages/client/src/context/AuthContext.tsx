@@ -9,6 +9,7 @@ import ErrorInformer from '../components/ErrorInformer'
 interface Props {
   children?: ReactNode
 }
+const isDev = () => process.env.NODE_ENV === 'development'
 
 const AuthContext = ({ children }: Props) => {
   const dispatch = useAppDispatch()
@@ -31,12 +32,16 @@ const AuthContext = ({ children }: Props) => {
     const code = query.get('code') // query параметр ?code приходит после OAuth редиректа с сайта Яндекса, поэтому здесь мы ловим этот переход
     const data: RequestOAuthData = {
       code: code || '',
-      redirect_uri: 'http://localhost:3000', // TODO Редирект будет с сайта Яндекса, поэтому нужен полный путь. Изменить в продакшене на необходимый урл.
+      redirect_uri: isDev()
+        ? `http://localhost:3000`
+        : 'http://altai.ya-praktikum.tech',
     }
     const res = await dispatch(OAuth(data))
 
     if (OAuth.fulfilled.match(res)) {
-      document.location = `http://localhost:${__SERVER_PORT__}/start`
+      document.location = isDev()
+        ? `http://localhost:${__SERVER_PORT__}/start`
+        : 'http://altai.ya-praktikum.tech/start'
     } else {
       setError(res.payload || res.error.message || 'Error')
     }

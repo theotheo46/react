@@ -33,14 +33,16 @@ ReactDOM.hydrateRoot(
 if (import.meta.env.PROD && typeof window !== 'undefined') {
   window.addEventListener('load', async () => {
     if ('serviceWorker' in navigator) {
-      try {
-        const reg = navigator.serviceWorker.register('/sw.js', {
+      navigator.serviceWorker
+        .register('/sw.js', {
           type: 'module',
         })
-        console.log('service worker register success:', reg)
-      } catch (e) {
-        console.error('service worker register fail', e)
-      }
+        .then(reg => {
+          console.log('service worker register success:', reg)
+        })
+        .catch(e => {
+          console.error('service worker register fail', e)
+        })
     }
   })
 }

@@ -14,6 +14,7 @@ import emojiController from './src/controllers/emojiController'
 dotenv.config()
 
 import express from 'express'
+import { expressCspHeader, INLINE, SELF } from 'express-csp-header'
 import cookieParser from 'cookie-parser'
 import * as path from 'path'
 import { createProxyMiddleware } from 'http-proxy-middleware'
@@ -22,7 +23,23 @@ export const isDev = () => process.env.NODE_ENV === 'development'
 
 async function startServer() {
   const app = express()
-  app.use(cors())
+  app.use(
+    cors(),
+    expressCspHeader({
+      directives: {
+        'default-src': [SELF],
+        'connect-src': ['*'],
+        'script-src': [SELF, INLINE, 'https://ya-praktikum.tech'],
+        'style-src': [SELF, INLINE, 'https://fonts.googleapis.com/'],
+        'img-src': [SELF, 'data:', 'https://ya-praktikum.tech'],
+        'font-src': [
+          SELF,
+          'https://fonts.googleapis.com/',
+          'https://fonts.gstatic.com/',
+        ],
+      },
+    })
+  )
   // @ts-ignore
   app.use(cookieParser())
 
@@ -81,6 +98,9 @@ async function startServer() {
   app.use('/emoji', emoji)
   app.use('/forum', forum)
   app.use('/api/theme', themeRouter)
+  app.get('/sw.js', (_, res) => {
+    res.sendFile(path.resolve(distPath, 'sw.js'))
+  })
   app.get('/api', (_, res) => {
     res.json('👋 Howdy from the server :)')
   })
