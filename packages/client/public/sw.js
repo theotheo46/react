@@ -19,19 +19,19 @@ self.addEventListener('activate', async event => {
   )
 })
 
-// self.addEventListener('fetch', event => {
-//   const { request } = event
-//   event.respondWith(networkFirst(request))
-// })
+self.addEventListener('fetch', event => {
+  const { request } = event
+  event.respondWith(networkFirst(request))
+})
 
-// async function networkFirst(request) {
-//   const cache = await caches.open(dynamicCacheName)
-//   try {
-//     const response = await fetch(request)
-//     await cache.put(request, response.clone())
-//     return response
-//   } catch (e) {
-//     const cached = await caches.match(request)
-//     return cached ?? (await caches.match('index.html'))
-//   }
-// }
+async function networkFirst(request) {
+  const cache = await caches.open(dynamicCacheName)
+  try {
+    const response = await fetch(request)
+    await cache.put(request, response.clone())
+    return response
+  } catch (e) {
+    const cached = await caches.match(request)
+    return cached ?? (await caches.match('index.html'))
+  }
+}

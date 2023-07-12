@@ -4,7 +4,7 @@ import Button from '../components/Button'
 import { FaArrowLeft } from 'react-icons/fa'
 import LeaderboardList from '../components/Leaderboard/LeaderboardList'
 
-const LeaderbordPage = () => {
+const LeaderboardPage = () => {
   const navigate = useNavigate()
 
   const pageTitle = 'Leaderboard | Water Puzzle'
@@ -30,4 +30,4 @@ const LeaderbordPage = () => {
   )
 }
 
-export default LeaderbordPage
+export default LeaderboardPage

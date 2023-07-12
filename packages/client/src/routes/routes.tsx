@@ -4,7 +4,7 @@ import ProfilePage from '../pages/ProfilePage'
 import ForumPage from '../pages/Forum/ForumPage'
 import SignInPage from '../pages/SignInPage'
 import SignUpPage from '../pages/SignUpPage'
-import LeaderbordPage from '../pages/LeaderbordPage'
+import LeaderboardPage from '../pages/LeaderboardPage'
 import ErrorPage from '../pages/ErrorPage/ErrorPage'
 import MiniLendingPage from '../pages/MiniLendingPage/MiniLendingPage'
 import StartPage from '../pages/StartPage'
@@ -12,11 +12,27 @@ import LevelPage from '../pages/LevelPage/LevelPage'
 import ForumSectionPage from '../pages/Forum/ForumSectionPage'
 import ForumTopicPage from '../pages/Forum/ForumTopicPage'
 import FinishPage from '../pages/FinishPage'
+import { AppDispatch } from '../store'
+import { getUser } from '../store/slices/userSlice/userAsyncThunks'
 
+export const mainRoute = [
+  {
+    path: '/',
+    element: Layout,
+    loader: (dispatch: AppDispatch) => {
+      return dispatch(getUser())
+    },
+  },
+]
 const RoutesBase = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route
+        path="/"
+        element={<Layout />}
+        loader={() => (dispatch: AppDispatch) => {
+          return dispatch(getUser())
+        }}>
         <Route index element={<MiniLendingPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/forum" element={<ForumPage />} />
@@ -24,7 +40,7 @@ const RoutesBase = () => {
         <Route path="/forumtopic/:id" element={<ForumTopicPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/leaderbord" element={<LeaderbordPage />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/level" element={<LevelPage />} />
         <Route path="/start" element={<StartPage />} />
         <Route path="/finish" element={<FinishPage />} />

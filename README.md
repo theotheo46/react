@@ -94,6 +94,7 @@
 Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
 
 ### Production окружение в докере
+
 Для сборки приложения выполнить:
 
 `docker-compose build ssrapp`
@@ -103,6 +104,7 @@
 `docker-compose up ssrapp`
 
 Контейнер запустит два сервиса:
+
 1. postgres - базу данных (postgres)
 2. ssrapp - само приложение
 
@@ -110,6 +112,97 @@
 
 1. На клиенте: добавил конфиг для билда серверной части приложения ssr.config.ts, обновил скрипты для сборки в package.json, сделал правки в файле main.tsx и добавил файл ssr.tsx для рендера на сервере.
 2. На сервере: добавил реализацию ssr в файле index.ts, поправил скрипты в package.json.
+3. Добавил proxy middleware для отправки всех запросов, начинющихся на '/api/v2', на яндекс api.
+   Что позволяет на клиенте пользоваться одним локальным сервером, даже для запросов, связанных с авторизацией:
+   ![Screenshot_34](https://github.com/theotheo46/react/assets/33191965/9387117b-3a1a-4a08-85d4-96c857114e8d)
+
+```
+app.use(
+  '/api/v2',
+  createProxyMiddleware({
+    changeOrigin: true,
+    cookieDomainRewrite: {
+      '*': '',
+    },
+    target: 'https://ya-praktikum.tech',
+  })
+)
+```
+
+4. Куки приходящие от Яндекса на локальный сервер, я прокинул через YandexAPIRepository в функцию render, чтобы была возможность вытащить куки на клиенте, воспользовавшись пропсом "repository":
+
+```
+const yandexApiRepo = new YandexAPIRepository(req.headers['cookie'])
+const [appHtml, store] = await render({
+  path: url,
+  repository: yandexApiRepo,
+})
+```
+
+5. На клиенте добавил в create store и в функцию render необходимые пропсы для вытаскивания YandexApiRepository:
+
+```
+export function create(service: UserService, initialState?: any) {
+  return configureStore({
+    reducer: {
+      user: userReducer,
+      game: gameReducer,
+      level: levelReducer,
+      forum: forumReducer,
+    },
+    preloadedState: initialState,
+    middleware: getDefaultMiddleware => {
+      return getDefaultMiddleware({
+        thunk: {
+          extraArgument: service,
+        },
+      })
+    },
+  })
+}
+```
+
+```
+export const render = async ({ path, repository }: Props) => {
+  const [pathname] = path.split('?')
+  const store = create(new UserService(repository))
+  <!-- mainRoute покрывает практически все роуты приложения и хранит в себе loader с функией проверки авторизации -->
+  const currentRoute = mainRoute.find(route => matchPath(pathname, route.path))
+  if (currentRoute) {
+    const { loader } = currentRoute
+    if (loader) {
+      // Здесь идёт необходимая проверка авторизации dispatch(getUser()), используя куки сервера
+      await loader(store.dispatch)
+    }
+  }
+  const resultRender = renderToString(
+    <Provider store={store}>
+      <StaticRouter location={path}>
+        <App />
+      </StaticRouter>
+    </Provider>
+  )
+  return [resultRender, store]
+}
+```
+
+6. В getUser, получив service из thunkApi.extra с YandexApiRepository, пришедший к нам из сервера, используем service.getCurrentUser(), таким образом, мы запросим пользователя из YandexApi используя куки с локального сервера:
+
+```
+export const getUser = createAsyncThunk<
+  User,
+  undefined,
+  { rejectValue: string }
+>('user/getUser', async (_, thunkApi) => {
+  try {
+    const service: UserService = thunkApi.extra as UserService
+    const data = await service.getCurrentUser()
+    return data
+  } catch (error) {
+    return thunkApi.rejectWithValue((error as Error).message)
+  }
+})
+```
 
 Для сборки клиентского и серверного пакетов:
 
@@ -573,6 +666,7 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 ![Проверка утечки памяти](/memoryleaks/heap_real_time.png)
 
 Проверка проводила в режиме непосредственной игры. Какие были возможные места утечки:
+
 1. Многократная перерисовка всего экрана с игрой.
 
    **Проблема:** при любом изменении одного элемента на экране - делать перерисовку всей страницы.

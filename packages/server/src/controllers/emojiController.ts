@@ -27,7 +27,7 @@ class EmojiController {
           emojiData = data as EmojiDataParam[]
         }) // Получение массива эмоджи
       if (emojiData) {
-        await Emoji.bulkCreate([...emojiData]) // TODO добавить массив с эмоджи
+        await Emoji.bulkCreate([...emojiData])
       }
     }
   }
