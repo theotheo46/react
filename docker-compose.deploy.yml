@@ -10,14 +10,30 @@ services:
       - pgadmin
     image: nginx:alpine
     ports:
-      - '80:80'
+      - 80:80
+      - 443:443
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    restart: always
+      - ./nginx/nginx.deploy.conf:/etc/nginx/nginx.conf
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/www/certbot
+      - ./dhparam:/etc/ssl/certs
+    restart: unless-stopped
     networks:
       - networkApp
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - certbot-etc:/etc/letsencrypt
+  #     - certbot-var:/var/www/certbot
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - networkApp
+  #   command: certonly --webroot -w /var/www/certbot --email an3wer@yandex.ru --agree-tos --no-eff-email --staging -d altai.ya-praktikum.tech
 
   app:
     build:
@@ -26,6 +42,8 @@ services:
       args:
         SERVER_PORT: ${SERVER_PORT}
     restart: always
+    expose:
+      - "${SERVER_PORT}"
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     environment:
@@ -80,3 +98,5 @@ networks:
 volumes:
   pgdata:
   pg-admin-data:
+  certbot-etc:
+  certbot-var:
