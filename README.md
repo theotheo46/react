@@ -693,11 +693,8 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 
 Запуск докера в облачном сервере `docker compose -f docker-compose.deploy.yml up -d --build`
 
-Запуск если нет в корне приложения .env файла:
-`CLIENT_PORT=3000 SERVER_PORT=3001 POSTGRES_USER=postgres POSTGRES_PASSWORD=postgres POSTGRES_DB=postgres POSTGRES_PORT=5432 POSTGRES_HOST=postgres docker compose up -d --build`
-
 Если у вас ошибка Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?, то в wsl ubuntu помогает команда `sudo /etc/init.d/docker start`
 
 После запуска контейнеров приложение будет доступно через порт 80
 
-Админка для postgresql доспупна по адрему /pgadmin, авторизация: admin@admin.com / admin
+Админка для postgresql доспупна по адрему https://altai.ya-praktikum.tech/pgadmin
