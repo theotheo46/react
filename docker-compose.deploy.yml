@@ -8,31 +8,32 @@ services:
       - app
       - postgres
       - pgadmin
-    image: nginx:latest
+    image: nginx:alpine
     ports:
       - 80:80
       - 443:443
     volumes:
       - ./nginx/nginx.deploy.conf:/etc/nginx/nginx.conf
-      - web-root:/var/www/html
       - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-    restart: always
+      - certbot-var:/var/www/certbot
+      - ./dhparam:/etc/ssl/certs
+    restart: unless-stopped
     networks:
       - networkApp
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email an3wer@yandex.ru --agree-tos --no-eff-email --staging -d altai.ya-praktikum.tech  -d www.altai.ya-praktikum.tech
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - certbot-etc:/etc/letsencrypt
+  #     - certbot-var:/var/www/certbot
+  #   depends_on:
+  #     - nginx
+  #   networks:
+  #     - networkApp
+  #   command: certonly --webroot -w /var/www/certbot --email an3wer@yandex.ru --agree-tos --no-eff-email --staging -d altai.ya-praktikum.tech
 
   app:
     build:
@@ -99,4 +100,3 @@ volumes:
   pg-admin-data:
   certbot-etc:
   certbot-var:
-  web-root:

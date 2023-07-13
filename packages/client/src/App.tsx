@@ -17,13 +17,13 @@ function App() {
   const { getUserTheme } = useTheme()
 
   useEffect(() => {
-    const fetchServerData = async () => {
-      const url = `http://localhost:${__SERVER_PORT__}/api`
-      const response = await fetch(url)
-      const data = await response.json()
-      console.log(data)
-    }
-    fetchServerData()
+    // const fetchServerData = async () => {
+    //   const url = `http://localhost:${__SERVER_PORT__}/api`
+    //   const response = await fetch(url)
+    //   const data = await response.json()
+    //   console.log(data)
+    // }
+    // fetchServerData()
     dispatch(createLevels())
     dispatch(setLastUpdateGameParam())
     dispatch(setLastUpdateLevelParam())
