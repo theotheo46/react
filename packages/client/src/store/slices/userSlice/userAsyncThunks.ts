@@ -31,7 +31,7 @@ export const logoutUser = createAsyncThunk<
   { rejectValue: string }
 >('user/logoutUser', async (_, { rejectWithValue }) => {
   try {
-    const response = await baseApi().post('/auth/logout')
+    const response = await baseApi('ya').post('/auth/logout')
     return response.data
   } catch (error) {
     return rejectWithValue((error as Error).message)
@@ -70,7 +70,8 @@ export const getServiceId = createAsyncThunk<
   { rejectValue: string }
 >('user/getServiceId', async (_, { rejectWithValue }) => {
   try {
-    const response = await baseApi().get('/oauth/yandex/service-id')
+    const url = 'https://altai.ya-praktikum.tech'
+    const response = await baseApi().get(`/oauth/yandex/service-id/?redirect_uri=${url}`)
     return response.data
   } catch (error) {
     return rejectWithValue((error as Error).message)
