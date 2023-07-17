@@ -31,7 +31,10 @@ const Form = ({ title, className, inputs, buttonLabel, onSubmit }: Props) => {
   const handleOAuth = async (e: React.MouseEvent<Element, MouseEvent>) => {
     e?.preventDefault()
     let serviceId = ''
-    const redirect_url = 'https://altai.ya-praktikum.tech' // TODO Редирект будет с сайта Яндекса, поэтому нужен полный путь. Изменить в продакшене на корректный урл.
+    const redirect_url =
+      process.env.NODE_ENV === 'production'
+        ? 'https://altai.ya-praktikum.tech'
+        : 'http://localhost:3001'
     const res = await dispatch(getServiceId())
     if (getServiceId.fulfilled.match(res)) {
       serviceId = res.payload.service_id

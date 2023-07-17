@@ -70,8 +70,13 @@ export const getServiceId = createAsyncThunk<
   { rejectValue: string }
 >('user/getServiceId', async (_, { rejectWithValue }) => {
   try {
-    const url = 'https://altai.ya-praktikum.tech'
-    const response = await baseApi().get(`/oauth/yandex/service-id/?redirect_uri=${url}`)
+    const url =
+      process.env.NODE_ENV === 'production'
+        ? 'https://altai.ya-praktikum.tech'
+        : 'http://localhost:3001'
+    const response = await baseApi().get(
+      `/oauth/yandex/service-id/?redirect_uri=${url}`
+    )
     return response.data
   } catch (error) {
     return rejectWithValue((error as Error).message)
