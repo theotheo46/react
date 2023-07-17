@@ -5,7 +5,7 @@ export const assetsUrls = [
   'dist/assets/icon-mode-2-dark.9f99409d.svg',
   'dist/assets/icon-mode-2.7339209d.svg',
   'dist/assets/icon-yandex.7786c2a1.svg',
-  'dist/assets/index.8609d9fa.js',
+  'dist/assets/index.23844596.js',
   'dist/assets/index.eda09487.css',
   'dist/assets/landing_dark.d9a4265b.png',
   'dist/assets/landing_light.d7d92b3c.png',

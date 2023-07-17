@@ -19,6 +19,7 @@ import {
 } from '../../store/slices/forumSlice/types'
 import MessagesPanel from './MessagesPanel'
 import InputContainer from './InputContainer'
+import sanitizeUserInput from '../../utils/SanitizeUserInput'
 
 const ForumChatBlock = () => {
   const dispatch = useAppDispatch()
@@ -35,12 +36,15 @@ const ForumChatBlock = () => {
 
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const sanitizedMessage = sanitizeUserInput(message)
+
     try {
       let data
       switch (writingMode) {
         case 'new':
           data = {
-            messagetext: message,
+            messagetext: sanitizedMessage,
             topicId: topicParam.topicId,
             userId: user!.id,
             usernick: user!.display_name || user!.login,
@@ -49,7 +53,7 @@ const ForumChatBlock = () => {
           break
         case 'reply':
           data = {
-            messagetext: message,
+            messagetext: sanitizedMessage,
             messageId: selectMessageId,
             userId: user!.id,
             usernick: user!.display_name || user!.login,
@@ -58,7 +62,7 @@ const ForumChatBlock = () => {
           break
         case 'update':
           data = {
-            messagetext: message,
+            messagetext: sanitizedMessage,
             id: selectMessageId,
             userId: user!.id,
           } as RequestUpdateMessage

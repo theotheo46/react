@@ -76,10 +76,15 @@ const ssrMiddleware = ({ vite, srcPath, distPath, ssrClientPath }: Params) => {
         repository: yandexApiRepo,
       })
 
+      const initStateSerialized = JSON.stringify(store.getState()).replace(
+        /</g,
+        '\\u003c'
+      )
+
       const data =
         '<script>' +
         'window.__INITIAL_STATE__=' +
-        JSON.stringify(store.getState()) +
+        initStateSerialized +
         '</script>'
 
       const html = template
