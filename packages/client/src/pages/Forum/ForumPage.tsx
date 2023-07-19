@@ -14,6 +14,7 @@ import {
   getAllSections,
 } from '../../store/slices/forumSlice/forumAsyncThunks'
 import { setSelectSectionToLS } from '../../store/slices/forumSlice'
+import sanitizeUserInput from '../../utils/SanitizeUserInput'
 
 export type ModalTypes = 'create' | 'delete' | 'rename' | null
 export interface ModalProps {
@@ -70,10 +71,12 @@ const ForumPage = () => {
   }
 
   const handleCreateSection = async (title: string) => {
+    const sanitizedTitle = sanitizeUserInput(title)
+
     const data = {
       userId: user!.id,
       usernick: user?.display_name || user!.login,
-      sectionname: title,
+      sectionname: sanitizedTitle,
     }
     try {
       await dispatch(addSection(data))
