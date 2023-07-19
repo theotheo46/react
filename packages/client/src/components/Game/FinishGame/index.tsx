@@ -26,40 +26,41 @@ const FinishGame = () => {
 
   const { gameIsLoading, startGame } = useStartLevel()
   const { setNextLevel } = useNextLevel()
-  
 
-  function setNotificationGEOLocation()
-  {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
-        const positionStr = `Уровень ${
-          currentLevel ? currentLevel : ''
-        } пройден:\n широта: ${position.coords.latitude}; долгота: ${position.coords.longitude}`;
-        if (Notification && Notification.permission !== 'denied') {
-          Notification.requestPermission(status => {
-            if (status === 'granted') {
-              const n = new Notification(positionStr, {
-                tag: 'finishGameLocNotification',
-              })
-            } else {
-              alert('Permissions for notifications are not granted')
-            }
-          })
-        } else {
-          alert('Permissions for notifications are not granted')
-        }
-        }, error => {
+  function setNotificationGEOLocation() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const positionStr = `Уровень ${
+            currentLevel ? currentLevel : ''
+          } пройден:\n широта: ${position.coords.latitude}; долгота: ${
+            position.coords.longitude
+          }`
+          if (Notification && Notification.permission !== 'denied') {
+            Notification.requestPermission(status => {
+              if (status === 'granted') {
+                const n = new Notification(positionStr, {
+                  tag: 'finishGameLocNotification',
+                })
+              } else {
+                alert('Permissions for notifications are not granted')
+              }
+            })
+          } else {
+            alert('Permissions for notifications are not granted')
+          }
+        },
+        error => {
           console.error(error)
-        }, {
-        })
+        },
+        {}
+      )
     } else {
       alert('GEOLocation is not available')
     }
   }
 
-
-  function setNotificationLevelFinished()
-  {
+  function setNotificationLevelFinished() {
     const notifStr = `Уровень ${
       currentLevel ? currentLevel : ''
     } пройден\nПереливаний: ${currentAttempts}    Время: ${currentTime}`
