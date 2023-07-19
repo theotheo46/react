@@ -27,24 +27,40 @@ const FinishGame = () => {
   const { gameIsLoading, startGame } = useStartLevel()
   const { setNextLevel } = useNextLevel()
 
-  function nextLevelHandler() {
-    setNextLevel()
-    startGame()
+  function setNotificationGEOLocation() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const positionStr = `Уровень ${
+            currentLevel ? currentLevel : ''
+          } пройден:\n широта: ${position.coords.latitude}; долгота: ${
+            position.coords.longitude
+          }`
+          if (Notification && Notification.permission !== 'denied') {
+            Notification.requestPermission(status => {
+              if (status === 'granted') {
+                const n = new Notification(positionStr, {
+                  tag: 'finishGameLocNotification',
+                })
+              } else {
+                alert('Permissions for notifications are not granted')
+              }
+            })
+          } else {
+            alert('Permissions for notifications are not granted')
+          }
+        },
+        error => {
+          console.error(error)
+        },
+        {}
+      )
+    } else {
+      alert('GEOLocation is not available')
+    }
   }
 
-  function exitGameHandler() {
-    dispatch(setCurrentTime(''))
-    dispatch(setCurrentAttempts(0))
-    dispatch(setMode(null))
-    navigate('/start')
-  }
-  useEffect(() => {
-    dispatch(setArraySettingsBottles([]))
-  }, [])
-
-  if (gameIsLoading) {
-    return <LoaderGame />
-  } else {
+  function setNotificationLevelFinished() {
     const notifStr = `Уровень ${
       currentLevel ? currentLevel : ''
     } пройден\nПереливаний: ${currentAttempts}    Время: ${currentTime}`
@@ -61,6 +77,28 @@ const FinishGame = () => {
     } else {
       alert('Permissions for notifications are not granted')
     }
+  }
+
+  function nextLevelHandler() {
+    setNextLevel()
+    startGame()
+  }
+
+  function exitGameHandler() {
+    dispatch(setCurrentTime(''))
+    dispatch(setCurrentAttempts(0))
+    dispatch(setMode(null))
+    navigate('/start')
+  }
+  useEffect(() => {
+    dispatch(setArraySettingsBottles([]))
+    setNotificationLevelFinished()
+    setNotificationGEOLocation()
+  }, [])
+
+  if (gameIsLoading) {
+    return <LoaderGame />
+  } else {
     return (
       <div className="finish-game">
         <div className="finish-game__img">
