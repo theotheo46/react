@@ -30,6 +30,6 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         context: .
-        file: ./Dockerfile.server
+        file: Dockerfile.server
         push: true
         tags: ${{ env.APP_SERVER_IMAGE }}
