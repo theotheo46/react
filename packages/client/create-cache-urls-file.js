@@ -3,17 +3,19 @@ import fs from 'fs'
 
 function readFilesRecursive(directory) {
   let files = []
-  const entries = fs.readdirSync(directory, { withFileTypes: true })
+  if (fs.existsSync(path)) {
+    const entries = fs.readdirSync(directory, { withFileTypes: true })
 
-  entries.forEach(entry => {
-    const fullPath = path.join(directory, entry.name)
+    entries.forEach(entry => {
+      const fullPath = path.join(directory, entry.name)
 
-    if (entry.isDirectory()) {
-      files = files.concat(readFilesRecursive(fullPath))
-    } else {
-      files.push(fullPath)
-    }
-  })
+      if (entry.isDirectory()) {
+        files = files.concat(readFilesRecursive(fullPath))
+      } else {
+        files.push(fullPath)
+      }
+    })
+  }
   return files
 }
 
