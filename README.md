@@ -26,7 +26,7 @@
   - [Ручки](#ручки)
   - [Интеграционные тесты](#интеграционные-тесты)
   - [Useful SQL queries](#useful-sql-queries)
-- [MEMORYLEAKS](#MEMORYLEAKS)
+- [MEMORYLEAKS](#memoryleaks)
 - [Docker](#docker)
 
 ### Технологии
