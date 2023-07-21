@@ -28,6 +28,7 @@
   - [Useful SQL queries](#useful-sql-queries)
 - [MEMORYLEAKS](#memoryleaks)
 - [Docker](#docker)
+- [CI/CD](#cicd)
 
 ### Технологии
 
@@ -701,4 +702,18 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 
 ### CI/CD
 
-mmmmmm
+Для CI/CD использовалась концепция GitHub actions.
+Создан новый workflow Docker Image CI и добавлен к Actions в репозитории проекта (продублирован в файле ./cd.yml)
+В этом workflow исползуются следующие actions:
+- actions/checkout@v3
+- docker/login-action@v2
+- docker/setup-buildx-action@v2
+- docker/build-push-action@v3
+- yc-actions/yc-coi-deploy@v1.0.1
+
+Переменные окружения (в виде секретов) задавались через пункт **Settings -> Secrets and variables -> Actions -> New repository secret**
+
+Хорошее описание данного подхода приведено в `https://habr.com/ru/articles/697206/`
+
+В качестве реестра образов в данном подходе использовался Dockerhub `https://hub.docker.com/`
+
