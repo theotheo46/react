@@ -22,6 +22,7 @@ import {
   setSelectSectionToLS,
   setSelectTopicToLS,
 } from '../../store/slices/forumSlice'
+import sanitizeUserInput from '../../utils/SanitizeUserInput'
 
 const iconBackStyle = { fill: 'var(--color-text-gray)', fontSize: '1.25rem' }
 
@@ -100,10 +101,12 @@ const ForumSectionPage = () => {
   }
 
   const handleCreateTopic = async (title: string) => {
+    const sanitizedTitle = sanitizeUserInput(title)
+
     const data = {
       userId: user!.id,
       usernick: user?.display_name || user!.login,
-      topicname: title,
+      topicname: sanitizedTitle,
       sectionId: sectionParam.sectionId,
     }
     try {
@@ -235,7 +238,7 @@ const ForumSectionPage = () => {
             <ForumModal
               title={
                 modal.type === 'create'
-                  ? `Создать тему для ${name}`
+                  ? 'Создать тему'
                   : modal.type === 'delete'
                   ? `Вы уверены, что хотите удалить тему "${topicTitle}"?`
                   : modal.type === 'rename'
