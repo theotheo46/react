@@ -698,3 +698,5 @@ curl -X POST -H 'Content-Type: application/json' -d '{"id" : "1"}' localhost:300
 После запуска контейнеров приложение будет доступно через порт 80
 
 Админка для postgresql доспупна по адрему https://altai.ya-praktikum.tech/pgadmin
+
+### CI/CD
